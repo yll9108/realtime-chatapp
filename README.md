@@ -15,7 +15,10 @@ week 2 : 10/17 - 10/22
       [ ] develop API routes for user authentication, chat rooms, messages, and user profiles.   
   2.  Front-End  
    
-  3.  Database Integration
+  3.  Database Integration  
+      [ ] set up the schema for users, chat rooms, and messages.  
+      [ ] implement database CRUD operations.  
+
   4. User account and authentication  
      [ ] user registration    
      [ ] user login  
@@ -42,7 +45,7 @@ week 2 : 10/17 - 10/22
      [ ] enable users to see translations of the messages.  
      [ ] enable to use emoji picker.  
 
-  9. Notifications  
+  9.  Notifications  
      [ ] send real-time notifications for new messages.  
 
   10. Search Functionality  
