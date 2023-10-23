@@ -1,7 +1,10 @@
-require('dotenv').config();
 const express = require('express');
-const app = express();
+const mongoose = require('mongoose');
 
+require('dotenv').config();
+
+const app = express();
+const port = process.env.PORT;
 //middleware
 app.use((req, res, next) => {
     console.log(req.path, req.method);
@@ -12,6 +15,6 @@ app.get('/', (req, res) =>{
     res.json({msg : 'Welcome to real-time chat app'});
 })
 //listen for requests
-app.listen(process.env.PORT, () =>{
-    console.log('listening on port', process.env.PORT);
+app.listen(port, () =>{
+    console.log(`listening on port : ${port}`);
 })
