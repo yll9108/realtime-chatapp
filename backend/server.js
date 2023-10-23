@@ -1,21 +1,22 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
-require("dotenv").config();
+const userRoute = require("./routes/userRoute.js");
 const app = express();
-
-const port = process.env.PORT || 5000;
-const uri = process.env.ATLAS_URI;
+require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
+app.use("/api/users", userRoute);
+
+const port = process.env.PORT || 4000;
+const uri = process.env.ATLAS_URI;
 
 //middleware
-app.use((req, res, next) => {
-  console.log(req.path, req.method);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log(req.path, req.method);
+//   next();
+// });
 
 //listen for requests
 app.listen(port, () => {
