@@ -1,8 +1,7 @@
 // const express = require("express");
+const { createUser } = require("./helper");
 
-import { createUser } from "./helper";
-
-export const registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
     try {
         const { userName, email, password } = req.body;
         if (!userName || !email || !password) {
@@ -23,3 +22,5 @@ export const registerUser = async (req, res) => {
         return res.sendStatus(400);
     }
 };
+
+module.exports = { registerUser };

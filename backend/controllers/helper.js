@@ -1,6 +1,8 @@
-import userModel from "../models/userModels";
+const { userModel } = require("../models/userModels");
 
-export const createUser = (values) =>
+const createUser = (values) =>
     new userModel(values).save().then((user) => user.toObject());
 
-export const getUserByEmail = () => userModel.findOne({ email });
+const getUserByEmail = () => userModel.findOne({ email });
+
+module.exports = { createUser, getUserByEmail };
