@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/api/users", userRoute);
 
-const port = process.env.PORT || 4000;
+// const port = process.env.PORT || 4000;
 const uri = process.env.ATLAS_URI;
 
 //middleware
@@ -19,23 +19,25 @@ const uri = process.env.ATLAS_URI;
 // });
 
 //listen for requests
-app.listen(port, () => {
-  console.log(`listening on port : ${port}`);
+app.listen(8080, () => {
+    console.log("server running on http://localhost:8080/");
 });
 //cconnect to DB
+mongoose.Promise = Promise;
+// needs to find DB first and go for next step
 mongoose
-  .connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("MongoDB connection succeed"))
-  .catch((error) => console.log("MongoDB connection failed:", error.message));
+    .connect(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => console.log("MongoDB connection succeed"))
+    .catch((error) => console.log("MongoDB connection failed:", error.message));
 //DB CRUD
 //crate
 // app.post();
 //read
 app.get("/", (req, res) => {
-  res.json({ msg: "Welcome to real-time chat app" });
+    res.json({ msg: "Welcome to real-time chat app" });
 });
 //upodate
 // app.put();
