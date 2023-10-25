@@ -12,7 +12,7 @@ const usersSchema = new mongoose.Schema({
   },
   about: {
     type: String,
-    required: true,
+    required: false,
   },
   email: {
     type: String,
@@ -24,7 +24,7 @@ const usersSchema = new mongoose.Schema({
   },
   profileURL: {
     type: String,
-    required: true,
+    required: false,
   },
   status: {
     type: String,
@@ -43,7 +43,16 @@ const usersSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  friends: [{ type: String, required: true }],
+  friends: [{ type: String }],
+
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
+  updatedAt: {
+    type: Date,
+    default: null,
+  },
 });
 
 const userModel = mongoose.model("users", usersSchema);
