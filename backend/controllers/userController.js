@@ -8,10 +8,11 @@ const registerUser = async (req, res) => {
             console.log("sth wrong");
             return res.sendStatus(400);
         }
-        // const existingUser = await getUserByEmail({ email });
-        // if (existingUser) {
-        //     return res.sendStatus(400);
-        // }
+        const existingUser = await getUserByEmail({ email });
+        if (existingUser) {
+            console.log("user exists");
+            return res.sendStatus(400);
+        }
         const user = await createUser({
             userName,
             email,
