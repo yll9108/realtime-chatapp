@@ -1,4 +1,4 @@
-// const express = require("express");
+const userModel = require("../models/userModels");
 const { createUser, getUserByEmail } = require("./helper");
 
 const registerUser = async (req, res) => {
@@ -24,4 +24,29 @@ const registerUser = async (req, res) => {
     }
 };
 
-module.exports = { registerUser };
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.sendStatus(400);
+        }
+
+        const user = await userModel.findOne({ email: email });
+        if (!user) {
+            console.log("user doesn't exist");
+            return res.sendStatus(400);
+        }
+        if (password !== user.password) {
+            console.log("Password wrong");
+            return res.sendStatus(403);
+        } else {
+            console.log("Login succeed");
+            return res.status(200).json(user).end();
+        }
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+};
+
+module.exports = { registerUser, login };
