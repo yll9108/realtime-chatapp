@@ -1,12 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const { dbConnect } = require("./database.js");
+const router = require("./routes/userRoute.js");
 // const mongoose = require("mongoose");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use("/api/users", router);
 
 const port = process.env.PORT || 5000;
 
@@ -21,12 +23,12 @@ const port = process.env.PORT || 5000;
 // app.use("/api/chasts", chatRoute);
 
 //listen for requests
-app.listen(port, () => {
-  console.log(`listening on port : ${port}`);
+app.listen(8080, () => {
+    console.log("server running on http://localhost:8080/");
 });
 //connect to DB
 dbConnect();
 //DB read
 app.get("/", (req, res) => {
-  res.json({ msg: "Welcome to real-time chat app" });
+    res.json({ msg: "Welcome to real-time chat app" });
 });
