@@ -1,20 +1,40 @@
-import React from 'react';
-import ChatArea from './ChatArea'; // Make sure the path is correct
-import UserList from './UserList'; // Make sure the path is correct
+import React, { useState } from 'react';import ChatArea from './ChatArea';
+import UserList from './UserList';
+import Sidebar from './Sidebar';
 import styled from 'styled-components';
 
 const ChatContainer = styled.div`
     display: flex;
     width: 100%;
-    height: 100vh;  // Assuming you want it to take the full viewport height
+    height: 100vh;
 `;
 
-function Chat({ handleLogout }) {
+function Chat() {
+    const demoChats = {
+        'John': {
+            messages: [
+                { type: "sent", content: "Hello how are you" },
+                { type: "received", content: "I'm good, thanks." }
+            ],
+            lastMessage: "I'm good, thanks.",
+            date: "2023-10-04"
+        },
+        'Doe': {
+            messages: [ 
+                { type: "sent", content: "Hey!" }
+            ],
+            lastMessage: "Hey!",
+            date: "2023-10-05"
+        }
+    };
+
+    const [selectedChat, setSelectedChat] = useState('John'); // default to John
+
     return (
         <ChatContainer>
-            <UserList />
-            <ChatArea />
-            <button onClick={handleLogout}>Logout</button>
+            <Sidebar />
+            <UserList setSelectedChat={setSelectedChat} chats={demoChats} />
+            <ChatArea chat={selectedChat} messages={demoChats[selectedChat].messages} chatName={selectedChat} />
         </ChatContainer>
     );
 }
