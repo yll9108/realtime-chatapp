@@ -1,4 +1,4 @@
-const userModel = require("../models/userModels");
+const userModel = require("../models/userModel.js");
 
 const createUser = (values) =>
     new userModel(values).save().then((user) => user.toObject());

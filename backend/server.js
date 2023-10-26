@@ -1,12 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const { dbConnect } = require("./database.js");
+const router = require("./routes/userRoute.js");
 // const mongoose = require("mongoose");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use("/api/users", router);
 
 const port = process.env.PORT || 5000;
 

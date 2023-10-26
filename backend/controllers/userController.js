@@ -1,8 +1,10 @@
-const userModel = require("../models/userModels");
+const userModel = require("../models/userModel.js");
 const { createUser, getUserByEmail } = require("./helper");
+const { v4: uuid } = require("uuid");
 
 const registerUser = async (req, res) => {
     try {
+        let userID = uuid();
         const { userName, email, password } = req.body;
         if (!userName || !email || !password) {
             console.log("sth wrong");
@@ -14,6 +16,7 @@ const registerUser = async (req, res) => {
             return res.sendStatus(400);
         }
         const user = await createUser({
+            userID,
             userName,
             email,
             password,
