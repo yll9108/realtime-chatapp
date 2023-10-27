@@ -1,5 +1,10 @@
 const userModel = require("../models/userModel.js");
-const { createUser, getUserByEmail } = require("./helper");
+const {
+    createUser,
+    getUserByEmail,
+    random,
+    authentication,
+} = require("./helper");
 const { v4: uuid } = require("uuid");
 
 const registerUser = async (req, res) => {
@@ -7,20 +12,27 @@ const registerUser = async (req, res) => {
         let userID = uuid();
         const { userName, email, password } = req.body;
         if (!userName || !email || !password) {
-            console.log("sth wrong");
+            console.log("missing one of them: userName, email or password");
             return res.sendStatus(400);
         }
         const existingUser = await getUserByEmail({ email });
         if (existingUser) {
-            console.log("user exists");
+            console.log("user already exists");
             return res.sendStatus(400);
         }
+
+        const salt = random();
         const user = await createUser({
             userID,
             userName,
             email,
-            password,
+            authentication: {
+                salt,
+                password: authentication(salt, password),
+            },
         });
+        console.log("Generated salt:", salt);
+        console.log("Stored salt:", user.authentication.salt);
         return res.status(200).json(user).end();
     } catch (error) {
         console.log(error);
@@ -32,21 +44,27 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
+            console.log("sth missing: email or password");
             return res.sendStatus(400);
         }
 
-        const user = await userModel.findOne({ email: email });
+        const user = await getUserByEmail({ email }).select(
+            "+authentication.salt+authentication.password"
+        );
         if (!user) {
             console.log("user doesn't exist");
             return res.sendStatus(400);
         }
-        if (password !== user.password) {
+
+        const expectedHash = authentication(user.authentication.salt, password);
+        console.log("expectedHash", expectedHash);
+        console.log("storedpassword", user.authentication.password);
+        if (user.authentication.password !== expectedHash) {
             console.log("Password wrong");
             return res.sendStatus(403);
-        } else {
-            console.log("Login succeed");
-            return res.status(200).json(user).end();
         }
+        console.log("Login succeed");
+        return res.status(200).json(user).end();
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);
