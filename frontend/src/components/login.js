@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 function Login({ handleLogin }) {
     return (
@@ -11,7 +11,8 @@ function Login({ handleLogin }) {
                 name="password"
                 placeholder="type in password"
             />
-<button onClick={handleLogin}>Login</button>
+            <button onClick={handleLogin}>Login</button>
+            <button>Forgot password?</button>
             <h3>Don't have an account?</h3>
             <button>Sign up</button>
         </LoginDiv>
