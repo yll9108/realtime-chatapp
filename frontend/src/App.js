@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Login from "./components/Login";
 import Chat from "./components/Chat";
+import ForgettingPW from "./components/ForgettingPW";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
     // State to track login status
@@ -22,13 +24,26 @@ function App() {
     };
 
     return (
-        <div className="App">
-            {isLoggedIn ? (
-                <Chat handleLogout={handleLogout} />
-            ) : (
-                <Login handleLogin={handleLogin} />
-            )}
-        </div>
+        <Router>
+            <div className="App">
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            isLoggedIn ? (
+                                <Chat handleLogout={handleLogout} />
+                            ) : (
+                                <Login handleLogin={handleLogin} />
+                            )
+                        }
+                    />
+                    <Route
+                        path="/forgot-password"
+                        element={<ForgettingPW />}
+                    ></Route>
+                </Routes>
+            </div>
+        </Router>
     );
 }
 

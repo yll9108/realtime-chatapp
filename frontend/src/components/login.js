@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import ForgettingPW from "./ForgettingPW";
+import { Link } from "react-router-dom";
 
 function Login({ handleLogin }) {
     return (
@@ -14,6 +14,7 @@ function Login({ handleLogin }) {
             />
             <button onClick={handleLogin}>Login</button>
             <p>Forgot password?</p>
+            <Link to="/forgot-password">Reset</Link>
             <h3>Don't have an account?</h3>
             <button>Sign up</button>
         </LoginDiv>
