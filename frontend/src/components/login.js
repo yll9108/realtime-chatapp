@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import ForgettingPW from "./ForgettingPW";
 
 function Login({ handleLogin }) {
     return (
@@ -12,7 +13,7 @@ function Login({ handleLogin }) {
                 placeholder="type in password"
             />
             <button onClick={handleLogin}>Login</button>
-            <button>Forgot password?</button>
+            <p>Forgot password?</p>
             <h3>Don't have an account?</h3>
             <button>Sign up</button>
         </LoginDiv>

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import Login from './components/login';
-import Chat from './components/Chat';
+import React, { useState, useEffect } from "react";
+import Login from "./components/Login";
+import Chat from "./components/Chat";
 
 function App() {
     // State to track login status
@@ -23,7 +23,11 @@ function App() {
 
     return (
         <div className="App">
-            { isLoggedIn ? <Chat handleLogout={handleLogout} /> : <Login handleLogin={handleLogin} /> }
+            {isLoggedIn ? (
+                <Chat handleLogout={handleLogout} />
+            ) : (
+                <Login handleLogin={handleLogin} />
+            )}
         </div>
     );
 }
