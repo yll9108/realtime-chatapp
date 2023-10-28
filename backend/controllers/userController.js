@@ -6,6 +6,7 @@ const {
     authentication,
 } = require("./helper");
 const { v4: uuid } = require("uuid");
+const nodemailer = require("nodemailer");
 
 const registerUser = async (req, res) => {
     try {
@@ -71,4 +72,40 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, login };
+// reset password
+const resetPW = async (req, res) => {
+    try {
+        // use email as rest tool
+        const { email } = req.body;
+        const user = await getUserByEmail({ email });
+
+        // when user typed in WRONG email
+        if (!user) {
+            console.log("Email hasn't been signed up.");
+            return res.sendStatus(400);
+        }
+
+        // when user typed in CORRECT email
+        // const resetToken = authentication(salt, user._id.toString());
+        const transpoter = nodemailer.createTransport({
+            service: "Hotmail",
+            auth: {
+                user: process.env.MY_EMAIL,
+                pass: process.env.MY_PASSWORD,
+            },
+        });
+        transpoter.sendMail({
+            from: process.env.MY_EMAIL,
+            to: user.email,
+            subject: "RESET PASSWORD",
+            html: `<p>This is test!`,
+        });
+        console.log(`MSG: Reset mail has been sent successfully!`);
+        return res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+};
+
+module.exports = { registerUser, login, resetPW };
