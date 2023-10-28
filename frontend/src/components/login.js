@@ -1,5 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 function Login({ handleLogin }) {
     return (
@@ -11,9 +12,11 @@ function Login({ handleLogin }) {
                 name="password"
                 placeholder="type in password"
             />
-<button onClick={handleLogin}>Login</button>
+            <button onClick={handleLogin}>Login</button>
+            <p>Forgot password?</p>
+            <Link to="/forgot-password">Reset</Link>
             <h3>Don't have an account?</h3>
-            <button>Sign up</button>
+            <Link to="/signup">Sign up</Link>
         </LoginDiv>
     );
 }
