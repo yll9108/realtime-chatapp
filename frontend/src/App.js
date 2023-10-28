@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Login from "./components/Login";
 import Chat from "./components/Chat";
+import SignUp from "./components/SignUp";
 import ForgettingPW from "./components/ForgettingPW";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -41,6 +42,7 @@ function App() {
                         path="/forgot-password"
                         element={<ForgettingPW />}
                     ></Route>
+                    <Route path="/signup" element={<SignUp />}></Route>
                 </Routes>
             </div>
         </Router>

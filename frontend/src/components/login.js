@@ -16,7 +16,7 @@ function Login({ handleLogin }) {
             <p>Forgot password?</p>
             <Link to="/forgot-password">Reset</Link>
             <h3>Don't have an account?</h3>
-            <button>Sign up</button>
+            <Link to="/signup">Sign up</Link>
         </LoginDiv>
     );
 }
