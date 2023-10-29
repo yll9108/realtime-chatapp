@@ -7,11 +7,11 @@ const {
 } = require("./helper");
 const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
-
 const port = process.env.PORT || 5000;
+
 const registerUser = async (req, res) => {
     try {
-        let userID = uuid();
+        const userID = uuid();
         const { userName, email, password } = req.body;
         if (!userName || !email || !password) {
             console.log("missing one of them: userName, email or password");
@@ -87,9 +87,8 @@ const resetPW = async (req, res) => {
         }
 
         // when user typed in CORRECT email
-        const salt = random();
-        const token = authentication(salt, user._id.toString());
-        console.log("token", token);
+        const token = Math.random().toString(16).slice(3);
+        console.log("token1", token);
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -105,40 +104,64 @@ const resetPW = async (req, res) => {
                 subject: "RESET PASSWORD",
                 html: `<p>Hi user: ${user.userName}</p>
             <p>Please click the link to reset the password.</p>
-            <a href="http://localhost:${port}/api/users/reset/${token}" /><p>Link</p>
+            <a href="http://localhost:${port}/api/user/reset/${token}"><p>Link</p></a>
             <p>Link will be expired in 1 hour, thank you!</p>`,
             });
+            console.log("token2", token);
         } catch (error) {
             console.log("error");
             return res.sendStatus(500);
         }
-        console.log(`MSG: Reset mail has been sent successfully!`);
 
         // update token
         user.resetPassword = {
             resetToken: token,
-            resetExpiration: Date.now() + 36000,
+            resetExpiration: Date.now() + 3600000,
         };
-        console.log("token", user.resetPassword.resetToken);
+        console.log("token3", user.resetPassword.resetToken);
         console.log("user.resetExpiration", user.resetPassword.resetExpiration);
         await user.save();
-        console.log(`MSG:`);
-
-        // after clicking the link, look for user inside token
-        const resetToken = req.params.resetToken;
-        const resetUser = await userModel.findOne({
-            "resetPassword.resetToken": resetToken,
-            "resetPassword.resetExpiration": { $gte: Date.now() },
-        });
-        if (!resetUser) {
-            console.log("Link expired!");
-            return res.status(400);
-        }
-        // handle if found user inside token
+        console.log(`MSG: token has been saved`);
+        return res.status(200).json({ msg: "Password reset email sent." });
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);
     }
 };
 
-module.exports = { registerUser, login, resetPW };
+// after clicking the link, look for user inside token
+const handleResetToken = async (req, res) => {
+    const resetToken = req.params.resetToken;
+    console.log("req.oarams.resetToken", req.params.resetToken);
+    const resetUser = await userModel.findOne({
+        "resetPassword.resetToken": resetToken,
+        "resetPassword.resetExpiration": { $gte: Date.now() },
+    });
+
+    if (!resetUser) {
+        console.log("Link expired");
+        return res.send(400).json({ msg: "Link expired" });
+    }
+    return res.status(200).json({ msg: "Token existed." });
+};
+// handle if found user inside token
+
+// const { userID, password } = req.body;
+// try {
+//     const user = await userModel.findOne({ userID });
+//     if (!user) {
+//         console.log("user not fount");
+//         return res.sendStatus(400);
+//     }
+// } catch (error) {
+//     console.log(error);
+//     return res.sendStatus(400);
+// }
+// user.authentication.password = password;
+// user.resetToken = null;
+// await user.save();
+
+// console.log("Password reset successfully");
+// return res.sendStatus(200);
+
+module.exports = { registerUser, login, resetPW, handleResetToken };
