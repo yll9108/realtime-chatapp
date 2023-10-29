@@ -8,6 +8,7 @@ const {
 const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 
+const port = process.env.PORT || 5000;
 const registerUser = async (req, res) => {
     try {
         let userID = uuid();
@@ -86,22 +87,54 @@ const resetPW = async (req, res) => {
         }
 
         // when user typed in CORRECT email
-        // const resetToken = authentication(salt, user._id.toString());
-        const transpoter = nodemailer.createTransport({
-            service: "Hotmail",
+        const salt = random();
+        const token = authentication(salt, user._id.toString());
+        console.log("token", token);
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
             auth: {
                 user: process.env.MY_EMAIL,
                 pass: process.env.MY_PASSWORD,
             },
         });
-        transpoter.sendMail({
-            from: process.env.MY_EMAIL,
-            to: user.email,
-            subject: "RESET PASSWORD",
-            html: `<p>This is test!`,
-        });
+
+        try {
+            await transporter.sendMail({
+                from: process.env.MY_EMAIL,
+                to: user.email,
+                subject: "RESET PASSWORD",
+                html: `<p>Hi user: ${user.userName}</p>
+            <p>Please click the link to reset the password.</p>
+            <a href="http://localhost:${port}/api/users/reset/${token}" /><p>Link</p>
+            <p>Link will be expired in 1 hour, thank you!</p>`,
+            });
+        } catch (error) {
+            console.log("error");
+            return res.sendStatus(500);
+        }
         console.log(`MSG: Reset mail has been sent successfully!`);
-        return res.sendStatus(200);
+
+        // update token
+        user.resetPassword = {
+            resetToken: token,
+            resetExpiration: Date.now() + 36000,
+        };
+        console.log("token", user.resetPassword.resetToken);
+        console.log("user.resetExpiration", user.resetPassword.resetExpiration);
+        await user.save();
+        console.log(`MSG:`);
+
+        // after clicking the link, look for user inside token
+        const resetToken = req.params.resetToken;
+        const resetUser = await userModel.findOne({
+            "resetPassword.resetToken": resetToken,
+            "resetPassword.resetExpiration": { $gte: Date.now() },
+        });
+        if (!resetUser) {
+            console.log("Link expired!");
+            return res.status(400);
+        }
+        // handle if found user inside token
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);

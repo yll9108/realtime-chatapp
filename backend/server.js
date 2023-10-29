@@ -23,8 +23,8 @@ const port = process.env.PORT || 5000;
 // app.use("/api/chasts", chatRoute);
 
 //listen for requests
-app.listen(8080, () => {
-    console.log("server running on http://localhost:8080/");
+app.listen(port, () => {
+    console.log(`server running on http://localhost:${port}/`);
 });
 //connect to DB
 dbConnect();
