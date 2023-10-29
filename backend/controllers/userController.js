@@ -104,7 +104,7 @@ const resetPW = async (req, res) => {
                 subject: "RESET PASSWORD",
                 html: `<p>Hi user: ${user.userName}</p>
             <p>Please click the link to reset the password.</p>
-            <a href="http://localhost:${port}/api/user/reset/${token}"><p>Link</p></a>
+            <a href="http://localhost:${port}/api/users/reset/${token}"><p>Link</p></a>
             <p>Link will be expired in 1 hour, thank you!</p>`,
             });
             console.log("token2", token);
