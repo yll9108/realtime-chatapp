@@ -69,7 +69,18 @@ const login = async (req, res) => {
             console.log("Password wrong");
             return res.sendStatus(403);
         }
+
+        const salt = random();
+        user.authentication.sessionToken = authentication(
+            salt,
+            user._id.toString()
+        );
+        console.log(
+            "user.authentication.sessionToken",
+            user.authentication.sessionToken
+        );
         console.log("Login succeed");
+        await user.save();
         return res.status(200).json(user).end();
     } catch (error) {
         console.log(error);
