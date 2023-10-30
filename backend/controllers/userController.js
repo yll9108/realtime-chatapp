@@ -5,13 +5,13 @@ const {
     random,
     authentication,
 } = require("./helper");
-const { v4: uuid } = require("uuid");
+// const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 const port = process.env.PORT || 5000;
 
 const registerUser = async (req, res) => {
     try {
-        const userID = uuid();
+        // const userID = uuid();
         const { userName, email, password } = req.body;
         if (!userName || !email || !password) {
             console.log("missing one of them: userName, email or password");
@@ -27,7 +27,7 @@ const registerUser = async (req, res) => {
 
         const salt = random();
         const user = await createUser({
-            userID,
+            // userID,
             userName,
             email,
             authentication: {
@@ -164,8 +164,9 @@ const handleResetToken = async (req, res) => {
 
 const handleResetPW = async (req, res) => {
     try {
-        const { userID, newPassword } = req.body;
-        const user = await userModel.findOne({ userID: userID });
+        const { newPassword } = req.body;
+        const _id = req.body._id;
+        const user = await userModel.findOne({ _id });
         if (!user) {
             console.log("user not found");
             return res.sendStatus(400);
