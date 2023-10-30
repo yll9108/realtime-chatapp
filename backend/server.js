@@ -11,16 +11,17 @@ app.use(express.json());
 app.use(cors());
 //user
 app.use("/api/users", userRoute);
+
 //chat
 app.use("/api/chats", chatRoute);
 
 //listen for requests
 app.listen(port, () => {
-  console.log(`server running on http://localhost:${port}`);
+    console.log(`server running on http://localhost:${port}`);
 });
 //connect to DB
 dbConnect();
 //DB read
 app.get("/", (req, res) => {
-  res.json({ msg: "Welcome to real-time chat app" });
+    res.json({ msg: "Welcome to real-time chat app" });
 });

@@ -22,6 +22,11 @@ const usersSchema = new mongoose.Schema({
         salt: { type: String },
         password: { type: String, required: true },
         sessionToken: { type: String },
+        newPassword: { type: String },
+    },
+    resetPassword: {
+        resetToken: { type: String },
+        resetExpiration: { type: Date },
     },
     profileURL: {
         type: String,
