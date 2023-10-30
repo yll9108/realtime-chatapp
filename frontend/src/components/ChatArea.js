@@ -130,7 +130,48 @@ const AttachOption = styled.div`
         background-color: #eaeaea;
     }
 `;
-const ChatArea = ({ messages, chatName }) => {
+const LogoutModalContainer = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+`;
+
+const ModalContent = styled.div`
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+`;
+
+const ModalButton = styled.button`
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+`;
+
+const LogoutModal = ({ onCancel, onConfirm }) => {
+    return (
+        <LogoutModalContainer>
+            <ModalContent>
+                <p>Are you sure you want to logout?</p>
+                <ModalButton onClick={onCancel}>Cancel</ModalButton>
+                <ModalButton onClick={onConfirm}>Logout</ModalButton>
+            </ModalContent>
+        </LogoutModalContainer>
+    );
+};
+
+const ChatArea = ({ messages, chatName, onLogout  }) => {
     const [currentMessages, setCurrentMessages] = useState(messages);
     const [inputValue, setInputValue] = useState('');
     const fileInputRef = useRef(null);
@@ -160,6 +201,7 @@ const ChatArea = ({ messages, chatName }) => {
     }, [messages]);
 
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const emojis = ["😀", "😁", "😂", "😃", "😄", "😅", "😆", "😉", "😊", "😋"]; // Add more emojis if you like
 
@@ -176,16 +218,40 @@ const ChatArea = ({ messages, chatName }) => {
             setInputValue('');
         }
     };
+    const handleConfirmLogout = () => {
+        if (typeof onLogout === 'function') {
+            console.log("User Logged Out!");
+            onLogout();
+            setShowLogoutModal(false);
+        } else {
+            console.error("onLogout is not a function");
+        }
+    };
+    
+
+    const handleCancelLogout = () => {
+        setShowLogoutModal(false);
+    };
+
+    const handleLogout = () => {
+        setShowLogoutModal(true);
+    };
+
     
     return (
         <ChatAreaContainer>
             <ChatHeader>
                 <ChatTitle>{chatName}</ChatTitle>
-                <LogoutButton onClick={() => {
-                    console.log("User Logged Out!");
-                }}>
+                <LogoutButton onClick={handleLogout}>
                     Logout
                 </LogoutButton>
+                {showLogoutModal && (
+                <LogoutModal 
+                    onCancel={handleCancelLogout} 
+                    onConfirm={handleConfirmLogout}
+                />
+            )}
+
             </ChatHeader>
             <ChatMessages>
     {currentMessages.map((message, index) => (

@@ -13,7 +13,7 @@ const ChatContainer = styled.div`
     height: 100vh;
 `;
 
-function Chat() {
+function Chat({ handleLogout }) {
     const demoChats = {
         'John': {
             messages: [
@@ -37,11 +37,12 @@ function Chat() {
 
     return (
         <ChatContainer>
-            <Sidebar setActiveSection={setActiveSection} />
+         <Sidebar setActiveSection={setActiveSection} handleLogout={handleLogout} />
+
             {activeSection === 'chat' && (
                 <>
                     <UserList setSelectedChat={setSelectedChat} chats={demoChats} />
-                    <ChatArea chat={selectedChat} messages={demoChats[selectedChat].messages} chatName={selectedChat} />
+                    <ChatArea chat={selectedChat} messages={demoChats[selectedChat].messages} chatName={selectedChat} onLogout={handleLogout} />
                 </>
             )}
             {activeSection === 'friends' && <Friends friendsData={demoChats} />}
