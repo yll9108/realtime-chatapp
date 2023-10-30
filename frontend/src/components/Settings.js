@@ -19,6 +19,7 @@ function Settings() {
                     <input type="checkbox" />
                 </div>
             </div>
+            
         </div>
     );
 }
