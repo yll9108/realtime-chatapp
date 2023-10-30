@@ -34,30 +34,31 @@ const NavLabel = styled.div`
 `;
 
 
-const Sidebar = () => {
+const Sidebar = ({ setActiveSection }) => {
     return (
         <NavbarContainer>
-        <NavItem>
-            <NavIcon>💬</NavIcon>
-            <NavLabel>Chat</NavLabel>
-        </NavItem>
+            <NavItem onClick={() => setActiveSection('chat')}>
+                <NavIcon>💬</NavIcon>
+                <NavLabel>Chat</NavLabel>
+            </NavItem>
 
-        <NavItem>
-            <NavIcon>👥</NavIcon>
-            <NavLabel>Friends</NavLabel>
-        </NavItem>
+            <NavItem onClick={() => setActiveSection('friends')}>
+                <NavIcon>👥</NavIcon>
+                <NavLabel>Friends</NavLabel>
+            </NavItem>
 
-        <NavItem>
-            <NavIcon>⚙️</NavIcon>
-            <NavLabel>Settings</NavLabel>
-        </NavItem>
+            <NavItem onClick={() => setActiveSection('settings')}>
+                <NavIcon>⚙️</NavIcon>
+                <NavLabel>Settings</NavLabel>
+            </NavItem>
 
-        <NavItem>
-            <NavIcon>👤</NavIcon>
-            <NavLabel>Profile</NavLabel>
-        </NavItem>
-    </NavbarContainer>
+            <NavItem onClick={() => setActiveSection('profile')}>
+                <NavIcon>👤</NavIcon>
+                <NavLabel>Profile</NavLabel>
+            </NavItem>
+        </NavbarContainer>
     );
 };
+
 
 export default Sidebar;

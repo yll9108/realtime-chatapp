@@ -1,30 +1,23 @@
 const express = require("express");
 const cors = require("cors");
 const { dbConnect } = require("./database.js");
-const router = require("./routes/userRoute.js");
-// const mongoose = require("mongoose");
+const userRoute = require("./routes/userRoute.js");
+const chatRoute = require("./routes/chatRoute.js");
 
 const app = express();
+const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors());
-app.use("/api/users", router);
-
-const port = process.env.PORT || 5000;
-
 //user
-// import userModel from "./models/userModel.js";
-// const userRoute = require("./routes/userRoute.js");
-// app.use("/api/users", userRoute);
+app.use("/api/users", userRoute);
 
 //chat
-// import chatModel from "./models/chatModel.js";
-// const chatRoute = require("./routes/chatRoute.js");
-// app.use("/api/chasts", chatRoute);
+app.use("/api/chats", chatRoute);
 
 //listen for requests
 app.listen(port, () => {
-    console.log(`server running on http://localhost:${port}/`);
+    console.log(`server running on http://localhost:${port}`);
 });
 //connect to DB
 dbConnect();

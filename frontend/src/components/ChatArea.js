@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 const ChatAreaContainer = styled.div`
@@ -48,6 +49,7 @@ const Message = styled.div`
 
 
 const ChatFooter = styled.footer`
+    position: relative; // Added this
     padding: 10px;
     background-color: #e5e5e5;
     border-top: 1px solid #d0d0d0;
@@ -86,46 +88,145 @@ const LogoutButton = styled.button`
         background-color: #e54848;
     }
 `;
+const EmojiPicker = styled.div`
+    position: absolute;
+    bottom: 60px;  // This will place it above the ChatFooter
+    left: 0;      
+    right: 0;     // Ensure it stretches across the entire width of ChatFooter
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;  // This will make it span the entire width of ChatFooter
+    padding: 10px; // Add some padding inside
+    box-sizing: border-box;
+`;
+
+const Emoji = styled.span`
+    cursor: pointer;
+    padding: 5px;
+`;
+const AttachModal = styled.div`
+    position: absolute;
+    bottom: 60px;
+    left: 0;
+    width: 150px;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+    z-index: 1;
+`;
+
+const AttachOption = styled.div`
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    &:hover {
+        background-color: #eaeaea;
+    }
+`;
 const ChatArea = ({ messages, chatName }) => {
     const [currentMessages, setCurrentMessages] = useState(messages);
     const [inputValue, setInputValue] = useState('');
+    const fileInputRef = useRef(null);
+    const [showAttachModal, setShowAttachModal] = useState(false);
 
-    const handleSendMessage = () => {
-        if (inputValue.trim()) {
-            setCurrentMessages([...currentMessages, { type: "sent", content: inputValue }]);
-            setInputValue('');
+    const handleAttachOptionClick = (type) => {
+        switch (type) {
+            case 'image':
+                fileInputRef.current.setAttribute('accept', 'image/*');
+                break;
+            case 'video':
+                fileInputRef.current.setAttribute('accept', 'video/*');
+                break;
+            case 'audio':
+                fileInputRef.current.setAttribute('accept', 'audio/*');
+                break;
+            default:
+                fileInputRef.current.removeAttribute('accept');
+                break;
         }
+        fileInputRef.current.click();
+        setShowAttachModal(false);
     };
-
+    
     useEffect(() => {
         setCurrentMessages(messages); // Update messages whenever `messages` prop changes.
     }, [messages]);
 
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+    const emojis = ["😀", "😁", "😂", "😃", "😄", "😅", "😆", "😉", "😊", "😋"]; // Add more emojis if you like
+
+    const handleInsertEmoji = (emoji) => {
+        setInputValue(inputValue + emoji);
+        setShowEmojiPicker(false);  // Hide the picker once an emoji is selected
+    };
+    
+    const handleSendMessage = () => {
+        console.log("Trying to send message...");
+        if (inputValue.trim()) {
+            const message = { type: "sent", content: inputValue };
+            setCurrentMessages(prevMessages => [...prevMessages, message]);
+            setInputValue('');
+        }
+    };
+    
     return (
         <ChatAreaContainer>
             <ChatHeader>
-            <ChatTitle>{chatName}</ChatTitle>
-                            <LogoutButton onClick={() => {
+                <ChatTitle>{chatName}</ChatTitle>
+                <LogoutButton onClick={() => {
                     console.log("User Logged Out!");
                 }}>
                     Logout
                 </LogoutButton>
             </ChatHeader>
             <ChatMessages>
-                {messages.map((message, index) => (
-                    <Message key={index} className={message.type}>
-                        {message.content}
-                    </Message>
-                ))}
-            </ChatMessages>
+    {currentMessages.map((message, index) => (
+        <Message key={index} className={message.type}>
+            {message.content}
+        </Message>
+    ))}
+</ChatMessages>
+
             <ChatFooter>
-            <ChatButton>
-                📎  {/* You can replace this with an icon for attachment */}
-            </ChatButton>
-            <ChatButton>
-                😃  {/* Emoji icon */}
-            </ChatButton>
-            <ChatInput 
+            <ChatButton onClick={() => setShowAttachModal(!showAttachModal)}>
+    📎
+</ChatButton>{showAttachModal && (
+    <AttachModal>
+        <AttachOption onClick={() => handleAttachOptionClick('image')}>
+            🖼 Image
+        </AttachOption>
+        <AttachOption onClick={() => handleAttachOptionClick('video')}>
+            🎥 Video
+        </AttachOption>
+        <AttachOption onClick={() => handleAttachOptionClick('audio')}>
+            🎵 Audio
+        </AttachOption>
+        <AttachOption onClick={() => handleAttachOptionClick('file')}>
+            📁 File
+        </AttachOption>
+    </AttachModal>
+)}
+                <ChatButton onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+                    😃
+                </ChatButton>
+                {showEmojiPicker && (
+                    <EmojiPicker>
+                        {emojis.map((emoji, index) => (
+                            <Emoji key={index} onClick={() => handleInsertEmoji(emoji)}>
+                                {emoji}
+                            </Emoji>
+                        ))}
+                    </EmojiPicker>
+                )}
+                <ChatInput 
                     type="text" 
                     placeholder="Type your message..." 
                     value={inputValue}
@@ -136,13 +237,23 @@ const ChatArea = ({ messages, chatName }) => {
                         }
                     }}
                 />
-             <ChatButton onClick={handleSendMessage}>
-                    ➤  {/* Send button icon */}
+                <ChatButton onClick={handleSendMessage}>
+                    ➤
                 </ChatButton>
-        </ChatFooter>
+                <input 
+                    type="file" 
+                    style={{ display: 'none' }} 
+                    ref={fileInputRef} 
+                    onChange={(e) => {
+                        const file = e.target.files[0];
+                        console.log(file);
+                    }}
+                />
+            </ChatFooter>
         </ChatAreaContainer>
     );
 };
 
 
 export default ChatArea;
+

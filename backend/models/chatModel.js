@@ -1,19 +1,15 @@
 const mongoose = require("mongoose");
 
 const chatroomSchema = new mongoose.Schema({
-  roomID: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+  // roomID: {
+  //   type: String,
+  //   unique: true,
+  // },
   roomName: {
     type: String,
   },
-  roomMembers: [{ type: String }],
-  roomPinnedBy: {
-    type: Boolean,
-    default: false,
-  },
+  roomMembers: Array,
+  roomPinnedBy: Array,
   roomCreatedAt: {
     type: Date,
     default: Date.now(),
