@@ -4,6 +4,7 @@ const {
     getUserByEmail,
     random,
     authentication,
+    getUserByResetToken,
 } = require("./helper");
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
@@ -156,18 +157,14 @@ const handleResetEmail = async (req, res) => {
 
 // after clicking the link, look for user inside token
 const handleResetToken = async (req, res) => {
-    const resetUser = getResetToken({ resetToken });
-    // const resetToken = req.params.resetToken;
-    // console.log("req.oarams.resetToken", req.params.resetToken);
-    // const resetUser = await userModel.findOne({
-    //     "resetPassword.resetToken": resetToken,
-    //     "resetPassword.resetExpiration": { $gte: Date.now() },
-    // });
+    const resetToken = req.params.resetToken;
+    const resetUser = await getUserByResetToken(resetToken, Date.now());
 
     if (!resetUser) {
         console.log("Link expired");
         return res.status(400).json({ msg: "Link expired" });
     }
+    console.log("resetUser", resetUser.authentication.salt);
     return res.status(200).json({ msg: "Token existed." });
 };
 
@@ -175,11 +172,7 @@ const handleResetPW = async (req, res) => {
     try {
         const { newPassword } = req.body;
         const resetToken = req.params.resetToken;
-        console.log("req.params.resetToken", req.params.resetToken);
-        const user = await userModel.findOne({
-            "resetPassword.resetToken": resetToken,
-            "resetPassword.resetExpiration": { $gte: Date.now() },
-        });
+        const user = await getUserByResetToken(resetToken, Date.now());
         if (!user) {
             console.log("user not found");
             return res.sendStatus(400);
