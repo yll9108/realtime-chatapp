@@ -9,9 +9,9 @@ const {
 const nodemailer = require("nodemailer");
 const port = process.env.PORT || 5000;
 
+// function register
 const registerUser = async (req, res) => {
     try {
-        // const userID = uuid();
         const { userName, email, password } = req.body;
         if (!userName || !email || !password) {
             console.log("missing one of them: userName, email or password");
@@ -19,15 +19,17 @@ const registerUser = async (req, res) => {
                 msg: "missing one of them: userName, email or password",
             });
         }
+
+        // check if user uses the same email to register
         const existingUser = await getUserByEmail({ email });
         if (existingUser) {
             console.log("user already exists");
             return res.status(400).json({ msg: "user already exists" });
         }
 
+        // if not .. user is able to type in password and it'll be hashed
         const salt = random();
         const user = await createUser({
-            // userID,
             userName,
             email,
             authentication: {
@@ -45,10 +47,11 @@ const registerUser = async (req, res) => {
 };
 
 // function login
-
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
+
+        // check if user type in email and password
         if (!email || !password) {
             console.log("sth missing: email or password");
             return res
@@ -56,14 +59,18 @@ const login = async (req, res) => {
                 .json({ msg: "sth missing: email or password" });
         }
 
+        // get user by email and select data from DB
         const user = await getUserByEmail({ email }).select(
             "+authentication.salt+authentication.password"
         );
+
+        // if user email doesn't exist
         if (!user) {
             console.log("user doesn't exist");
             return res.sendStatus(400).json({ msg: "user doesn't exist" });
         }
 
+        // if user email exists, comparing hashed password
         const expectedHash = authentication(user.authentication.salt, password);
         console.log("expectedHash", expectedHash);
         console.log("storedpassword", user.authentication.password);
@@ -91,7 +98,7 @@ const login = async (req, res) => {
 };
 
 // reset password
-const resetPW = async (req, res) => {
+const handleResetEmail = async (req, res) => {
     try {
         // use email as rest tool
         const { email } = req.body;
@@ -114,6 +121,7 @@ const resetPW = async (req, res) => {
             },
         });
 
+        // create a transporter to send reset mail
         try {
             await transporter.sendMail({
                 from: process.env.MY_EMAIL,
@@ -148,12 +156,13 @@ const resetPW = async (req, res) => {
 
 // after clicking the link, look for user inside token
 const handleResetToken = async (req, res) => {
-    const resetToken = req.params.resetToken;
-    console.log("req.oarams.resetToken", req.params.resetToken);
-    const resetUser = await userModel.findOne({
-        "resetPassword.resetToken": resetToken,
-        "resetPassword.resetExpiration": { $gte: Date.now() },
-    });
+    const resetUser = getResetToken({ resetToken });
+    // const resetToken = req.params.resetToken;
+    // console.log("req.oarams.resetToken", req.params.resetToken);
+    // const resetUser = await userModel.findOne({
+    //     "resetPassword.resetToken": resetToken,
+    //     "resetPassword.resetExpiration": { $gte: Date.now() },
+    // });
 
     if (!resetUser) {
         console.log("Link expired");
@@ -171,8 +180,6 @@ const handleResetPW = async (req, res) => {
             "resetPassword.resetToken": resetToken,
             "resetPassword.resetExpiration": { $gte: Date.now() },
         });
-        // const _id = req.body._id;
-        // const user = await userModel.findOne({ resetToken });
         if (!user) {
             console.log("user not found");
             return res.sendStatus(400);
@@ -199,7 +206,7 @@ const handleResetPW = async (req, res) => {
 module.exports = {
     registerUser,
     login,
-    resetPW,
+    handleResetEmail,
     handleResetToken,
     handleResetPW,
 };
