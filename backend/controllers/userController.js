@@ -165,8 +165,14 @@ const handleResetToken = async (req, res) => {
 const handleResetPW = async (req, res) => {
     try {
         const { newPassword } = req.body;
-        const _id = req.body._id;
-        const user = await userModel.findOne({ _id });
+        const resetToken = req.params.resetToken;
+        console.log("req.params.resetToken", req.params.resetToken);
+        const user = await userModel.findOne({
+            "resetPassword.resetToken": resetToken,
+            "resetPassword.resetExpiration": { $gte: Date.now() },
+        });
+        // const _id = req.body._id;
+        // const user = await userModel.findOne({ resetToken });
         if (!user) {
             console.log("user not found");
             return res.sendStatus(400);
