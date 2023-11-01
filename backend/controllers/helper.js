@@ -8,6 +8,11 @@ const getUserByEmail = (email) => userModel.findOne(email);
 const getUserBySessionToken = (sessionToken) => {
     userModel.findOne({ "authentication.sessionToken": sessionToken });
 };
+const getUserByResetToken = (resetToken, currentTime) =>
+    userModel.findOne({
+        "resetPassword.resetToken": resetToken,
+        "resetPassword.resetExpiration": { $gte: currentTime },
+    });
 
 const random = () => crypto.randomBytes(128).toString("base64");
 
@@ -26,4 +31,5 @@ module.exports = {
     random,
     authentication,
     getUserBySessionToken,
+    getUserByResetToken,
 };
