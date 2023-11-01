@@ -17,9 +17,16 @@ function SignUp() {
                 email,
                 password,
             })
-            .then((result) => {
-                console.log(result);
-                navigate("/");
+            .then((res) => {
+                if (res.data.Status === "Success") {
+                    navigate("/");
+                } else if (res.data.Status === "missing") {
+                    console.log(
+                        `MSG from frontend: missing one of them: userName, email or password`
+                    );
+                } else if (res.data.Status === "duplicate user") {
+                    console.log(`MSG from frontend: user already exists`);
+                }
             })
             .catch((err) => console.log(err));
     };

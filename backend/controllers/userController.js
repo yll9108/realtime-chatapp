@@ -15,9 +15,9 @@ const registerUser = async (req, res) => {
     try {
         const { userName, email, password } = req.body;
         if (!userName || !email || !password) {
-            console.log("missing one of them: userName, email or password");
-            return res.status(400).json({
-                msg: "missing one of them: userName, email or password",
+            // console.log("missing one of them: userName, email or password");
+            return res.send({
+                Status: "missing",
             });
         }
 
@@ -25,7 +25,9 @@ const registerUser = async (req, res) => {
         const existingUser = await getUserByEmail({ email });
         if (existingUser) {
             console.log("user already exists");
-            return res.status(400).json({ msg: "user already exists" });
+            return res.send({
+                Status: "duplicate user",
+            });
         }
 
         // if not .. user is able to type in password and it'll be hashed
@@ -38,9 +40,12 @@ const registerUser = async (req, res) => {
                 password: authentication(salt, password),
             },
         });
-        console.log("Generated salt:", salt);
-        console.log("Stored salt:", user.authentication.salt);
-        return res.status(200).json(user).end();
+        // console.log("Generated salt:", salt);
+        // console.log("Stored salt:", user.authentication.salt);
+        return res.send({
+            Status: "Success",
+        });
+        // return res.status(200).json(user).end();
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);
@@ -55,9 +60,9 @@ const login = async (req, res) => {
         // check if user type in email and password
         if (!email || !password) {
             console.log("sth missing: email or password");
-            return res
-                .sendStatus(400)
-                .json({ msg: "sth missing: email or password" });
+            return res.send({
+                Status: "missing",
+            });
         }
 
         // get user by email and select data from DB
@@ -68,13 +73,15 @@ const login = async (req, res) => {
         // if user email doesn't exist
         if (!user) {
             console.log("user doesn't exist");
-            return res.sendStatus(400).json({ msg: "user doesn't exist" });
+            return res.send({
+                Status: "non existing",
+            });
         }
 
         // if user email exists, comparing hashed password
         const expectedHash = authentication(user.authentication.salt, password);
-        console.log("expectedHash", expectedHash);
-        console.log("storedpassword", user.authentication.password);
+        // console.log("expectedHash", expectedHash);
+        // console.log("storedpassword", user.authentication.password);
         if (user.authentication.password !== expectedHash) {
             console.log("Password wrong");
             return res.sendStatus(403);
@@ -85,13 +92,16 @@ const login = async (req, res) => {
             salt,
             user._id.toString()
         );
-        console.log(
-            "user.authentication.sessionToken",
-            user.authentication.sessionToken
-        );
-        console.log("Login succeed");
+        // console.log(
+        //     "user.authentication.sessionToken",
+        //     user.authentication.sessionToken
+        // );
+        // console.log("Login succeed");
         await user.save();
-        return res.status(200).json(user).end();
+        // return res.status(200).json(user).end();
+        return res.send({
+            Status: "Success",
+        });
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);
@@ -108,12 +118,14 @@ const handleResetEmail = async (req, res) => {
         // when user typed in WRONG email
         if (!user) {
             console.log("Email hasn't been signed up.");
-            return res.sendStatus(400);
+            return res.send({
+                Status: "Wrong email",
+            });
         }
 
         // when user typed in CORRECT email
         const token = Math.random().toString(16).slice(3);
-        console.log("token1", token);
+        // console.log("token1", token);
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -144,11 +156,13 @@ const handleResetEmail = async (req, res) => {
             resetToken: token,
             resetExpiration: Date.now() + 3600000,
         };
-        console.log("token3", user.resetPassword.resetToken);
-        console.log("user.resetExpiration", user.resetPassword.resetExpiration);
+        // console.log("token3", user.resetPassword.resetToken);
+        // console.log("user.resetExpiration", user.resetPassword.resetExpiration);
         await user.save();
-        console.log(`MSG: token has been saved`);
-        return res.status(200).json({ msg: "Password reset email sent." });
+        return res.send({
+            Status: "Succeed",
+        });
+        // console.log(`MSG: token has been saved`);
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);
@@ -165,9 +179,6 @@ const handleResetToken = async (req, res) => {
         return res.status(400).json({ msg: "Link expired" });
     }
     console.log("resetUser", resetUser.authentication.salt);
-    // res.sendFile(
-    //     path.join(__dirname, "../../frontend/src/components/ResetPW.js")
-    // );
     return res.status(200).json({ msg: "Token existed." });
 };
 
@@ -177,8 +188,10 @@ const handleResetPW = async (req, res) => {
         const resetToken = req.params.resetToken;
         const user = await getUserByResetToken(resetToken, Date.now());
         if (!user) {
-            console.log("user not found");
-            return res.sendStatus(400);
+            console.log("Expired Link");
+            return res.send({
+                Status: "Expired Link",
+            });
         }
         const salt = random();
         const newHashedPassword = authentication(salt, newPassword);
@@ -192,7 +205,9 @@ const handleResetPW = async (req, res) => {
         );
         user.resetPassword.resetToken = null;
         await user.save();
-        return res.status(200).json({ msg: "changed password successfully" });
+        return res.send({
+            Status: "Success",
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ msg: "failed" });

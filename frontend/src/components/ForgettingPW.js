@@ -13,9 +13,13 @@ function ForgettingPW() {
             .post("http://localhost:8080/api/users/reset", {
                 email,
             })
-            .then((result) => {
-                console.log(result);
-                navigate("/");
+            .then((res) => {
+                if (res.data.Status === "Wrong email") {
+                    console.log(`MSG from frontend: email hasn't signed up`);
+                } else if (res.data.Status === "Succeed") {
+                    console.log(`MSG from frontend: Succeed`);
+                    navigate("/");
+                }
             })
             .catch((err) => console.log(err));
     };
