@@ -9,6 +9,7 @@ const {
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 const port = process.env.PORT || 5000;
+const path = require("path");
 
 // function register
 const registerUser = async (req, res) => {
@@ -165,7 +166,10 @@ const handleResetToken = async (req, res) => {
         return res.status(400).json({ msg: "Link expired" });
     }
     console.log("resetUser", resetUser.authentication.salt);
-    return res.status(200).json({ msg: "Token existed." });
+    res.sendFile(
+        path.join(__dirname, "../../frontend/src/components/ResetPW.js")
+    );
+    // return res.status(200).json({ msg: "Token existed." });
 };
 
 const handleResetPW = async (req, res) => {
