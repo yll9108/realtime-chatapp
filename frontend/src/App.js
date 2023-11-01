@@ -45,7 +45,7 @@ function App() {
                     ></Route>
                     <Route path="/signup" element={<SignUp />}></Route>
                     <Route
-                        path="/reset-password/:token"
+                        path="/reset/:resetToken"
                         element={<ResetPW />}
                     ></Route>
                 </Routes>

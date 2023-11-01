@@ -8,8 +8,7 @@ const {
 } = require("./helper");
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
-const port = process.env.PORT || 5000;
-const path = require("path");
+const port = 3000;
 
 // function register
 const registerUser = async (req, res) => {
@@ -131,7 +130,7 @@ const handleResetEmail = async (req, res) => {
                 subject: "RESET PASSWORD",
                 html: `<p>Hi user: ${user.userName}</p>
             <p>Please click the link to reset the password.</p>
-            <a href="http://localhost:${port}/api/users/reset/${token}"><p>Link</p></a>
+            <a href="http://localhost:${port}/reset/${token}"><p>Link</p></a>
             <p>Link will be expired in 1 hour, thank you!</p>`,
             });
             console.log("token2", token);
@@ -166,10 +165,10 @@ const handleResetToken = async (req, res) => {
         return res.status(400).json({ msg: "Link expired" });
     }
     console.log("resetUser", resetUser.authentication.salt);
-    res.sendFile(
-        path.join(__dirname, "../../frontend/src/components/ResetPW.js")
-    );
-    // return res.status(200).json({ msg: "Token existed." });
+    // res.sendFile(
+    //     path.join(__dirname, "../../frontend/src/components/ResetPW.js")
+    // );
+    return res.status(200).json({ msg: "Token existed." });
 };
 
 const handleResetPW = async (req, res) => {

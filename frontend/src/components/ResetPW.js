@@ -1,18 +1,16 @@
 import { useState } from "react";
-// import styled from "styled-components";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function ResetPW() {
     const [newPassword, setNewPassword] = useState();
     const navigate = useNavigate();
-    const location = useLocation();
+    const { resetToken } = useParams();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const resetToken = location.pathname.split("/").pop();
         axios
-            .post(`http://localhost:8080/api/users/${resetToken}`, {
+            .post(`http://localhost:8080/api/users/reset/${resetToken}`, {
                 newPassword,
             })
             .then((result) => {
@@ -42,11 +40,5 @@ function ResetPW() {
         </>
     );
 }
-
-// const ForgettingPWDiv = styled.div`
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-// `;
 
 export default ResetPW;
