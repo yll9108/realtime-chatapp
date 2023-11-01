@@ -2,10 +2,22 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { auth, googleAuthProvider } from "./../fireBaseConfig";
 
 function Login({ handleLogin }) {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+
+    const signInWithGoogle = () => {
+        auth.signInWithPopup(googleAuthProvider)
+            .then((result) => {
+                // Successful login
+                handleLogin();
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -49,6 +61,7 @@ function Login({ handleLogin }) {
                 />
                 <button onClick={handleLogin}>Login</button>
             </form>
+            <button onClick={signInWithGoogle}>Login/Signup with Google</button>
             <p>Forgot password?</p>
             <Link to="/forgot-password">Reset</Link>
             <h3>Don't have an account?</h3>
