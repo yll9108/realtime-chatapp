@@ -1,39 +1,79 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { auth, googleAuthProvider } from './../fireBaseConfig';
+import axios from "axios";
+import { auth, googleAuthProvider } from "./../fireBaseConfig";
 
 function Login({ handleLogin }) {
-  const signInWithGoogle = () => {
-    auth.signInWithPopup(googleAuthProvider)
-        .then((result) => {
-            // Successful login
-            handleLogin();
-        })
-        .catch((error) => {
-            console.error(error.message);
-        });
-};
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
 
-return (
-  <LoginDiv>
-      <h1>LOGIN</h1>
-      <input type="email" name="email" placeholder="type in email" />
-      <input type="password" name="password" placeholder="type in password" />
-      <button onClick={handleLogin}>Login</button>
-      <button onClick={signInWithGoogle}>Login/Signup with Google</button>
-      <p>Forgot password?</p>
-      <Link to="/forgot-password">Reset</Link>
-      <h3>Don't have an account?</h3>
-      <Link to="/signup">Sign up</Link>
-  </LoginDiv>
-);
+    const signInWithGoogle = () => {
+        auth.signInWithPopup(googleAuthProvider)
+            .then((result) => {
+                // Successful login
+                handleLogin();
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axios
+            .post("http://localhost:8080/api/users/login", {
+                email,
+                password,
+            })
+            .then((result) => {
+                console.log("Logged in successfully", result);
+                // navigate("/");
+            })
+            .catch((err) => console.log(err));
+    };
+
+    return (
+        <LoginDiv>
+            <h1>LOGIN</h1>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    <strong>Email</strong>
+                </label>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="type in email"
+                    onChange={(e) => {
+                        setEmail(e.target.value);
+                    }}
+                />
+                <label>
+                    <strong>Password</strong>
+                </label>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="type in password"
+                    onChange={(e) => {
+                        setPassword(e.target.value);
+                    }}
+                />
+                <button onClick={handleLogin}>Login</button>
+            </form>
+            <button onClick={signInWithGoogle}>Login/Signup with Google</button>
+            <p>Forgot password?</p>
+            <Link to="/forgot-password">Reset</Link>
+            <h3>Don't have an account?</h3>
+            <Link to="/signup">Sign up</Link>
+        </LoginDiv>
+    );
 }
 
 const LoginDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 export default Login;

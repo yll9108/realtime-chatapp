@@ -4,6 +4,7 @@ import Login from "./components/Login";
 import Chat from "./components/Chat";
 import SignUp from "./components/SignUp";
 import ForgettingPW from "./components/ForgettingPW";
+import ResetPW from "./components/ResetPW";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { auth } from './fireBaseConfig';
 
@@ -54,6 +55,10 @@ function App() {
                         element={<ForgettingPW />}
                     ></Route>
                     <Route path="/signup" element={<SignUp />}></Route>
+                    <Route
+                        path="/reset/:resetToken"
+                        element={<ResetPW />}
+                    ></Route>
                 </Routes>
             </div>
         </Router>
