@@ -34,7 +34,9 @@ const NavBar = () => {
               ChatApp
             </Link>
           </h2>
-          <span className="login-UserName">Logged in as {user?.name}</span>
+          {user && (
+            <span className="login-UserName">Logged in as {user?.name}</span>
+          )}
           <Nav>
             <Stack>
               <Link to="/login" className="login">
