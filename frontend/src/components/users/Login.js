@@ -1,25 +1,37 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { auth, googleAuthProvider } from "../../fireBaseConfig";
 
 function Login({ handleLogin }) {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
   const signInWithGoogle = () => {
-    auth
-      .signInWithPopup(googleAuthProvider)
+    auth.signInWithPopup(googleAuthProvider)
       .then((result) => {
-        // Successful login
-        handleLogin();
+        const user = result.user;
+        // Send the user data to your backend
+        axios.post('http://localhost:8080/api/users/google-login', {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+        })
+        .then(response => {
+          // Handle the response from your backend
+          handleLogin(response.data.user);
+          navigate('/'); // Navigate to the home page or dashboard
+        })
+        .catch(error => {
+          // Handle any errors
+          console.error(error);
+        });
       })
       .catch((error) => {
         console.error(error.message);
       });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -29,7 +41,8 @@ function Login({ handleLogin }) {
       })
       .then((result) => {
         console.log("Logged in successfully", result);
-        // navigate("/");
+        handleLogin(result.data.user);
+        navigate('/'); // Navigate to the home page or dashboard
       })
       .catch((err) => console.log(err));
   };
@@ -45,9 +58,8 @@ function Login({ handleLogin }) {
           type="email"
           name="email"
           placeholder="type in email"
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <label>
           <strong>Password</strong>
@@ -56,11 +68,10 @@ function Login({ handleLogin }) {
           type="password"
           name="password"
           placeholder="type in password"
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={handleLogin}>Login</button>
+        <button type="submit">Login</button>
       </form>
       <button onClick={signInWithGoogle}>Login/Signup with Google</button>
       <p>Forgot password?</p>

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import ChatArea from './ChatArea';
 import UserList from './UserList';
-import Sidebar from './Sidebar';
+import Sidebar from './../shared/Sidebar';
 import styled from 'styled-components';
-import Friends from './Friends';
-import Settings from './Settings';
-import Profile from './Profile';
+import Friends from './../settings/Friends';
+import Settings from './../settings/Settings';
+import Profile from './../settings/Profile';
 
 const ChatContainer = styled.div`
     display: flex;
