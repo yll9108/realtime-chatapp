@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 const Navbar = styled.div`
   background-color: black;
@@ -22,6 +24,7 @@ const Stack = styled.div`
 `;
 
 const NavBar = () => {
+  const { user } = useContext(AuthContext);
   return (
     <>
       <Navbar>
@@ -31,7 +34,7 @@ const NavBar = () => {
               ChatApp
             </Link>
           </h2>
-          <span className="login-UserName">Logged in as test</span>
+          <span className="login-UserName">Logged in as {user?.name}</span>
           <Nav>
             <Stack>
               <Link to="/login" className="login">
