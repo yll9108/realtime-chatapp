@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Login from "./components/users/Login";
-import Chat from "./components/Chat";
-import SignUp from "./components/SignUp";
-import ForgettingPW from "./components/ForgettingPW";
-import ResetPW from "./components/ResetPW";
+import Chat from "./components/chats/Chat";
+import SignUp from "./components/users/SignUp";
+import ForgettingPW from "./components/users/ForgettingPW";
+import ResetPW from "./components/users/ResetPW";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { auth } from "./fireBaseConfig";
 
