@@ -100,10 +100,10 @@ const login = async (req, res) => {
     // console.log("Login succeed");
     await user.save();
     // return res.status(200).json(user).end();
-    return res.send({
-      Status: "Success",
-    });
-    // return res.status(200).json({ _id: user._id, name: user.userName, email });
+    // return res.send({
+    //   Status: "Success",
+    // });
+    return res.status(200).json({ _id: user._id, name: user.userName, email });
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);
