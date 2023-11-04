@@ -1,20 +1,34 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-// import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { auth, googleAuthProvider } from "../../fireBaseConfig";
 import { AuthContext } from "../../context/AuthContext";
 
 function Login({ handleLogin }) {
   // const [email, setEmail] = useState();
   // const [password, setPassword] = useState();
+  const navigate = useNavigate();
 
   const signInWithGoogle = () => {
-    auth
-      .signInWithPopup(googleAuthProvider)
+    auth.signInWithPopup(googleAuthProvider)
       .then((result) => {
-        // Successful login
-        handleLogin();
+        const user = result.user;
+        // Send the user data to your backend
+        axios.post('http://localhost:8080/api/users/google-login', {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+        })
+        .then(response => {
+          // Handle the response from your backend
+          handleLogin(response.data.user);
+          navigate('/'); // Navigate to the home page or dashboard
+        })
+        .catch(error => {
+          // Handle any errors
+          console.error(error);
+        });
       })
       .catch((error) => {
         console.error(error.message);
@@ -34,6 +48,7 @@ function Login({ handleLogin }) {
   //     })
   //     .catch((err) => console.log(err));
   // };
+  
   const { loginUser, updateLoginInfo, loginInfo, loginError, isLoginLoading } =
     useContext(AuthContext);
   return (
@@ -48,6 +63,7 @@ function Login({ handleLogin }) {
             type="email"
             name="email"
             placeholder="type in email"
+			value={email}
             onChange={(e) =>
               updateLoginInfo({ ...loginInfo, email: e.target.value })
             }
@@ -61,6 +77,7 @@ function Login({ handleLogin }) {
             type="password"
             name="password"
             placeholder="type in password"
+			value={password}
             onChange={(e) =>
               updateLoginInfo({ ...loginInfo, password: e.target.value })
             }

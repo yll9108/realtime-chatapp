@@ -8,8 +8,8 @@ import ResetPW from "./components/users/ResetPW";
 import { Routes, Route, Navigate } from "react-router-dom";
 import styled from "styled-components";
 import { AuthContext } from "./context/AuthContext";
+import { auth } from "./fireBaseConfig";
 // import Sidebar from "./components/shared/Sidebar";
-// import { auth } from "./fireBaseConfig";
 
 function App() {
   // State to track login status
