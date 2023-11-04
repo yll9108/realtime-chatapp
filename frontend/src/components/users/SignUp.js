@@ -38,7 +38,7 @@ function SignUp() {
     registerError,
     isRegisterLoading,
   } = useContext(AuthContext);
-  console.log("registerError", registerError);
+
   return (
     <>
       <SignUpDiv>
@@ -92,7 +92,6 @@ function SignUp() {
           <button>
             {isRegisterLoading ? "Creating your account" : "Register"}
           </button>
-
           <Alert>
             <p>{registerError}</p>
           </Alert>
