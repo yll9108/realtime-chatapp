@@ -12,7 +12,15 @@ export const AuthContextProvider = ({ children }) => {
     email: "",
     password: "",
   });
-  // console.log(registerInfo);
+  const [loginError, setLoginError] = useState(null);
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const [loginInfo, setLoginInfo] = useState({
+    email: "",
+    password: "",
+  });
+  console.log("registerInfo", registerInfo);
+  console.log("loginInfo", loginInfo);
+  console.log("user", user);
 
   useEffect(() => {
     const user = localStorage.getItem("User");
@@ -23,8 +31,10 @@ export const AuthContextProvider = ({ children }) => {
     setRegisterInfo(info);
   }, []);
 
-  //the function originally in the SingUp.js
-  //name : handleSubmit => registerUser
+  const updateLoginInfo = useCallback((info) => {
+    setLoginInfo(info);
+  }, []);
+  //SingUp.js handleSubmit
   const registerUser = useCallback(
     async (e) => {
       e.preventDefault();
@@ -50,15 +60,41 @@ export const AuthContextProvider = ({ children }) => {
     [registerInfo]
   );
 
+  //Login.js handleSubmit
+  const loginUser = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setIsLoginLoading(true);
+      setLoginError(null);
+
+      const response = await postRequest(
+        `${baseUrl}/users/login`,
+        JSON.stringify(loginInfo)
+      );
+      setIsLoginLoading(false);
+
+      if (response.error) {
+        return setLoginError(response);
+      }
+      localStorage.setItem("User", JSON.stringify(response));
+      setUser(response);
+    },
+    [loginInfo]
+  );
   return (
     <AuthContext.Provider
       value={{
         user,
-        registerInfo,
         updateRegisterInfo,
         registerUser,
+        registerInfo,
         registerError,
         isRegisterLoading,
+        loginUser,
+        updateLoginInfo,
+        loginInfo,
+        loginError,
+        isLoginLoading,
       }}
     >
       {children}
