@@ -1,7 +1,5 @@
-import { createContext, useState, useCallback } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { baseUrl } from "../utils/services";
+import { createContext, useState, useCallback, useEffect } from "react";
+import { baseUrl, postRequest } from "../utils/services";
 
 export const AuthContext = createContext();
 
@@ -14,8 +12,12 @@ export const AuthContextProvider = ({ children }) => {
     email: "",
     password: "",
   });
+  // console.log(registerInfo);
 
-  console.log("registerInfo", registerInfo);
+  useEffect(() => {
+    const user = localStorage.getItem("User");
+    setUser(JSON.parse(user));
+  }, []);
 
   const updateRegisterInfo = useCallback((info) => {
     setRegisterInfo(info);
@@ -23,41 +25,30 @@ export const AuthContextProvider = ({ children }) => {
 
   //the function originally in the SingUp.js
   //name : handleSubmit => registerUser
-  const navigate = useNavigate();
-  const registerUser = (e) => {
-    e.preventDefault();
+  const registerUser = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-    setIsRegisterLoading(true);
-    setRegisterError(null);
+      setIsRegisterLoading(true);
+      setRegisterError(null);
 
-    axios
-      .post(`${baseUrl}/users/register`, registerInfo)
-      .then((res) => {
-        const response = res.data.Status;
+      const response = await postRequest(
+        `${baseUrl}/users/register`,
+        JSON.stringify(registerInfo)
+      );
 
-        setIsRegisterLoading(false);
+      setIsRegisterLoading(false);
 
-        if (response === "Success") {
-          setUser(response);
-          navigate("/");
-          console.log(response);
-        } else if (response === "missing") {
-          setRegisterError(response.toString());
+      if (response.error) {
+        console.log(response);
+        return setRegisterError(response);
+      }
 
-          console.log(
-            `MSG from frontend: missing one of them: userName, email or password`
-          );
-        } else if (response === "duplicate user") {
-          setRegisterError(response.toString());
-
-          console.log(`MSG from frontend: user already exists`);
-        }
-      })
-      .catch((err) => {
-        setRegisterError(err);
-        console.log(err);
-      });
-  };
+      localStorage.setItem("User", JSON.stringify(response));
+      setUser(response);
+    },
+    [registerInfo]
+  );
 
   return (
     <AuthContext.Provider
