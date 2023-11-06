@@ -3,39 +3,27 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { auth, googleAuthProvider } from "../../fireBaseConfig";
-import { AuthContext } from "../../context/AuthContext";
+import { useAuth, AuthContext } from "./../../context/AuthContext";
 
 function Login({ handleLogin }) {
   // const [email, setEmail] = useState();
   // const [password, setPassword] = useState();
-  // const navigate = useNavigate();
 
-  // const signInWithGoogle = () => {
-  //   auth
-  //     .signInWithPopup(googleAuthProvider)
-  //     .then((result) => {
-  //       const user = result.user;
-  //       // Send the user data to your backend
-  //       axios
-  //         .post("http://localhost:8080/api/users/google-login", {
-  //           uid: user.uid,
-  //           email: user.email,
-  //           displayName: user.displayName,
-  //         })
-  //         .then((response) => {
-  //           // Handle the response from your backend
-  //           handleLogin(response.data.user);
-  //           navigate("/"); // Navigate to the home page or dashboard
-  //         })
-  //         .catch((error) => {
-  //           // Handle any errors
-  //           console.error(error);
-  //         });
-  //     })
-  //     .catch((error) => {
-  //       console.error(error.message);
-  //     });
-  // };
+  const { loginUser, updateLoginInfo, loginInfo, loginError, isLoginLoading } =
+    useContext(AuthContext);
+
+  const navigate = useNavigate();
+  const { signInWithGoogle } = useAuth();
+
+  const handleSignIn = () => {
+    signInWithGoogle()
+      .then(() => {
+        navigate("/"); // Navigate after sign in
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
 
   // const handleSubmit = (e) => {
   //   e.preventDefault();
@@ -46,13 +34,12 @@ function Login({ handleLogin }) {
   //     })
   //     .then((result) => {
   //       console.log("Logged in successfully", result);
-  //       // navigate("/");
+  //       handleLogin(result.data.user);
+  //       navigate('/'); // Navigate to the home page or dashboard
   //     })
   //     .catch((err) => console.log(err));
   // };
 
-  const { loginUser, updateLoginInfo, loginInfo, loginError, isLoginLoading } =
-    useContext(AuthContext);
   return (
     <LoginDiv>
       <h1>LOGIN</h1>
@@ -89,7 +76,7 @@ function Login({ handleLogin }) {
           {isLoginLoading ? "Login processing.." : "Login"}
         </button>
       </form>
-      {/* <button onClick={signInWithGoogle}>Login/Signup with Google</button> */}
+      <button onClick={handleSignIn}>Login/Signup with Google</button>
       <Alert>
         <p>{loginError}</p>
       </Alert>

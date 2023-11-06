@@ -21,37 +21,8 @@ app.use("/api/chats", chatRoute);
 // Message routes
 app.use("/api/messages", messageRoute);
 
-app.post('/api/users/google-login', async (req, res) => {
-    const { uid, email, displayName } = req.body;
-    
-    try {
-      // Check if the user already exists in the database
-      let user = await User.findOne({ firebaseUid: uid });
-  
-      if (user) {
-        // User exists, update the user data if necessary
-        // ...
-        return res.status(200).send(user);
-      } else {
-        // User doesn't exist, create a new user
-        const newUser = new User({
-          email: email,
-          userName: displayName,
-          // Set other fields as necessary
-          firebaseUid: uid,
-          authentication: { password: 'N/A' } // Or handle it as per your schema
-        });
-  
-        // Save the new user to the database
-        user = await newUser.save();
-        return res.status(201).send(user);
-      }
-    } catch (error) {
-      // Handle any errors
-      console.error(error);
-      return res.status(500).send(error);
-    }
-  });
+
+app.post('/api/users/google-login', userController.googleLogin);
   
 
 // Listen for requests
