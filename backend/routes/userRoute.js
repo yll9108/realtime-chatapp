@@ -19,6 +19,6 @@ router.get("/reset/:resetToken", handleResetToken);
 router.post("/reset/:resetToken", handleResetPW);
 router.get("/find/:userId", findUser); // /api/users/find
 router.get("/", getUsers); // /api/users/
-app.post("/google-login", googleLogin);
+router.post("/google-login", googleLogin);
 
 module.exports = router;

@@ -9,7 +9,7 @@ const {
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 const port = 3000;
-const User = require("../models/User");
+// const User = require("../models/User");
 // function register
 const registerUser = async (req, res) => {
   try {
@@ -216,7 +216,7 @@ const googleLogin = async (req, res) => {
   const { uid, email, displayName } = req.body;
 
   try {
-    let user = await User.findOne({ firebaseUid: uid });
+    let user = await userModel.findOne({ firebaseUid: uid });
 
     if (user) {
       return res.status(200).send(user);
