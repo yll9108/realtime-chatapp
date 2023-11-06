@@ -13,7 +13,7 @@ const AllUsers = styled.div`
 const PotentialChats = () => {
   const { user } = useContext(AuthContext);
   const { potentialChats, createChat } = useContext(ChatContext);
-  console.log("potentialChats", potentialChats);
+  // console.log("potentialChats", potentialChats);
   return (
     <>
       <AllUsers>
