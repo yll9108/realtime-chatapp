@@ -1,38 +1,49 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { auth, googleAuthProvider } from "../../fireBaseConfig";
-import { useAuth,  AuthContext  } from './../../context/AuthContext'; 
+import { Link } from "react-router-dom";
+import { AuthContext } from "./../../context/AuthContext";
 
 function Login({ handleLogin }) {
   // const [email, setEmail] = useState();
   // const [password, setPassword] = useState();
-  const navigate = useNavigate();
-  const { signInWithGoogle } = useAuth(); 
 
-  const handleSignIn = () => {
-    signInWithGoogle().then(() => {
-      navigate('/'); // Navigate after sign in
-    }).catch((error) => {
-      console.error(error.message);
-    });
-  };
+  const {
+    loginUser,
+    updateLoginInfo,
+    loginInfo,
+    loginError,
+    isLoginLoading,
+    signInWithGoogle,
+  } = useContext(AuthContext);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios
-      .post("http://localhost:8080/api/users/login", {
-        email,
-        password,
-      })
-      .then((result) => {
-        console.log("Logged in successfully", result);
-        handleLogin(result.data.user);
-        navigate('/'); // Navigate to the home page or dashboard
-      })
-      .catch((err) => console.log(err));
-  };
+  // const navigate = useNavigate();
+  // const { signInWithGoogle } = useAuth();
+
+  // const handleSignIn = () => {
+  //   signInWithGoogle()
+  //     .then(() => {
+  //       navigate("/"); // Navigate after sign in
+  //     })
+  //     .catch((error) => {
+  //       console.error(error.message);
+  //     });
+  // };
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   axios
+  //     .post("http://localhost:8080/api/users/login", {
+  //       email,
+  //       password,
+  //     })
+  //     .then((result) => {
+  //       console.log("Logged in successfully", result);
+  //       handleLogin(result.data.user);
+  //       navigate('/'); // Navigate to the home page or dashboard
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+
   return (
     <LoginDiv>
       <h1>LOGIN</h1>
@@ -45,7 +56,6 @@ function Login({ handleLogin }) {
             type="email"
             name="email"
             placeholder="type in email"
-			value={email}
             onChange={(e) =>
               updateLoginInfo({ ...loginInfo, email: e.target.value })
             }
@@ -59,7 +69,6 @@ function Login({ handleLogin }) {
             type="password"
             name="password"
             placeholder="type in password"
-			value={password}
             onChange={(e) =>
               updateLoginInfo({ ...loginInfo, password: e.target.value })
             }
@@ -69,8 +78,8 @@ function Login({ handleLogin }) {
           {isLoginLoading ? "Login processing.." : "Login"}
         </button>
       </form>
-      <button onClick={handleSignIn}>Login/Signup with Google</button>
-            <Alert>
+      <button onClick={signInWithGoogle}>Login/Signup with Google</button>
+      <Alert>
         <p>{loginError}</p>
       </Alert>
 

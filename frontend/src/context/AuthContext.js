@@ -1,5 +1,7 @@
 import { createContext, useState, useCallback, useEffect } from "react";
 import { baseUrl, postRequest } from "../utils/services";
+import axios from "axios";
+import { auth, googleAuthProvider } from "../utils/fireBaseConfig";
 
 export const AuthContext = createContext();
 
@@ -18,9 +20,9 @@ export const AuthContextProvider = ({ children }) => {
     email: "",
     password: "",
   });
-  console.log("registerInfo", registerInfo);
-  console.log("loginInfo", loginInfo);
-  console.log("user", user);
+  // console.log("registerInfo", registerInfo);
+  // console.log("loginInfo", loginInfo);
+  // console.log("user", user);
 
   useEffect(() => {
     const user = localStorage.getItem("User");
@@ -81,6 +83,30 @@ export const AuthContextProvider = ({ children }) => {
     },
     [loginInfo]
   );
+
+  const signInWithGoogle = () => {
+    auth
+      .signInWithPopup(googleAuthProvider)
+      .then((result) => {
+        const user = result.user;
+        axios
+          .post("http://localhost:8080/api/users/google-login", {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+          })
+          .then((response) => {
+            setUser(response.data.user);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -95,6 +121,7 @@ export const AuthContextProvider = ({ children }) => {
         loginInfo,
         loginError,
         isLoginLoading,
+        signInWithGoogle,
       }}
     >
       {children}

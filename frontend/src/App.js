@@ -8,8 +8,9 @@ import ResetPW from "./components/users/ResetPW";
 import { Routes, Route, Navigate } from "react-router-dom";
 import styled from "styled-components";
 import { AuthContext } from "./context/AuthContext";
-import { auth } from "./fireBaseConfig";
+import { ChatContextProvider } from "./context/ChatContext";
 // import Sidebar from "./components/shared/Sidebar";
+// import { auth } from "./fireBaseConfig";
 
 function App() {
   // State to track login status
@@ -41,17 +42,19 @@ function App() {
   const { user } = useContext(AuthContext);
   return (
     <>
-      <NavBar />
-      <Container>
-        <Routes>
-          <Route path="/" element={user ? <Chat /> : <Login />} />
-          <Route path="/register" element={user ? <Chat /> : <SignUp />} />
-          <Route path="/login" element={user ? <Chat /> : <Login />} />
-          <Route path="/forgot-password" element={<ForgettingPW />} />
-          <Route path="/reset/:resetToken" element={<ResetPW />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </Container>
+      <ChatContextProvider user={user}>
+        <NavBar />
+        <Container>
+          <Routes>
+            <Route path="/" element={user ? <Chat /> : <Login />} />
+            <Route path="/register" element={user ? <Chat /> : <SignUp />} />
+            <Route path="/login" element={user ? <Chat /> : <Login />} />
+            <Route path="/forgot-password" element={<ForgettingPW />} />
+            <Route path="/reset/:resetToken" element={<ResetPW />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </Container>
+      </ChatContextProvider>
     </>
     // <Router>
     //   <div className="App">
