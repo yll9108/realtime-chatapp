@@ -71,7 +71,7 @@ const UserList = ({ chat, user }) => {
         <div>
           <UserAvatar />
           <UserInfo>
-            <UserName>{recipientUser?.name}</UserName>
+            <UserName>{recipientUser?.userName}</UserName>
             <UserLastMessage>text message</UserLastMessage>
           </UserInfo>
         </div>
