@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { auth, googleAuthProvider } from "../../fireBaseConfig";
-import { useAuth } from './../../context/AuthContext'; import { AuthContext } from "../../context/AuthContext";
+import { useAuth,  AuthContext  } from './../../context/AuthContext'; 
 
 function Login({ handleLogin }) {
   // const [email, setEmail] = useState();
