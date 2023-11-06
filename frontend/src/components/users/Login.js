@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-// import axios from "axios";
-// import { auth, googleAuthProvider } from "../../fireBaseConfig";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { auth, googleAuthProvider } from "../../fireBaseConfig";
 import { AuthContext } from "../../context/AuthContext";
 
 function Login({ handleLogin }) {
@@ -50,6 +50,7 @@ function Login({ handleLogin }) {
   //     })
   //     .catch((err) => console.log(err));
   // };
+
   const { loginUser, updateLoginInfo, loginInfo, loginError, isLoginLoading } =
     useContext(AuthContext);
   return (
