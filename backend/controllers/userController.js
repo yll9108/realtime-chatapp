@@ -9,7 +9,7 @@ const {
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 const port = 3000;
-
+const User = require('../models/User');
 // function register
 const registerUser = async (req, res) => {
     try {
@@ -213,6 +213,30 @@ const handleResetPW = async (req, res) => {
         return res.status(500).json({ msg: "failed" });
     }
 };
+const googleLogin = async (req, res) => {
+    const { uid, email, displayName } = req.body;
+    
+    try {
+      let user = await User.findOne({ firebaseUid: uid });
+  
+      if (user) {
+        return res.status(200).send(user);
+      } else {
+        const newUser = new User({
+          email: email,
+          userName: displayName,
+          firebaseUid: uid,
+          authentication: { password: 'N/A' } // Or handle according to your schema
+        });
+  
+        user = await newUser.save();
+        return res.status(201).send(user);
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send(error);
+    }
+  };
 
 module.exports = {
     registerUser,
@@ -220,4 +244,5 @@ module.exports = {
     handleResetEmail,
     handleResetToken,
     handleResetPW,
+    googleLogin
 };

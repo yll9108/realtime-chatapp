@@ -3,35 +3,21 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { auth, googleAuthProvider } from "../../fireBaseConfig";
-
+import { useAuth } from './../../context/AuthContext'; 
 function Login({ handleLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const signInWithGoogle = () => {
-    auth.signInWithPopup(googleAuthProvider)
-      .then((result) => {
-        const user = result.user;
-        // Send the user data to your backend
-        axios.post('http://localhost:8080/api/users/google-login', {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-        })
-        .then(response => {
-          // Handle the response from your backend
-          handleLogin(response.data.user);
-          navigate('/'); // Navigate to the home page or dashboard
-        })
-        .catch(error => {
-          // Handle any errors
-          console.error(error);
-        });
-      })
-      .catch((error) => {
-        console.error(error.message);
-      });
+  const { signInWithGoogle } = useAuth(); 
+
+  const handleSignIn = () => {
+    signInWithGoogle().then(() => {
+      navigate('/'); // Navigate after sign in
+    }).catch((error) => {
+      console.error(error.message);
+    });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -46,7 +32,6 @@ function Login({ handleLogin }) {
       })
       .catch((err) => console.log(err));
   };
-
   return (
     <LoginDiv>
       <h1>LOGIN</h1>
@@ -73,8 +58,8 @@ function Login({ handleLogin }) {
         />
         <button type="submit">Login</button>
       </form>
-      <button onClick={signInWithGoogle}>Login/Signup with Google</button>
-      <p>Forgot password?</p>
+      <button onClick={handleSignIn}>Login/Signup with Google</button>
+            <p>Forgot password?</p>
       <Link to="/forgot-password">Reset</Link>
       <h3>Don't have an account?</h3>
       <Link to="/signup">Sign up</Link>
