@@ -6,6 +6,7 @@ const {
   handleResetToken,
   handleResetPW,
   findUser,
+  getUsers,
 } = require("../controllers/userController.js");
 
 const router = express.Router();
@@ -15,5 +16,7 @@ router.post("/login", login);
 router.post("/reset", handleResetEmail);
 router.get("/reset/:resetToken", handleResetToken);
 router.post("/reset/:resetToken", handleResetPW);
-router.get("/find/:userId", findUser);
+router.get("/find/:userId", findUser); // /api/users/find
+router.get("/", getUsers); // /api/users/
+
 module.exports = router;
