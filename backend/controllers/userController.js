@@ -1,4 +1,4 @@
-const userModel = require("../models/userModel.js");
+const userModel = require("./../models/userModel");
 const {
   createUser,
   getUserByEmail,
@@ -9,7 +9,7 @@ const {
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 const port = 3000;
-// const User = require("../models/User");
+const User = require("../models/userModel");
 // function register
 const registerUser = async (req, res) => {
   try {
@@ -216,23 +216,34 @@ const googleLogin = async (req, res) => {
   const { uid, email, displayName } = req.body;
 
   try {
-    let user = await userModel.findOne({ firebaseUid: uid });
+    // First, check if a user with the given email already exists.
+    let user = await userModel.findOne({ email: email });
 
+    // If a user with the email exists, return that user and do not create a new one.
     if (user) {
+      // If the user was found by email but does not have a firebaseUid, update it.
+      if (!user.firebaseUid) {
+        user.firebaseUid = uid;
+        await user.save();
+      }
       return res.status(200).send(user);
-    } else {
-      const newUser = new User({
-        email: email,
-        userName: displayName,
-        firebaseUid: uid,
-        authentication: { password: "N/A" }, // Or handle according to your schema
-      });
-
-      user = await newUser.save();
-      return res.status(201).send(user);
     }
+
+    // If no user exists with that email, create a new user.
+    const newUser = new User({
+      email: email,
+      userName: displayName,
+      firebaseUid: uid,
+      // Set other required fields with default values or based on the information provided
+      authentication: { password: "N/A" }, // Or handle according to your schema
+    });
+
+    // Save the new user to the database.
+    user = await newUser.save();
+    return res.status(201).send(user);
   } catch (error) {
     console.error(error);
+    // Handle specific errors, e.g., duplicate key error, separately if needed
     return res.status(500).send(error);
   }
 };

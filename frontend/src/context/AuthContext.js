@@ -99,13 +99,19 @@ export const AuthContextProvider = ({ children }) => {
             setUser(response.data.user);
           })
           .catch((error) => {
-            console.error(error);
+            // Handle the error here. For example, log it or set an error state.
+            console.error('Error during Google sign-in:', error.response || error);
           });
       })
       .catch((error) => {
-        console.error(error.message);
+        console.error('Error during Google auth:', error.message);
       });
   };
+  const logoutUser = useCallback(() => {
+    localStorage.removeItem("User");
+    setUser(null);
+    auth.signOut();
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -122,6 +128,7 @@ export const AuthContextProvider = ({ children }) => {
         loginError,
         isLoginLoading,
         signInWithGoogle,
+        logoutUser,
       }}
     >
       {children}
