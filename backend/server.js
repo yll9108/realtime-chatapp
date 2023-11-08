@@ -6,25 +6,31 @@ const chatRoute = require("./routes/chatRoute.js");
 const messageRoute = require("./routes/messageRoute.js");
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(cors());
-//user
+
+// User routes
 app.use("/api/users", userRoute);
 
-//chat
+// Chat routes
 app.use("/api/chats", chatRoute);
-//message
+
+// Message routes
 app.use("/api/messages", messageRoute);
 
-//listen for requests
+// app.post("/api/users/google-login", userController.googleLogin);
+
+// Listen for requests
 app.listen(port, () => {
-    console.log(`server running on http://localhost:${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });
-//connect to DB
+
+// Connect to DB
 dbConnect();
-//DB read
+
+// DB read
 app.get("/", (req, res) => {
-    res.json({ msg: "Welcome to real-time chat app" });
+  res.json({ msg: "Welcome to real-time chat app" });
 });

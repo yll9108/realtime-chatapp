@@ -10,7 +10,7 @@ const {
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 const port = 3000;
-
+// const User = require("../models/User");
 // function register
 const registerUser = async (req, res) => {
     try {
@@ -48,10 +48,13 @@ const registerUser = async (req, res) => {
         });
         // console.log("Generated salt:", salt);
         // console.log("Stored salt:", user.authentication.salt);
-        return res.send({
-            Status: "Success",
-        });
+        // return res.send({
+        //   Status: "Success",
+        // });
         // return res.status(200).json(user).end();
+        return res
+            .status(200)
+            .json({ _id: user._id, name: user.userName, email });
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);
@@ -105,9 +108,12 @@ const login = async (req, res) => {
         // console.log("Login succeed");
         await user.save();
         // return res.status(200).json(user).end();
-        return res.send({
-            Status: "Success",
-        });
+        // return res.send({
+        //   Status: "Success",
+        // });
+        return res
+            .status(200)
+            .json({ _id: user._id, name: user.userName, email });
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);
@@ -219,6 +225,55 @@ const handleResetPW = async (req, res) => {
         return res.status(500).json({ msg: "failed" });
     }
 };
+const googleLogin = async (req, res) => {
+    const { uid, email, displayName } = req.body;
+
+    try {
+        let user = await userModel.findOne({ firebaseUid: uid });
+
+        if (user) {
+            return res.status(200).send(user);
+        } else {
+            const newUser = new User({
+                email: email,
+                userName: displayName,
+                firebaseUid: uid,
+                authentication: { password: "N/A" }, // Or handle according to your schema
+            });
+
+            user = await newUser.save();
+            return res.status(201).send(user);
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send(error);
+    }
+};
+
+//find one  user
+const findUser = async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const user = await userModel.findById(userId);
+
+        res.status(200).json(user);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+};
+
+//get array of users
+const getUsers = async (req, res) => {
+    try {
+        const users = await userModel.find();
+
+        res.status(200).json(users);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+};
 
 module.exports = {
     registerUser,
@@ -226,4 +281,7 @@ module.exports = {
     handleResetEmail,
     handleResetToken,
     handleResetPW,
+    findUser,
+    getUsers,
+    googleLogin,
 };
