@@ -69,6 +69,10 @@ function SignUp() {
                     <ul>Max length: 10</ul>
                     <ul>Min length: 6</ul>
                     <ul>Needs to contain UpperCase and LowerCase</ul>
+                    <ul>
+                        You can have these
+                        symbols:`~!@#$%^&*()_+=,&lt;&gt;-&#123;&#125;[]:;.'"?|
+                    </ul>
                 </ol>
             </SignUpDiv>
         </>
