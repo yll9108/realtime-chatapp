@@ -23,6 +23,20 @@ const authentication = (salt, password) => {
         .digest("hex");
 };
 
+const checkPasswordComplexity = (str, minlength, maxlength, strength) => {
+    if (!str || str.length < minlength || str.length > maxlength) {
+        return false;
+    }
+    let n = 0;
+    const regex = [/[a-z]/, /[A-Z]/, /[0-9]/];
+    for (const r of regex) {
+        if (str.match(r)) {
+            n++;
+        }
+    }
+    return n >= strength;
+};
+
 console.log("Secret:", secret);
 
 module.exports = {
@@ -32,4 +46,5 @@ module.exports = {
     authentication,
     getUserBySessionToken,
     getUserByResetToken,
+    checkPasswordComplexity,
 };

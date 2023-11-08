@@ -5,6 +5,7 @@ const {
     random,
     authentication,
     getUserByResetToken,
+    checkPasswordComplexity,
 } = require("./helper");
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
@@ -29,7 +30,11 @@ const registerUser = async (req, res) => {
                 Status: "duplicate user",
             });
         }
-
+        if (!checkPasswordComplexity(password, 6, 10, 3)) {
+            console.log("PasswordComplexity doesn't match");
+        } else {
+            console.log("PasswordComplexity MATCH");
+        }
         // if not .. user is able to type in password and it'll be hashed
         const salt = random();
         const user = await createUser({
