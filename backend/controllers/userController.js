@@ -9,7 +9,6 @@ const {
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 const port = 3000;
-const User = require("../models/userModel");
 // function register
 const registerUser = async (req, res) => {
   try {
@@ -238,7 +237,6 @@ const googleLogin = async (req, res) => {
       email: email,
       userName: displayName,
       firebaseUid: uid,
-      // ... other user fields
     });
 
     try {
