@@ -30,7 +30,8 @@ const registerUser = async (req, res) => {
                 Status: "duplicate user",
             });
         }
-        if (!checkPasswordComplexity(password, 6, 10, 3)) {
+
+        if (!checkPasswordComplexity(password, 6, 10, 3) || password == email) {
             console.log("PasswordComplexity doesn't match");
         } else {
             console.log("PasswordComplexity MATCH");

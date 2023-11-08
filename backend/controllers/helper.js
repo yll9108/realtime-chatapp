@@ -28,7 +28,12 @@ const checkPasswordComplexity = (str, minlength, maxlength, strength) => {
         return false;
     }
     let n = 0;
-    const regex = [/[a-z]/, /[A-Z]/, /[0-9]/];
+    const regex = [
+        /[a-z]/,
+        /[A-Z]/,
+        /[0-9]/,
+        /[`~!@#$%^&*()_+=,<>\-\[\]\{\}\:;\.'"\/\\?\|]/,
+    ];
     for (const r of regex) {
         if (str.match(r)) {
             n++;

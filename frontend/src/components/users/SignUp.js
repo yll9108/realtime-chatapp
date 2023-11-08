@@ -64,6 +64,12 @@ function SignUp() {
                     />
                     <button>Sign Up</button>
                 </form>
+                <ol>
+                    Password rules:
+                    <ul>Max length: 10</ul>
+                    <ul>Min length: 6</ul>
+                    <ul>Needs to contain UpperCase and LowerCase</ul>
+                </ol>
             </SignUpDiv>
         </>
     );
