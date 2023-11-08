@@ -216,15 +216,19 @@ const googleLogin = async (req, res) => {
   const { uid, email, displayName } = req.body;
 
   try {
-    // First, check if a user with the given email already exists.
     let user = await userModel.findOne({ email: email });
 
-    // If a user with the email exists, return that user and do not create a new one.
     if (user) {
-      // If the user was found by email but does not have a firebaseUid, update it.
       if (!user.firebaseUid) {
         user.firebaseUid = uid;
-        await user.save();
+        try {
+          await user.save();
+          console.log('firebaseUid saved successfully');
+        } catch (saveError) {
+          console.error('Error saving firebaseUid:', saveError);
+          // Send back a 500 error response
+          return res.status(500).send({ message: 'Error saving firebaseUid', error: saveError });
+        }
       }
       return res.status(200).send(user);
     }
@@ -234,20 +238,24 @@ const googleLogin = async (req, res) => {
       email: email,
       userName: displayName,
       firebaseUid: uid,
-      // Set other required fields with default values or based on the information provided
-      authentication: { password: "N/A" }, // Or handle according to your schema
+      // ... other user fields
     });
 
-    // Save the new user to the database.
-    user = await newUser.save();
+    try {
+      user = await newUser.save();
+      console.log('New user created with firebaseUid');
+    } catch (saveError) {
+      console.error('Error creating new user with firebaseUid:', saveError);
+      // Send back a 500 error response
+      return res.status(500).send({ message: 'Error creating new user', error: saveError });
+    }
+
     return res.status(201).send(user);
   } catch (error) {
-    console.error(error);
-    // Handle specific errors, e.g., duplicate key error, separately if needed
+    console.error('General error in googleLogin:', error);
     return res.status(500).send(error);
   }
 };
-
 //find one  user
 const findUser = async (req, res) => {
   const userId = req.params.userId;

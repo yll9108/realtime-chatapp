@@ -85,23 +85,23 @@ export const AuthContextProvider = ({ children }) => {
   );
 
   const signInWithGoogle = () => {
-    auth
-      .signInWithPopup(googleAuthProvider)
+    auth.signInWithPopup(googleAuthProvider)
       .then((result) => {
         const user = result.user;
-        axios
-          .post("http://localhost:8080/api/users/google-login", {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-          })
-          .then((response) => {
-            setUser(response.data.user);
-          })
-          .catch((error) => {
-            // Handle the error here. For example, log it or set an error state.
-            console.error('Error during Google sign-in:', error.response || error);
-          });
+        console.log('Google Auth User:', user); // Log the user object from Google Auth
+  
+        axios.post("http://localhost:8080/api/users/google-login", {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+        })
+        .then((response) => {
+          console.log('Server Response:', response.data); // Log the response from your server
+          setUser(response.data.user);
+        })
+        .catch((error) => {
+          console.error('Error during Google sign-in:', error.response || error);
+        });
       })
       .catch((error) => {
         console.error('Error during Google auth:', error.message);
