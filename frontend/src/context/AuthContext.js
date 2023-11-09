@@ -52,18 +52,24 @@ export const AuthContextProvider = ({ children }) => {
             );
 
             setIsRegisterLoading(false);
-
-            if (response.Status === "duplicate user") {
-                setRegisterError("User existed");
-            } else if (response.Status === "missing") {
+            // console.log(response);
+            if (response.code === 400) {
                 setRegisterError(
                     "missing one of them : email/username/password"
                 );
-            } else if (response.error) {
+            } else if (response.code === 409) {
+                setRegisterError("User existed");
+            } else if (response.code === 500) {
                 console.log(response);
                 return setRegisterError(response);
-            } else {
+            } else if (response.code === 422) {
+                setRegisterError(
+                    "The provided password does not meet the minimum requirements. It must be at least 6 characters long and contain a combination of upper case letters, lower case letters, numbers, and special characters."
+                );
+            } else if (response.code === 200) {
                 navigate("/");
+            } else if (response.code === 403) {
+                setRegisterError("password can't be the same as email");
             }
 
             // it's better to save user after logged in

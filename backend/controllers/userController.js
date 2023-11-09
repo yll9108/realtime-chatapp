@@ -16,25 +16,28 @@ const registerUser = async (req, res) => {
     try {
         const { userName, email, password } = req.body;
         if (!userName || !email || !password) {
-            // console.log("missing one of them: userName, email or password");
-            return res.send({
-                Status: "missing",
-            });
+            return res.send({ status: "Missing Info", code: 400 });
         }
 
         // check if user uses the same email to register
         const existingUser = await getUserByEmail({ email });
         if (existingUser) {
-            console.log("user already exists");
+            // console.log("user already exists");
             return res.send({
-                Status: "duplicate user",
+                status: "Existing User",
+                code: 409,
             });
         }
 
-        if (!checkPasswordComplexity(password, 6, 10, 3) || password == email) {
-            console.log("PasswordComplexity doesn't match");
-        } else {
-            console.log("PasswordComplexity MATCH");
+        if (!checkPasswordComplexity(password, 6, 10, 4)) {
+            return res.send({
+                status: "Unprocessable Entity",
+                code: 422,
+            });
+        }
+
+        if (password == email) {
+            return res.send({ status: "Unacceptable requirement", code: 403 });
         }
         // if not .. user is able to type in password and it'll be hashed
         const salt = random();
@@ -46,18 +49,12 @@ const registerUser = async (req, res) => {
                 password: authentication(salt, password),
             },
         });
-        // console.log("Generated salt:", salt);
-        // console.log("Stored salt:", user.authentication.salt);
-        // return res.send({
-        //   Status: "Success",
-        // });
-        // return res.status(200).json(user).end();
         return res
             .status(200)
-            .json({ _id: user._id, name: user.userName, email });
+            .json({ _id: user._id, name: user.userName, email, code: 200 });
     } catch (error) {
         console.log(error);
-        return res.sendStatus(400);
+        return res.sendStatus(500).json({ code: 500 });
     }
 };
 
