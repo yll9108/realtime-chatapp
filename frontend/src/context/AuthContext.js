@@ -53,29 +53,37 @@ export const AuthContextProvider = ({ children }) => {
 
             setIsRegisterLoading(false);
             // console.log(response);
-            if (response.code === 400) {
-                setRegisterError(
-                    "missing one of them : email/username/password"
-                );
-            } else if (response.code === 409) {
-                setRegisterError("User existed");
-            } else if (response.code === 500) {
-                console.log(response);
-                return setRegisterError(response);
-            } else if (response.code === 422) {
-                setRegisterError(
-                    "The provided password does not meet the minimum requirements. It must be at least 6 characters long and contain a combination of upper case letters, lower case letters, numbers, and special characters."
-                );
-            } else if (response.code === 200) {
-                navigate("/");
-            } else if (response.code === 403) {
-                setRegisterError("password can't be the same as email");
+            switch (response.code) {
+                case 200:
+                    navigate("/");
+                    break;
+                case 400:
+                    setRegisterError(
+                        "Missing one of them : email/username/password"
+                    );
+                    break;
+                case 403:
+                    setRegisterError("password can't be the same as email");
+                    break;
+                case 409:
+                    setRegisterError("User existed");
+                    break;
+                case 422:
+                    setRegisterError(
+                        "The provided password does not meet the minimum requirements. It must be at least 6 characters long and contain a combination of upper case letters, lower case letters, numbers, and special characters."
+                    );
+                    break;
+                case 500:
+                    console.log(response);
+                    return setRegisterError(response);
+                default:
+                    console.log("Unknown response code: " + response.code);
+                    break;
             }
-
-            // it's better to save user after logged in
-            // localStorage.setItem("User", JSON.stringify(response));
-            // setUser(response);
         },
+        // it's better to save user after logged in
+        // localStorage.setItem("User", JSON.stringify(response));
+        // setUser(response);
         [registerInfo, navigate]
     );
 

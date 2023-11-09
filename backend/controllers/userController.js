@@ -15,30 +15,37 @@ const port = 3000;
 const registerUser = async (req, res) => {
     try {
         const { userName, email, password } = req.body;
+
+        const responseMap = {
+            missingInfo: { status: "Missing Info", code: 400 },
+            existingUser: { status: "Existing User", code: 409 },
+            unprocessableEntity: {
+                status: "Unacceptable requirement",
+                code: 422,
+            },
+            unacceptableRequirement: {
+                status: "Unacceptable requirement",
+                code: 403,
+            },
+        };
+
+        if (password == email) {
+            return res.send(responseMap.unacceptableRequirement);
+        }
         if (!userName || !email || !password) {
-            return res.send({ status: "Missing Info", code: 400 });
+            return res.send(responseMap.missingInfo);
         }
 
         // check if user uses the same email to register
         const existingUser = await getUserByEmail({ email });
         if (existingUser) {
-            // console.log("user already exists");
-            return res.send({
-                status: "Existing User",
-                code: 409,
-            });
+            return res.send(responseMap.existingUser);
         }
 
         if (!checkPasswordComplexity(password, 6, 10, 4)) {
-            return res.send({
-                status: "Unprocessable Entity",
-                code: 422,
-            });
+            return res.send(responseMap.unprocessableEntity);
         }
 
-        if (password == email) {
-            return res.send({ status: "Unacceptable requirement", code: 403 });
-        }
         // if not .. user is able to type in password and it'll be hashed
         const salt = random();
         const user = await createUser({
