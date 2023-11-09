@@ -53,7 +53,7 @@ const NavBar = () => {
         </h2>
         {user ? (
           <>
-            <span className="login-UserName">Logged in as {user.name}</span>
+            <span className="login-UserName">Logged in as {user.userName}</span>
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
           </>
         ) : (

@@ -3,9 +3,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { AuthContext } from "./../../context/AuthContext";
 
-function Login({ handleLogin }) {
-  // const [email, setEmail] = useState();
-  // const [password, setPassword] = useState();
+function Login() {
+
 
   const {
     loginUser,
@@ -15,34 +14,6 @@ function Login({ handleLogin }) {
     isLoginLoading,
     signInWithGoogle,
   } = useContext(AuthContext);
-
-  // const navigate = useNavigate();
-  // const { signInWithGoogle } = useAuth();
-
-  // const handleSignIn = () => {
-  //   signInWithGoogle()
-  //     .then(() => {
-  //       navigate("/"); // Navigate after sign in
-  //     })
-  //     .catch((error) => {
-  //       console.error(error.message);
-  //     });
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   axios
-  //     .post("http://localhost:8080/api/users/login", {
-  //       email,
-  //       password,
-  //     })
-  //     .then((result) => {
-  //       console.log("Logged in successfully", result);
-  //       handleLogin(result.data.user);
-  //       navigate('/'); // Navigate to the home page or dashboard
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
 
   return (
     <LoginDiv>

@@ -220,40 +220,27 @@ const googleLogin = async (req, res) => {
     if (user) {
       if (!user.firebaseUid) {
         user.firebaseUid = uid;
-        try {
-          await user.save();
-          console.log('firebaseUid saved successfully');
-        } catch (saveError) {
-          console.error('Error saving firebaseUid:', saveError);
-          // Send back a 500 error response
-          return res.status(500).send({ message: 'Error saving firebaseUid', error: saveError });
-        }
+        await user.save();
+        console.log('firebaseUid saved successfully');
       }
-      return res.status(200).send(user);
-    }
+    } else {
+      // When creating a new user, include the firebaseUid in the userModel instance
+      const newUser = new userModel({
+        email: email,
+        userName: displayName,
+        firebaseUid: uid, // Ensure firebaseUid is assigned here
+      });
 
-    // If no user exists with that email, create a new user.
-    const newUser = new User({
-      email: email,
-      userName: displayName,
-      firebaseUid: uid,
-    });
-
-    try {
       user = await newUser.save();
       console.log('New user created with firebaseUid');
-    } catch (saveError) {
-      console.error('Error creating new user with firebaseUid:', saveError);
-      // Send back a 500 error response
-      return res.status(500).send({ message: 'Error creating new user', error: saveError });
     }
-
-    return res.status(201).send(user);
+    return res.status(user ? 200 : 201).send(user);
   } catch (error) {
-    console.error('General error in googleLogin:', error);
-    return res.status(500).send(error);
+    console.error('Error in googleLogin:', error);
+    return res.status(500).send({ message: 'Error in googleLogin', error: error });
   }
 };
+
 //find one  user
 const findUser = async (req, res) => {
   const userId = req.params.userId;

@@ -12,6 +12,7 @@ const usersSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true ,
     },
     authentication: {
         salt: { type: String },
@@ -54,6 +55,9 @@ const usersSchema = new mongoose.Schema({
         type: Date,
         default: null,
     },
+    firebaseUid: { 
+        type: String,
+         default: null },
 });
 
 const userModel = mongoose.model("users", usersSchema);
