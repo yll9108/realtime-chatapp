@@ -7,27 +7,16 @@ const {
     getUserByResetToken,
     checkPasswordComplexity,
 } = require("./helper");
+const { responseMap } = require("./responseMap");
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 const port = 3000;
 // const User = require("../models/User");
+
 // function register
 const registerUser = async (req, res) => {
     try {
         const { userName, email, password } = req.body;
-
-        const responseMap = {
-            missingInfo: { status: "Missing Info", code: 400 },
-            existingUser: { status: "Existing User", code: 409 },
-            unprocessableEntity: {
-                status: "Unacceptable requirement",
-                code: 422,
-            },
-            unacceptableRequirement: {
-                status: "Unacceptable requirement",
-                code: 403,
-            },
-        };
 
         if (password == email) {
             return res.send(responseMap.unacceptableRequirement);
@@ -61,7 +50,7 @@ const registerUser = async (req, res) => {
             .json({ _id: user._id, name: user.userName, email, code: 200 });
     } catch (error) {
         console.log(error);
-        return res.sendStatus(500).json({ code: 500 });
+        return res.send(responseMap.serverError);
     }
 };
 
@@ -72,10 +61,7 @@ const login = async (req, res) => {
 
         // check if user type in email and password
         if (!email || !password) {
-            console.log("sth missing: email or password");
-            return res.send({
-                Status: "missing",
-            });
+            return res.send(responseMap.missingInfo);
         }
 
         // get user by email and select data from DB
@@ -85,22 +71,13 @@ const login = async (req, res) => {
 
         // if user email doesn't exist
         if (!user) {
-            console.log("user doesn't exist");
-            return res.send({
-                Status: "non existing",
-            });
+            return res.send(responseMap.nonExistingUser);
         }
 
         // if user email exists, comparing hashed password
         const expectedHash = authentication(user.authentication.salt, password);
-        // console.log("expectedHash", expectedHash);
-        // console.log("storedpassword", user.authentication.password);
         if (user.authentication.password !== expectedHash) {
-            console.log("Password wrong");
-            return res.send({
-                Status: "Password wrong",
-            });
-            // return res.sendStatus(403);
+            return res.send(responseMap.unauthorized);
         }
 
         const salt = random();
@@ -108,22 +85,14 @@ const login = async (req, res) => {
             salt,
             user._id.toString()
         );
-        // console.log(
-        //     "user.authentication.sessionToken",
-        //     user.authentication.sessionToken
-        // );
-        // console.log("Login succeed");
         await user.save();
-        // return res.status(200).json(user).end();
-        // return res.send({
-        //   Status: "Success",
-        // });
         return res
             .status(200)
-            .json({ _id: user._id, name: user.userName, email });
+            .json({ _id: user._id, name: user.userName, email, code: 200 });
     } catch (error) {
         console.log(error);
-        return res.sendStatus(400);
+        return res.send(responseMap.serverError);
+        // return res.sendStatus(500).json({ code: 500 });
     }
 };
 
@@ -137,9 +106,7 @@ const handleResetEmail = async (req, res) => {
         // when user typed in WRONG email
         if (!user) {
             console.log("Email hasn't been signed up.");
-            return res.send({
-                Status: "Wrong email",
-            });
+            return res.send(responseMap.nonExistingUser);
         }
 
         // when user typed in CORRECT email

@@ -100,17 +100,26 @@ export const AuthContextProvider = ({ children }) => {
             );
             setIsLoginLoading(false);
 
-            if (response.Status === "missing") {
-                setLoginError("missing one of them : email/username/password");
-            } else if (response.Status === "non existing") {
-                setLoginError("user doesn't exist");
-            } else if (response.Status === "Password wrong") {
-                setLoginError("wrong password");
-            } else if (response.error) {
-                return setLoginError(response);
-            } else {
-                localStorage.setItem("User", JSON.stringify(response));
-                setUser(response);
+            switch (response.code) {
+                case 200:
+                    localStorage.setItem("User", JSON.stringify(response));
+                    setUser(response);
+                    break;
+                case 400:
+                    setLoginError("Missing one of them : email//password");
+                    break;
+                case 401:
+                    setLoginError("wrong password");
+                    break;
+                case 404:
+                    setLoginError("user doesn't exist");
+                    break;
+                case 500:
+                    setLoginError(response);
+                    break;
+                default:
+                    console.log("Unknown response code: " + response.code);
+                    break;
             }
         },
         [loginInfo]
