@@ -6,7 +6,8 @@ const responseMap = {
         code: 403,
     },
     nonExistingUser: { status: "Non Existing User", code: 404 },
-    existingUser: { status: "Existing User", code: 409 },
+    existingUserEmail: { status: "Existing User Email", code: 409 },
+    existingUserName: { status: "Existing User Name", code: 409 },
     unprocessableEntity: {
         status: "Unacceptable requirement",
         code: 422,

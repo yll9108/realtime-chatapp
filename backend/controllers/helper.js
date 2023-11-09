@@ -4,7 +4,7 @@ const secret = process.env.SECRET;
 
 const createUser = (values) =>
     new userModel(values).save().then((user) => user.toObject());
-const getUserByEmail = (email) => userModel.findOne(email);
+const getUserByField = (field, value) => userModel.findOne({ [field]: value });
 const getUserBySessionToken = (sessionToken) => {
     userModel.findOne({ "authentication.sessionToken": sessionToken });
 };
@@ -46,7 +46,7 @@ console.log("Secret:", secret);
 
 module.exports = {
     createUser,
-    getUserByEmail,
+    getUserByField,
     random,
     authentication,
     getUserBySessionToken,

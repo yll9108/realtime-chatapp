@@ -1,7 +1,7 @@
 const userModel = require("../models/userModel.js");
 const {
+    getUserByField,
     createUser,
-    getUserByEmail,
     random,
     authentication,
     getUserByResetToken,
@@ -18,17 +18,19 @@ const registerUser = async (req, res) => {
     try {
         const { userName, email, password } = req.body;
 
-        if (password == email) {
-            return res.send(responseMap.unacceptableRequirement);
-        }
         if (!userName || !email || !password) {
             return res.send(responseMap.missingInfo);
+        } else if (password == email) {
+            return res.send(responseMap.unacceptableRequirement);
         }
-
         // check if user uses the same email to register
-        const existingUser = await getUserByEmail({ email });
-        if (existingUser) {
-            return res.send(responseMap.existingUser);
+
+        const existingUserEmail = await getUserByField("email", email);
+        const existingUserName = await getUserByField("userName", userName);
+        if (existingUserEmail) {
+            return res.send(responseMap.existingUserEmail);
+        } else if (existingUserName) {
+            return res.send(responseMap.existingUserName);
         }
 
         if (!checkPasswordComplexity(password, 6, 10, 4)) {
@@ -65,7 +67,7 @@ const login = async (req, res) => {
         }
 
         // get user by email and select data from DB
-        const user = await getUserByEmail({ email }).select(
+        const user = await getUserByField("email", email).select(
             "+authentication.salt+authentication.password"
         );
 

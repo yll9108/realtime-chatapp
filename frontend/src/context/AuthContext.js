@@ -66,7 +66,11 @@ export const AuthContextProvider = ({ children }) => {
                     setRegisterError("password can't be the same as email");
                     break;
                 case 409:
-                    setRegisterError("User existed");
+                    if (response.status === "Existing User Email") {
+                        setRegisterError("User Email existed");
+                    } else if (response.status === "Existing User Name") {
+                        setRegisterError("User Name existed");
+                    }
                     break;
                 case 422:
                     setRegisterError(
