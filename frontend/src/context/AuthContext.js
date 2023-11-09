@@ -25,7 +25,6 @@ export const AuthContextProvider = ({ children }) => {
     // console.log("registerInfo", registerInfo);
     // console.log("loginInfo", loginInfo);
     // console.log("user", user);
-    // const navigate = useNavigate();
 
     useEffect(() => {
         const user = localStorage.getItem("User");
@@ -87,11 +86,18 @@ export const AuthContextProvider = ({ children }) => {
             );
             setIsLoginLoading(false);
 
-            if (response.error) {
+            if (response.Status === "missing") {
+                setLoginError("missing one of them : email/username/password");
+            } else if (response.Status === "non existing") {
+                setLoginError("user doesn't exist");
+            } else if (response.Status === "Password wrong") {
+                setLoginError("wrong password");
+            } else if (response.error) {
                 return setLoginError(response);
+            } else {
+                localStorage.setItem("User", JSON.stringify(response));
+                setUser(response);
             }
-            localStorage.setItem("User", JSON.stringify(response));
-            setUser(response);
         },
         [loginInfo]
     );

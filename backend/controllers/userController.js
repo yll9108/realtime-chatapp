@@ -93,7 +93,10 @@ const login = async (req, res) => {
         // console.log("storedpassword", user.authentication.password);
         if (user.authentication.password !== expectedHash) {
             console.log("Password wrong");
-            return res.sendStatus(403);
+            return res.send({
+                Status: "Password wrong",
+            });
+            // return res.sendStatus(403);
         }
 
         const salt = random();
