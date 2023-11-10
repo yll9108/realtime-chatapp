@@ -224,11 +224,12 @@ const googleLogin = async (req, res) => {
         console.log('firebaseUid saved successfully');
       }
     } else {
-      // When creating a new user, include the firebaseUid in the userModel instance
+      // Create a new user and set isGoogleAccount to true
       const newUser = new userModel({
         email: email,
         userName: displayName,
-        firebaseUid: uid, // Ensure firebaseUid is assigned here
+        firebaseUid: uid,
+        isGoogleAccount: true, // Indicate that this user is authenticated through Google
       });
 
       user = await newUser.save();
