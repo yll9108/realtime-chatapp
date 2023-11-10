@@ -1,4 +1,4 @@
-const userModel = require("../models/userModel.js");
+const userModel = require("./../models/userModel");
 const {
   createUser,
   getUserByEmail,
@@ -9,7 +9,6 @@ const {
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 const port = 3000;
-// const User = require("../models/User");
 // function register
 const registerUser = async (req, res) => {
   try {
@@ -216,24 +215,30 @@ const googleLogin = async (req, res) => {
   const { uid, email, displayName } = req.body;
 
   try {
-    let user = await userModel.findOne({ firebaseUid: uid });
+    let user = await userModel.findOne({ email: email });
 
     if (user) {
-      return res.status(200).send(user);
+      if (!user.firebaseUid) {
+        user.firebaseUid = uid;
+        await user.save();
+        console.log('firebaseUid saved successfully');
+      }
     } else {
-      const newUser = new User({
+      // Create a new user and set isGoogleAccount to true
+      const newUser = new userModel({
         email: email,
         userName: displayName,
         firebaseUid: uid,
-        authentication: { password: "N/A" }, // Or handle according to your schema
+        isGoogleAccount: true, // Indicate that this user is authenticated through Google
       });
 
       user = await newUser.save();
-      return res.status(201).send(user);
+      console.log('New user created with firebaseUid');
     }
+    return res.status(user ? 200 : 201).send(user);
   } catch (error) {
-    console.error(error);
-    return res.status(500).send(error);
+    console.error('Error in googleLogin:', error);
+    return res.status(500).send({ message: 'Error in googleLogin', error: error });
   }
 };
 

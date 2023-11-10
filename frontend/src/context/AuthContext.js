@@ -2,6 +2,8 @@ import { createContext, useState, useCallback, useEffect } from "react";
 import { baseUrl, postRequest } from "../utils/services";
 import axios from "axios";
 import { auth, googleAuthProvider } from "../utils/fireBaseConfig";
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 export const AuthContext = createContext();
 
@@ -20,6 +22,10 @@ export const AuthContextProvider = ({ children }) => {
     email: "",
     password: "",
   });
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");  
+  const navigate = useNavigate();
+
   // console.log("registerInfo", registerInfo);
   // console.log("loginInfo", loginInfo);
   // console.log("user", user);
@@ -83,29 +89,45 @@ export const AuthContextProvider = ({ children }) => {
     },
     [loginInfo]
   );
-
-  const signInWithGoogle = () => {
-    auth
-      .signInWithPopup(googleAuthProvider)
+  const showCustomPopup = (message) => {
+    setPopupMessage(message);
+    setShowPopup(true);
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 3000);
+  };
+  
+  const signInWithGoogle = useCallback(() => {
+    auth.signInWithPopup(googleAuthProvider)
       .then((result) => {
-        const user = result.user;
-        axios
-          .post("http://localhost:8080/api/users/google-login", {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-          })
-          .then((response) => {
-            setUser(response.data.user);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        const { user } = result;
+        console.log('Google Auth User:', user);
+        axios.post("http://localhost:8080/api/users/google-login", {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+        })
+        .then((response) => {
+          console.log('Server Response:', response.data);
+    setUser(response.data); 
+    if (response.data.isNewUser) {
+      showCustomPopup("Account created! Welcome to ChatApp.");
+    }
+    navigate('/home');
+        })
+        .catch((error) => {
+          console.error('Error during Google sign-in:', error.response || error);
+        });
       })
       .catch((error) => {
-        console.error(error.message);
+        console.error('Error during Google auth:', error.message);
       });
-  };
+  }, [navigate, showCustomPopup]); 
+  const logoutUser = useCallback(() => {
+    localStorage.removeItem("User");
+    setUser(null);
+    auth.signOut();
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -122,9 +144,23 @@ export const AuthContextProvider = ({ children }) => {
         loginError,
         isLoginLoading,
         signInWithGoogle,
+        logoutUser,
       }}
     >
+       {showPopup && <Popup>{popupMessage}</Popup>}
       {children}
     </AuthContext.Provider>
   );
 };
+const Popup = styled.div`
+position: absolute;
+top: 20%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: white;
+padding: 20px;
+border: 1px solid #ccc;
+border-radius: 5px;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+z-index: 1000;
+`;
