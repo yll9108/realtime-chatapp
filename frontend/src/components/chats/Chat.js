@@ -1,8 +1,7 @@
-// import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import ChatArea from "../chats/ChatArea";
 import UserList from "../chats/UserList";
 import Sidebar from "../shared/Sidebar";
-import { useContext } from "react";
 import styled from "styled-components";
 // import Friends from "../settings/Friends";
 // import Settings from './Settings';
@@ -37,25 +36,23 @@ function Chat() {
     // };
 
     // const [selectedChat, setSelectedChat] = useState('John'); // default to John
-    // const [activeSection, setActiveSection] = useState("chat"); // default to chat
+    const [activeSection, setActiveSection] = useState("chat"); // default to chat
     const { user } = useContext(AuthContext);
     const { userChats, isUserChatsLoading } = useContext(ChatContext);
 
     return (
         <ChatContainer>
-            <Sidebar />
+            <Sidebar setActiveSection={setActiveSection} />
             <PotentialChats />
             {userChats?.length < 1 ? null : (
                 <Stack className="chat-list">
                     <Stack className="messages-box">
                         {isUserChatsLoading && <p>Loading Chats..</p>}
-                        {userChats?.map((chat, index) => {
-                            return (
-                                <div key={index}>
-                                    <UserList chat={chat} user={user} />
-                                </div>
-                            );
-                        })}
+                        {userChats?.map((chat, index) => (
+                            <div key={index}>
+                                <UserList chat={chat} user={user} />
+                            </div>
+                        ))}
                     </Stack>
                     <ChatArea />
                 </Stack>

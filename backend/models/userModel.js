@@ -12,10 +12,11 @@ const usersSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true ,
     },
     authentication: {
         salt: { type: String },
-        password: { type: String, required: true },
+        password: { type: String, required: function() { return !this.isGoogleAccount; } },
         sessionToken: { type: String },
         newPassword: { type: String },
     },
@@ -54,6 +55,13 @@ const usersSchema = new mongoose.Schema({
         type: Date,
         default: null,
     },
+    firebaseUid: { 
+        type: String,
+         default: null },
+         isGoogleAccount: { 
+            type: Boolean, 
+            default: false 
+          },
 });
 
 const userModel = mongoose.model("users", usersSchema);
