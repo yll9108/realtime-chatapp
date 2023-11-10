@@ -4,7 +4,7 @@ const secret = process.env.SECRET;
 
 const createUser = (values) =>
     new userModel(values).save().then((user) => user.toObject());
-const getUserByEmail = (email) => userModel.findOne(email);
+const getUserByField = (field, value) => userModel.findOne({ [field]: value });
 const getUserBySessionToken = (sessionToken) => {
     userModel.findOne({ "authentication.sessionToken": sessionToken });
 };
@@ -23,13 +23,33 @@ const authentication = (salt, password) => {
         .digest("hex");
 };
 
+const checkPasswordComplexity = (str, minlength, maxlength, strength) => {
+    if (!str || str.length < minlength || str.length > maxlength) {
+        return false;
+    }
+    let n = 0;
+    const regex = [
+        /[a-z]/,
+        /[A-Z]/,
+        /[0-9]/,
+        /[`~!@#$%^&*()_+=,<>\-\[\]\{\}\:;\.'"\/\\?\|]/,
+    ];
+    for (const r of regex) {
+        if (str.match(r)) {
+            n++;
+        }
+    }
+    return n >= strength;
+};
+
 console.log("Secret:", secret);
 
 module.exports = {
     createUser,
-    getUserByEmail,
+    getUserByField,
     random,
     authentication,
     getUserBySessionToken,
     getUserByResetToken,
+    checkPasswordComplexity,
 };
