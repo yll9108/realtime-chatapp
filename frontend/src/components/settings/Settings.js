@@ -1,28 +1,24 @@
-import React from 'react';
+import React from "react";
+import ToggleSwitch from "./ToggleSwitch.js";
 
 function Settings() {
+    const toggleSwitches = [
+        { label: "Profile" },
+        { label: "Status" },
+        { label: "About" },
+    ];
     return (
         <div>
             <h2>Settings</h2>
             <div>
-                <h3>Privacy</h3>
-                <div>
-                    <label>Profile:</label>
-                    <input type="checkbox" />
-                </div>
-                <div>
-                    <label>Status:</label>
-                    <input type="checkbox" />
-                </div>
-                <div>
-                    <label>About:</label>
-                    <input type="checkbox" />
-                </div>
+                {toggleSwitches.map((item, index) => (
+                    <div key={index}>
+                        <ToggleSwitch label={item.label} />
+                    </div>
+                ))}
             </div>
-            
         </div>
     );
 }
-
 
 export default Settings;

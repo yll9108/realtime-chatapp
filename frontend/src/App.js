@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import Settings from "./components/settings/Settings";
 import Login from "./components/users/Login";
 import Chat from "./components/chats/Chat";
 import SignUp from "./components/users/SignUp";
@@ -54,6 +55,10 @@ function App() {
                         <Route
                             path="/login"
                             element={user ? <Chat /> : <Login />}
+                        />
+                        <Route
+                            path="/settings"
+                            element={user ? <Settings /> : <Login />}
                         />
                         <Route
                             path="/forgot-password"
