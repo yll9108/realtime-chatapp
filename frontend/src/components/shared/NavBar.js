@@ -40,7 +40,7 @@ const NavBar = () => {
 
   const handleLogout = () => {
     logoutUser();
-    navigate('/login'); // Redirect to login page after logout
+    navigate("/login"); // Redirect to login page after logout
   };
 
   return (
@@ -53,7 +53,7 @@ const NavBar = () => {
         </h2>
         {user ? (
           <>
-            <span className="login-UserName">Logged in as {user.userName}</span>
+            <span className="login-UserName">Logged in as {user?.name}</span>
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
           </>
         ) : (

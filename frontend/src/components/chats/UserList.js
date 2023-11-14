@@ -71,7 +71,9 @@ const UserList = ({ chat, user }) => {
         <div>
           <UserAvatar />
           <UserInfo>
-            <UserName>{recipientUser?.userName}</UserName>
+            <UserName>
+              {recipientUser === null ? "unknown" : recipientUser?.userName}
+            </UserName>
             <UserLastMessage>text message</UserLastMessage>
           </UserInfo>
         </div>
