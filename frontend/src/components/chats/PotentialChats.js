@@ -8,7 +8,7 @@ const AllUsers = styled.div`
   flex-direction: column;
   width: 30%;
   height: 100vh;
-`;
+`; 
 
 const PotentialChats = () => {
   const { user } = useContext(AuthContext);
