@@ -153,6 +153,7 @@ export const AuthContextProvider = ({ children }) => {
                     })
                     .then((response) => {
                         console.log("Server Response:", response.data);
+                        localStorage.setItem("User", JSON.stringify(response.data));
                         setUser(response.data);
                         if (response.data.isNewUser) {
                             showCustomPopup(

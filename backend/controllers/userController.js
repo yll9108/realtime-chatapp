@@ -223,7 +223,12 @@ const googleLogin = async (req, res) => {
             user = await newUser.save();
             console.log("New user created with firebaseUid");
         }
-        return res.status(user ? 200 : 201).send(user);
+        return res.status(user ? 200 : 201).json({ 
+            _id: user._id, 
+            name: user.userName, 
+            email: user.email, 
+            code: 200 
+        });
     } catch (error) {
         console.error("Error in googleLogin:", error);
         return res
