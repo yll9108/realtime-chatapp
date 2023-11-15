@@ -38,6 +38,7 @@ const getSetting = async (req, res) => {
 const changeSetting = async (req, res) => {
     try {
         const { showProfile, showStatus, showAbout } = req.body;
+        console.log("req.body", req.body);
         const userId = req.params.userId;
 
         // 验证 userId 是否是有效的 ObjectId
@@ -58,10 +59,9 @@ const changeSetting = async (req, res) => {
             );
             console.log("User settings updated", updatdSetting);
             return res.status(200).json({
-                _id: user._id,
-                showAbout: user.showAbout,
-                showProfile: user.showProfile,
-                showStatus: user.showStatus,
+                showAbout: showAbout,
+                showProfile: showProfile,
+                showStatus: showStatus,
                 code: 200,
             });
         }

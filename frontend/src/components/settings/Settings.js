@@ -6,9 +6,9 @@ import axios from "axios";
 function Settings() {
     const { user } = useContext(AuthContext);
     const userId = user._id;
-    const [showProfile, setShowProfile] = useState(false);
-    const [showStatus, setShowStatus] = useState(false);
-    const [showAbout, setShowAbout] = useState(false);
+    const [showProfile, setShowProfile] = useState();
+    const [showStatus, setShowStatus] = useState();
+    const [showAbout, setShowAbout] = useState();
 
     // const toggleSwitches = [
     //     { label: "Profile", state: showProfile, setState: setShowProfile },
