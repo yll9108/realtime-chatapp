@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import axios from "axios";
 
-export default function ToggleSwitch({ label, checked, onChange, userId }) {
+export default function ToggleSwitch({ label, userId, status }) {
     console.log("UserId in ToggleSwitch:", userId);
-    const [isChecked, setIsChecked] = useState(
-        checked !== undefined ? checked : false
-    );
+    const [isChecked, setIsChecked] = useState(status);
+    console.log("isChecked", isChecked);
+    console.log("status", status);
 
     const handleToggle = (e) => {
         e.preventDefault();
@@ -15,21 +15,18 @@ export default function ToggleSwitch({ label, checked, onChange, userId }) {
             return;
         }
         setIsChecked(!isChecked);
-
-        console.log(userId);
-        if (userId)
-            axios
-                .post(`http://localhost:8080/api/settings/${userId}`, {
-                    showProfile: label === "Profile" ? !checked : undefined,
-                    showStatus: label === "Status" ? !checked : undefined,
-                    showAbout: label === "About" ? !checked : undefined,
-                })
-                .then((res) => {
-                    console.log(res);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+        axios
+            .post(`http://localhost:8080/api/settings/${userId}`, {
+                showProfile: label === "Profile" ? isChecked : undefined,
+                showStatus: label === "Status" ? isChecked : undefined,
+                showAbout: label === "About" ? isChecked : undefined,
+            })
+            .then((res) => {
+                console.log("line 40", res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
     return (
         <Form>
@@ -40,7 +37,7 @@ export default function ToggleSwitch({ label, checked, onChange, userId }) {
                     id={`toggle-switch${label}`}
                     label=""
                     checked={isChecked}
-                    onChange={handleToggle}
+                    onChange={() => console.log("isChecked", isChecked)}
                 />
             </div>
         </Form>

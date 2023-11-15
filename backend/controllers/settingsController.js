@@ -20,7 +20,13 @@ const getSetting = async (req, res) => {
             );
             console.log("user settings", user);
             console.log("!!!!!!!user.userId", user ? user._id : "undefined");
-            return res.sendStatus(200);
+            return res.status(200).json({
+                _id: user._id,
+                showAbout: user.showAbout,
+                showProfile: user.showProfile,
+                showStatus: user.showStatus,
+                code: 200,
+            });
         }
     } catch (error) {
         console.log("error", error);
@@ -51,7 +57,13 @@ const changeSetting = async (req, res) => {
                 { new: true }
             );
             console.log("User settings updated", updatdSetting);
-            return res.sendStatus(200);
+            return res.status(200).json({
+                _id: user._id,
+                showAbout: user.showAbout,
+                showProfile: user.showProfile,
+                showStatus: user.showStatus,
+                code: 200,
+            });
         }
     } catch (error) {
         console.log("error", error);
