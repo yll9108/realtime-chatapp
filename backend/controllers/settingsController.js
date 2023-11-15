@@ -19,6 +19,7 @@ const getSetting = async (req, res) => {
                 "+showProfile+showStatus+showAbout"
             );
             console.log("user settings", user);
+            console.log("!!!!!!!user.userId", user ? user._id : "undefined");
             return res.sendStatus(200);
         }
     } catch (error) {

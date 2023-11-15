@@ -45,6 +45,7 @@ const registerUser = async (req, res) => {
                 password: authentication(salt, password),
             },
         });
+
         return res
             .status(200)
             .json({ _id: user._id, name: user.userName, email, code: 200 });
