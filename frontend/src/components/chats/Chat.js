@@ -18,21 +18,18 @@ function Chat() {
   return (
     <ChatContainer>
       <Sidebar setActiveSection={setActiveSection} />
-            {activeSection === 'friends' && <PotentialChats/>}
-            {activeSection === 'settings' && <Settings />}
-            {activeSection === 'profile' && <Profile />}
-      <PotentialChats />
-      {userChats?.length < 1 ? null : (
+      {activeSection === 'friends' && <PotentialChats />}
+      {activeSection === 'settings' && <Settings />}
+      {activeSection === 'profile' && <Profile userProfile={user} />} 
+      {activeSection === 'chat' && userChats?.length > 0 && (
         <ChatList>
           <Stack className="messages-box">
             {isUserChatsLoading && <p>Loading Chats..</p>}
-            {userChats?.map((chat, index) => {
-              return (
-                <div key={index} onClick={() => updateCurrentChat(chat)}>
-                  <UserList chat={chat} user={user} />
-                </div>
-              );
-            })}
+            {userChats?.map((chat, index) => (
+              <div key={index} onClick={() => updateCurrentChat(chat)}>
+                <UserList chat={chat} user={user} />
+              </div>
+            ))}
           </Stack>
           <ChatArea />
         </ChatList>
