@@ -1,8 +1,9 @@
 // UserList.js
 
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
+import { ChatContext } from "../../context/ChatContext";
 
 const UserListContainer = styled.div`
   background-color: #f0f0f0;
@@ -58,13 +59,17 @@ const Stack = styled.div`
   justify-content: space-between;
   gap: 3em;
 `;
-const UserOnlie = styled.span`
-  background-color: green;
-  border-radius: 50%;
-`;
+// const UserOnlie = styled.span`
+//   background-color: green;
+//   border-radius: 50%;
+// `;
 const UserList = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipientUser(chat, user);
-  // console.log(recipientUser);
+  const { onlineUsers } = useContext(ChatContext);
+
+  const isOnline = onlineUsers?.some(
+    (user) => user?.userId === recipientUser?._id
+  );
   return (
     <UserListContainer>
       <Stack>
@@ -80,7 +85,7 @@ const UserList = ({ chat, user }) => {
         <div>
           <UserDate>05/11/2023</UserDate>
           <UserNotification>2</UserNotification>
-          <UserOnlie>online</UserOnlie>
+          <span className={isOnline ? "user-online" : ""}></span>
         </div>
       </Stack>
     </UserListContainer>
