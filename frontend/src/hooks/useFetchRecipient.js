@@ -10,6 +10,7 @@ export const useFetchRecipientUser = (chat, user) => {
   // eslint-disable-next-line
   useEffect(() => {
     const getUser = async () => {
+
       if (!recipientId) return null;
 
       const response = await getRequest(`${baseUrl}/users/find/${recipientId}`);
@@ -17,12 +18,14 @@ export const useFetchRecipientUser = (chat, user) => {
       if (response.error) {
         response.error = error;
         return setError(error);
+
       }
 
       setRecipientUser(response);
     };
 
     getUser();
+
   }, [recipientId]);
   return { recipientUser };
 };

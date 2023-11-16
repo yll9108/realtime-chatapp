@@ -1,5 +1,3 @@
-import React from 'react';
-
 function Profile({ userProfile }) {
     if (!userProfile) return <div>No profile data available.</div>;
 
@@ -10,7 +8,7 @@ function Profile({ userProfile }) {
                 <label>Name:</label> {userProfile.name}
             </div>
             <div>
-                <label>About:</label> {userProfile.about}
+                <label>About:</label> {userProfile.about || 'No about information'}
             </div>
             <div>
                 <label>Email:</label> {userProfile.email}
@@ -18,7 +16,6 @@ function Profile({ userProfile }) {
         </div>
     );
 }
-
 
 
 export default Profile;
