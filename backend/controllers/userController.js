@@ -45,6 +45,7 @@ const registerUser = async (req, res) => {
                 password: authentication(salt, password),
             },
         });
+
         return res
             .status(200)
             .json({ _id: user._id, name: user.userName, email, code: 200 });
@@ -86,9 +87,16 @@ const login = async (req, res) => {
             user._id.toString()
         );
         await user.save();
-        return res
-            .status(200)
-            .json({ _id: user._id, name: user.userName, email, code: 200 });
+        return res.status(200).json({
+            _id: user._id,
+            name: user.userName,
+            email,
+            showAbout: user.showAbout,
+            showProfile: user.showProfile,
+            showStatus: user.showStatus,
+            status: user.status,
+            code: 200,
+        });
     } catch (error) {
         console.log(error);
         return res.send(responseMap.serverError);
