@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import ToggleSwitch from "./ToggleSwitch.js";
 import { AuthContext } from "../../context/AuthContext.js";
 import axios from "axios";
+import Sidebar from "../shared/Sidebar";
+import PotentialChats from "../chats/PotentialChats";
+import Profile from "../settings/Profile";
 
 function Settings() {
     const { user } = useContext(AuthContext);
@@ -9,7 +12,7 @@ function Settings() {
     const [showProfile, setShowProfile] = useState();
     const [showStatus, setShowStatus] = useState();
     const [showAbout, setShowAbout] = useState();
-
+    const [activeSection, setActiveSection] = useState("settings");
     // const toggleSwitches = [
     //     { label: "Profile", state: showProfile, setState: setShowProfile },
     //     { label: "Status", state: showStatus, setState: setShowStatus },
@@ -32,6 +35,10 @@ function Settings() {
 
     return (
         <div>
+            {/* <Sidebar setActiveSection={setActiveSection} />
+            {activeSection === "friends" && <PotentialChats />}
+            {activeSection === "profile" && <Profile userProfile={user} />} */}
+
             <h2>Settings</h2>
             <div>
                 <ToggleSwitch

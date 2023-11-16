@@ -47,9 +47,9 @@ const Sidebar = ({ setActiveSection }) => {
             </NavItem>
 
             <NavItem onClick={() => setActiveSection("settings")}>
-                <Link to="/settings" style={{ textDecoration: "none" }}>
-                    <NavIcon>⚙️</NavIcon>
-                </Link>
+                {/* <Link to="/settings" style={{ textDecoration: "none" }}> */}
+                <NavIcon>⚙️</NavIcon>
+                {/* </Link> */}
                 <NavLabel>Settings</NavLabel>
             </NavItem>
 
