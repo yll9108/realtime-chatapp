@@ -23,7 +23,7 @@ function Settings() {
                 setShowProfile(res.data.showProfile);
                 setShowStatus(res.data.showStatus);
                 setShowAbout(res.data.showAbout);
-                console.log("!!!!!!res", res.data);
+                // console.log("!!!!!!res", res.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -37,17 +37,17 @@ function Settings() {
                 <ToggleSwitch
                     label="Profile"
                     userId={user ? user._id : null}
-                    status={showProfile}
+                    status={showProfile !== undefined ? showProfile : false}
                 />
                 <ToggleSwitch
                     label="Status"
                     userId={user ? user._id : null}
-                    status={showStatus}
+                    status={showStatus !== undefined ? showStatus : false}
                 />
                 <ToggleSwitch
                     label="About"
                     userId={user ? user._id : null}
-                    status={showAbout}
+                    status={showAbout !== undefined ? showAbout : false}
                 />
             </div>
         </div>

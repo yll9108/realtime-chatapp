@@ -4,17 +4,17 @@ import axios from "axios";
 
 export default function ToggleSwitch({ label, userId, status }) {
     // console.log("UserId in ToggleSwitch:", userId);
-    console.warn(status);
+    // console.warn(status);
     const [isChecked, setIsChecked] = useState(status);
     // console.log("isChecked", isChecked);
     // console.log("status", status);
 
-    // useEffect(() => {
-    //     setIsChecked(status);
-    // }, [status]);
+    useEffect(() => {
+        if (status !== undefined) setIsChecked(status);
+    }, [status]);
 
     useEffect(() => {
-        console.log("icChecked", isChecked);
+        // console.log("icChecked", isChecked);
     }, [isChecked]);
 
     const handleToggle = (e) => {
@@ -23,10 +23,10 @@ export default function ToggleSwitch({ label, userId, status }) {
             return;
         } else {
             if (e.target.checked) {
-                console.log("checked");
+                // console.log("checked");
                 setIsChecked(true);
             } else {
-                console.log("unchecked");
+                // console.log("unchecked");
                 setIsChecked(false);
             }
             axios
@@ -38,7 +38,7 @@ export default function ToggleSwitch({ label, userId, status }) {
                     showAbout: label === "About" ? e.target.checked : undefined,
                 })
                 .then((res) => {
-                    console.log("line 40", res);
+                    // console.log("line 40", res);
                 })
                 .catch((err) => {
                     console.log(err);
