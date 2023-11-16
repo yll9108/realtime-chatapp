@@ -39,6 +39,8 @@ export const ChatContextProvider = ({ children, user }) => {
         return !isChatCreated;
       });
       setPotentialChats(pChats);
+    
+
     };
 
     getUsers();

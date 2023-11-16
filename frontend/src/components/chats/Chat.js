@@ -17,38 +17,30 @@ function Chat() {
 
   return (
     <ChatContainer>
-      <Sidebar />
+
+      <Sidebar setActiveSection={setActiveSection} />
+      {activeSection === 'friends' && <PotentialChats />}
+      {activeSection === 'settings' && <Settings />}
+      {activeSection === 'profile' && <Profile userProfile={user} />} 
+      {activeSection === 'chat' && userChats?.length > 0 && (
+
       <PotentialChats />
       {userChats?.length < 1 ? null : (
+
         <ChatList>
           <Stack className="messages-box">
             {isUserChatsLoading && <p>Loading Chats..</p>}
-            {userChats?.map((chat, index) => {
-              return (
-                <div key={index} onClick={() => updateCurrentChat(chat)}>
-                  <UserList chat={chat} user={user} />
-                </div>
-              );
-            })}
+            {userChats?.map((chat, index) => (
+              <div key={index} onClick={() => updateCurrentChat(chat)}>
+                <UserList chat={chat} user={user} />
+              </div>
+            ))}
           </Stack>
           <ChatArea />
         </ChatList>
       )}
     </ChatContainer>
 
-    // <ChatContainer>
-    //  <Sidebar setActiveSection={setActiveSection} handleLogout={handleLogout} />
-
-    //     {activeSection === 'chat' && (
-    //         <>
-    //             <UserList setSelectedChat={setSelectedChat} chats={demoChats} />
-    //             <ChatArea chat={selectedChat} messages={demoChats[selectedChat].messages} chatName={selectedChat} onLogout={handleLogout} />
-    //         </>
-    //     )}
-    //     {activeSection === 'friends' && <Friends friendsData={demoChats} />}
-    //     {activeSection === 'settings' && <Settings />}
-    //     {activeSection === 'profile' && <Profile />}
-    // </ChatContainer>
   );
 }
 const ChatContainer = styled.div`

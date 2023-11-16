@@ -71,9 +71,10 @@ const UserList = ({ chat, user }) => {
         <div>
           <UserAvatar />
           <UserInfo>
-            <UserName>
-              {recipientUser === null ? "unknown" : recipientUser?.userName}
-            </UserName>
+          <UserName>
+  {recipientUser && recipientUser.userName ? recipientUser.userName : "unknown"}
+</UserName>
+
             <UserLastMessage>text message</UserLastMessage>
           </UserInfo>
         </div>
