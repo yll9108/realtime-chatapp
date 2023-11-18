@@ -16,6 +16,8 @@ code {
 
 /* define new css */
 
+/* login css */
+
 .card {
     border-color: lightseagreen;
     background: black;
@@ -64,8 +66,8 @@ code {
     border: none;
 }
 
-.row a {
-    color: lightgray;
+.Login a {
+    color: lightcyan;
 }
 
 @media (max-width: 767px) {
@@ -79,4 +81,15 @@ code {
     .d-flex.d-flex.justify-content-end {
         justify-content: flex-start !important;
     }
+}
+
+/* navBar css */
+.register {
+    margin-left: 3em;
+    border-bottom: none;
+}
+
+.NavBar a {
+    color: lightseagreen;
+    text-decoration: none;
 }

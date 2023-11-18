@@ -19,7 +19,7 @@ function Login({ handleLogin }) {
     return (
         // <LoginDiv>
         <>
-            <div class="container">
+            <div class="container Login">
                 <div class="row d-flex justify-content-center mt-5">
                     <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                         <div class="card py-3 px-2">
@@ -56,7 +56,7 @@ function Login({ handleLogin }) {
                                 <div class="row">
                                     <div class="form-group mt-3 d-grid gap-2">
                                         <button
-                                            type="button"
+                                            type="sumbit"
                                             class="btn btn-block btn-primary btn-lg"
                                         >
                                             {isLoginLoading
