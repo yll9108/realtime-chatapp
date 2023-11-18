@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import styled from "styled-components";
+// import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { AuthContext } from "./../../context/AuthContext";
 
@@ -17,69 +17,106 @@ function Login({ handleLogin }) {
     } = useContext(AuthContext);
 
     return (
-        <LoginDiv>
-            <h1>LOGIN</h1>
-            <form onSubmit={loginUser}>
-                <Stack>
-                    <label>
-                        <strong>Email</strong>
-                    </label>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="type in email"
-                        onChange={(e) =>
-                            updateLoginInfo({
-                                ...loginInfo,
-                                email: e.target.value,
-                            })
-                        }
-                    />
-                </Stack>
-                <Stack>
-                    <label>
-                        <strong>Password</strong>
-                    </label>
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="type in password"
-                        onChange={(e) =>
-                            updateLoginInfo({
-                                ...loginInfo,
-                                password: e.target.value,
-                            })
-                        }
-                    />
-                </Stack>
-                <button type="submit">
-                    {isLoginLoading ? "Login processing.." : "Login"}
-                </button>
-            </form>
-            <button onClick={signInWithGoogle}>Login/Signup with Google</button>
-            <Alert>
-                <p>{loginError}</p>
-            </Alert>
+        // <LoginDiv>
+        <>
+            <div class="container">
+                <div class="row d-flex justify-content-center mt-5">
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                        <div class="card py-3 px-2">
+                            <h1 class="text-center mb-3 mt-2">LOGIN</h1>
+                            <form class="myform" onSubmit={loginUser}>
+                                <div class="form-group">
+                                    <input
+                                        class="form-control"
+                                        type="email"
+                                        name="email"
+                                        placeholder="Email"
+                                        onChange={(e) =>
+                                            updateLoginInfo({
+                                                ...loginInfo,
+                                                email: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </div>
+                                <div class="form-group">
+                                    <input
+                                        class="form-control"
+                                        type="password"
+                                        name="password"
+                                        placeholder="Password"
+                                        onChange={(e) =>
+                                            updateLoginInfo({
+                                                ...loginInfo,
+                                                password: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </div>
+                                <div class="row">
+                                    <div class="form-group mt-3 d-grid gap-2">
+                                        <button
+                                            type="button"
+                                            class="btn btn-block btn-primary btn-lg"
+                                        >
+                                            {isLoginLoading
+                                                ? "Login processing.."
+                                                : "Login"}
+                                        </button>
+                                        <div class="form-group mt-3 d-grid gap-2">
+                                            <button
+                                                class="btn btn-block btn-primary btn-lg"
+                                                onClick={signInWithGoogle}
+                                            >
+                                                Login/Signup with Google
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <p>{loginError}</p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-12">
+                                                <p>Forgot password?</p>
+                                            </div>
+                                            <div class="col-md-6 col-12 d-flex justify-content-end">
+                                                <Link to="/forgot-password">
+                                                    Reset
+                                                </Link>
+                                            </div>
+                                        </div>
 
-            <p>Forgot password?</p>
-            <Link to="/forgot-password">Reset</Link>
-            <h3>Don't have an account?</h3>
-            <Link to="/register">Sign up</Link>
-        </LoginDiv>
+                                        <div class="row">
+                                            <div class="col-md-6 col-12">
+                                                <p>Don't have an account?</p>
+                                            </div>
+                                            <div class="col-md-6 col-12 d-flex justify-content-end">
+                                                <Link to="/register">
+                                                    Register
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 }
 
-const LoginDiv = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`;
-const Stack = styled.div`
-    display: flex;
-`;
-const Alert = styled.div`
-    background-color: blue;
-    display: flex;
-    color: black;
-`;
+// const LoginDiv = styled.div`
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+// `;
+// const Stack = styled.div`
+//     display: flex;
+// `;
+// const Alert = styled.div`
+//     background-color: blue;
+//     display: flex;
+//     color: black;
+// `;
 export default Login;
