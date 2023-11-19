@@ -19,15 +19,15 @@ function Login({ handleLogin }) {
     return (
         // <LoginDiv>
         <>
-            <div class="container Login">
-                <div class="row d-flex justify-content-center mt-5">
-                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                        <div class="card py-3 px-2">
-                            <h1 class="text-center mb-3 mt-2">LOGIN</h1>
-                            <form class="myform" onSubmit={loginUser}>
-                                <div class="form-group">
+            <div className="container Login">
+                <div className="row d-flex justify-content-center mt-5">
+                    <div className="col-12 col-md-8 col-lg-6 col-xl-5">
+                        <div className="card py-3 px-2">
+                            <h1 className="text-center mb-3 mt-2">LOGIN</h1>
+                            <form className="myform" onSubmit={loginUser}>
+                                <div className="form-group">
                                     <input
-                                        class="form-control"
+                                        className="form-control"
                                         type="email"
                                         name="email"
                                         placeholder="Email"
@@ -39,9 +39,9 @@ function Login({ handleLogin }) {
                                         }
                                     />
                                 </div>
-                                <div class="form-group">
+                                <div className="form-group">
                                     <input
-                                        class="form-control"
+                                        className="form-control"
                                         type="password"
                                         name="password"
                                         placeholder="Password"
@@ -53,19 +53,19 @@ function Login({ handleLogin }) {
                                         }
                                     />
                                 </div>
-                                <div class="row">
-                                    <div class="form-group mt-3 d-grid gap-2">
+                                <div className="row">
+                                    <div className="form-group mt-3 d-grid gap-2">
                                         <button
                                             type="sumbit"
-                                            class="btn btn-block btn-primary btn-lg text-dark"
+                                            className="btn btn-block btn-primary btn-lg text-dark"
                                         >
                                             {isLoginLoading
                                                 ? "Login processing.."
                                                 : "Login"}
                                         </button>
-                                        <div class="form-group mt-3 d-grid gap-2">
+                                        <div className="form-group mt-3 d-grid gap-2">
                                             <button
-                                                class="btn btn-block btn-primary btn-lg text-dark"
+                                                className="btn btn-block btn-primary btn-lg text-dark"
                                                 onClick={signInWithGoogle}
                                             >
                                                 Login/Signup with Google
@@ -76,22 +76,22 @@ function Login({ handleLogin }) {
                                                 {loginError}
                                             </p>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6 col-12">
+                                        <div className="row">
+                                            <div className="col-md-6 col-12">
                                                 <p>Forgot password?</p>
                                             </div>
-                                            <div class="col-md-6 col-12 d-flex justify-content-end">
+                                            <div className="col-md-6 col-12 d-flex justify-content-end">
                                                 <Link to="/forgot-password">
                                                     Reset
                                                 </Link>
                                             </div>
                                         </div>
 
-                                        <div class="row">
-                                            <div class="col-md-6 col-12">
+                                        <div className="row">
+                                            <div className="col-md-6 col-12">
                                                 <p>Don't have an account?</p>
                                             </div>
-                                            <div class="col-md-6 col-12 d-flex justify-content-end">
+                                            <div className="col-md-6 col-12 d-flex justify-content-end">
                                                 <Link to="/register">
                                                     Register
                                                 </Link>

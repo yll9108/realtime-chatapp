@@ -45,34 +45,36 @@ const NavBar = () => {
 
     return (
         <div className="container-{breakpoint} NavBar">
-            <div className="row">
-                <h1 className="col-6">
-                    <Link to="/" className="chatApp">
-                        ChatApp
-                    </Link>
-                </h1>
-                {user ? (
-                    <>
-                        <span className="login-UserName">
-                            Logged in as {user?.name}
-                        </span>
-                        <button onClick={handleLogout}>Logout</button>
-                    </>
-                ) : (
-                    <div className="col-6 d-flex justify-content-end align-items-center">
-                        <h3>
-                            <Link to="/login" className="login">
-                                Login
-                            </Link>
-                        </h3>
-                        <h3>
-                            <Link to="/register" className="register">
-                                Register
-                            </Link>
-                        </h3>
-                        {/* </div> */}
-                    </div>
-                )}
+            <div className="NacBar Content">
+                <div className="row">
+                    <h1 className="col-6">
+                        <Link to="/" className="chatApp">
+                            ChatApp
+                        </Link>
+                    </h1>
+                    {user ? (
+                        <>
+                            <span className="login-UserName">
+                                Logged in as {user?.name}
+                            </span>
+                            <button onClick={handleLogout}>Logout</button>
+                        </>
+                    ) : (
+                        <div className="col-6 d-flex justify-content-end align-items-center">
+                            <h3>
+                                <Link to="/login" className="login">
+                                    Login
+                                </Link>
+                            </h3>
+                            <h3>
+                                <Link to="/register" className="register">
+                                    Register
+                                </Link>
+                            </h3>
+                            {/* </div> */}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

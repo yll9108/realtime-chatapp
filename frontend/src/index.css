@@ -90,6 +90,13 @@ code {
 /* navBar css */
 
 .NavBar {
+    background: linear-gradient(1deg, black 50%, rgb(17, 255, 164) 140%);
+    border: none;
+    /* height: 50%; */
+    clip-path: polygon(0 100%, 100, 0, 100%, 0, 30%, 50%);
+}
+
+.NavBar {
     border-bottom: 1px solid lightseagreen;
     /* padding: ; */
     margin-left: 0%;
