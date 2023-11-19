@@ -70,6 +70,10 @@ code {
     color: lightcyan;
 }
 
+.errorText {
+    color: yellow;
+}
+
 @media (max-width: 767px) {
     .bn {
         text-align: center;
@@ -84,12 +88,25 @@ code {
 }
 
 /* navBar css */
-.register {
-    margin-left: 3em;
-    border-bottom: none;
+
+.NavBar {
+    border-bottom: 1px solid lightseagreen;
+    /* padding: ; */
+    margin-left: 0%;
+    margin-right: 0%;
 }
 
 .NavBar a {
     color: lightseagreen;
     text-decoration: none;
+}
+
+.chatApp {
+    margin-left: 1vw;
+}
+
+.register {
+    margin-left: 3vw;
+    margin-right: 2vw;
+    border-bottom: none;
 }

@@ -44,16 +44,13 @@ const NavBar = () => {
     };
 
     return (
-        <div
-            className="container NavBar"
-            style={{ borderBottom: "1px solid lightseagreen" }}
-        >
+        <div className="container-{breakpoint} NavBar">
             <div className="row">
-                <h2 className="col-6">
+                <h1 className="col-6">
                     <Link to="/" className="chatApp">
                         ChatApp
                     </Link>
-                </h2>
+                </h1>
                 {user ? (
                     <>
                         <span className="login-UserName">
@@ -62,14 +59,17 @@ const NavBar = () => {
                         <button onClick={handleLogout}>Logout</button>
                     </>
                 ) : (
-                    <div className="col-6 d-flex justify-content-end">
-                        <Link to="/login" className="login">
-                            Login
-                        </Link>
-
-                        <Link to="/register" className="register">
-                            Register
-                        </Link>
+                    <div className="col-6 d-flex justify-content-end align-items-center">
+                        <h3>
+                            <Link to="/login" className="login">
+                                Login
+                            </Link>
+                        </h3>
+                        <h3>
+                            <Link to="/register" className="register">
+                                Register
+                            </Link>
+                        </h3>
                         {/* </div> */}
                     </div>
                 )}

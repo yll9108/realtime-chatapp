@@ -57,7 +57,7 @@ function Login({ handleLogin }) {
                                     <div class="form-group mt-3 d-grid gap-2">
                                         <button
                                             type="sumbit"
-                                            class="btn btn-block btn-primary btn-lg"
+                                            class="btn btn-block btn-primary btn-lg text-dark"
                                         >
                                             {isLoginLoading
                                                 ? "Login processing.."
@@ -65,14 +65,16 @@ function Login({ handleLogin }) {
                                         </button>
                                         <div class="form-group mt-3 d-grid gap-2">
                                             <button
-                                                class="btn btn-block btn-primary btn-lg"
+                                                class="btn btn-block btn-primary btn-lg text-dark"
                                                 onClick={signInWithGoogle}
                                             >
                                                 Login/Signup with Google
                                             </button>
                                         </div>
                                         <div>
-                                            <p>{loginError}</p>
+                                            <p className="errorText">
+                                                {loginError}
+                                            </p>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 col-12">
