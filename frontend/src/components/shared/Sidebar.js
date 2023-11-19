@@ -1,7 +1,7 @@
 // Sidebar.js
-import React from 'react';
-import styled from 'styled-components';
-
+import React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const NavbarContainer = styled.div`
     background-color: #2c2c2c;
@@ -33,32 +33,32 @@ const NavLabel = styled.div`
     font-size: 14px;
 `;
 
-
 const Sidebar = ({ setActiveSection }) => {
     return (
         <NavbarContainer>
-            <NavItem onClick={() => setActiveSection('chat')}>
+            <NavItem onClick={() => setActiveSection("chat")}>
                 <NavIcon>💬</NavIcon>
                 <NavLabel>Chat</NavLabel>
             </NavItem>
 
-            <NavItem onClick={() => setActiveSection('friends')}>
+            <NavItem onClick={() => setActiveSection("friends")}>
                 <NavIcon>👥</NavIcon>
                 <NavLabel>Friends</NavLabel>
             </NavItem>
 
-            <NavItem onClick={() => setActiveSection('settings')}>
+            <NavItem onClick={() => setActiveSection("settings")}>
+                {/* <Link to="/settings" style={{ textDecoration: "none" }}> */}
                 <NavIcon>⚙️</NavIcon>
+                {/* </Link> */}
                 <NavLabel>Settings</NavLabel>
             </NavItem>
 
-            <NavItem onClick={() => setActiveSection('profile')}>
+            <NavItem onClick={() => setActiveSection("profile")}>
                 <NavIcon>👤</NavIcon>
                 <NavLabel>Profile</NavLabel>
             </NavItem>
         </NavbarContainer>
     );
 };
-
 
 export default Sidebar;

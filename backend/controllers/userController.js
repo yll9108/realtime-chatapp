@@ -16,10 +16,42 @@ const registerUser = async (req, res) => {
   try {
     const { userName, email, password } = req.body;
 
-    if (!userName || !email || !password) {
-      return res.send(responseMap.missingInfo);
-    } else if (password == email) {
-      return res.send(responseMap.unacceptableRequirement);
+        if (!userName || !email || !password) {
+            return res.send(responseMap.missingInfo);
+        } else if (password == email) {
+            return res.send(responseMap.unacceptableRequirement);
+        }
+        // check if user uses the same email to register
+
+        const existingUserEmail = await getUserByField("email", email);
+        const existingUserName = await getUserByField("userName", userName);
+        if (existingUserEmail) {
+            return res.send(responseMap.existingUserEmail);
+        } else if (existingUserName) {
+            return res.send(responseMap.existingUserName);
+        }
+
+        if (!checkPasswordComplexity(password, 6, 10, 4)) {
+            return res.send(responseMap.unprocessableEntity);
+        }
+
+        // if not .. user is able to type in password and it'll be hashed
+        const salt = random();
+        const user = await createUser({
+            userName,
+            email,
+            authentication: {
+                salt,
+                password: authentication(salt, password),
+            },
+        });
+
+        return res
+            .status(200)
+            .json({ _id: user._id, name: user.userName, email, code: 200 });
+    } catch (error) {
+        console.log(error);
+        return res.send(responseMap.serverError);
     }
     // check if user uses the same email to register
 
@@ -59,9 +91,47 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // check if user type in email and password
-    if (!email || !password) {
-      return res.send(responseMap.missingInfo);
+        // check if user type in email and password
+        if (!email || !password) {
+            return res.send(responseMap.missingInfo);
+        }
+
+        // get user by email and select data from DB
+        const user = await getUserByField("email", email).select(
+            "+authentication.salt+authentication.password"
+        );
+
+        // if user email doesn't exist
+        if (!user) {
+            return res.send(responseMap.nonExistingUser);
+        }
+
+        // if user email exists, comparing hashed password
+        const expectedHash = authentication(user.authentication.salt, password);
+        if (user.authentication.password !== expectedHash) {
+            return res.send(responseMap.unauthorized);
+        }
+
+        const salt = random();
+        user.authentication.sessionToken = authentication(
+            salt,
+            user._id.toString()
+        );
+        await user.save();
+        return res.status(200).json({
+            _id: user._id,
+            name: user.userName,
+            email,
+            showAbout: user.showAbout,
+            showProfile: user.showProfile,
+            showStatus: user.showStatus,
+            status: user.status,
+            code: 200,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.send(responseMap.serverError);
+        // return res.sendStatus(500).json({ code: 500 });
     }
 
     // get user by email and select data from DB
