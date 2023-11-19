@@ -269,7 +269,31 @@ const getUsers = async (req, res) => {
         res.status(500).json(error);
     }
 };
+const updateUserProfile = async (req, res) => {
+    const { _id, userName, about, email } = req.body;
+    
+    if (!_id) {
+        return res.status(400).json({ message: 'User ID is required.' });
+    }
 
+    try {
+        const updatedUser = await userModel.findByIdAndUpdate(
+            _id,
+            { userName, about, email },
+            { new: true }
+        );
+        
+        
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        res.json(updatedUser);
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ message: 'Error updating user.' });
+    }
+};
 module.exports = {
     registerUser,
     login,
@@ -279,4 +303,5 @@ module.exports = {
     findUser,
     getUsers,
     googleLogin,
+    updateUserProfile
 };

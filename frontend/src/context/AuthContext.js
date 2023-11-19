@@ -178,7 +178,11 @@ export const AuthContextProvider = ({ children }) => {
         setUser(null);
         auth.signOut();
     }, []);
-
+    const updateUser = useCallback((updatedUserData) => {
+        localStorage.setItem("User", JSON.stringify(updatedUserData));
+        setUser(updatedUserData);
+    }, []);
+    
     return (
         <AuthContext.Provider
             value={{
@@ -195,6 +199,7 @@ export const AuthContextProvider = ({ children }) => {
                 isLoginLoading,
                 signInWithGoogle,
                 logoutUser,
+                updateUser
             }}
         >
             {showPopup && <Popup>{popupMessage}</Popup>}
