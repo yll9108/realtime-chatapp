@@ -31,10 +31,15 @@ export const AuthContextProvider = ({ children }) => {
     // console.log("user", user);
 
     useEffect(() => {
-        const user = localStorage.getItem("User");
-        setUser(JSON.parse(user));
+        const userFromStorage = localStorage.getItem("User");
+        console.log("User from localStorage:", userFromStorage); // Debug log
+        if (typeof userFromStorage === "string" && userFromStorage.trim() !== "") {
+            setUser(JSON.parse(userFromStorage));
+        }
     }, []);
-
+    
+    
+    
     const updateRegisterInfo = useCallback((info) => {
         setRegisterInfo(info);
     }, []);
