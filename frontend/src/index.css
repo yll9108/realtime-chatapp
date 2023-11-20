@@ -90,7 +90,7 @@ code {
 /* navBar css */
 
 .NavBar {
-    background: linear-gradient(1deg, black 50%, rgb(17, 255, 164) 140%);
+    background: linear-gradient(1deg, black 30%, rgb(17, 255, 164) 150%);
     border: none;
     /* height: 50%; */
     clip-path: polygon(0 100%, 100, 0, 100%, 0, 30%, 50%);
