@@ -12,7 +12,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "frontend": "cd frontend && npm start",
     "backend": "cd backend && npm start",
-    "dev": "concurrently \"npm run frontend\" \"npm run backend\""
+    "socket": "cd socket && nodemon",
+    "dev": "concurrently \"npm run frontend\" \"npm run backend\" \"npm run socket\""
   },
   "repository": {
     "type": "git",
