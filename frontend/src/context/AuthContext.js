@@ -67,7 +67,7 @@ export const AuthContextProvider = ({ children }) => {
                     );
                     break;
                 case 403:
-                    setRegisterError("password can't be the same as email");
+                    setRegisterError("Password can't be the same as email");
                     break;
                 case 409:
                     if (response.status === "Existing User Email") {
@@ -114,13 +114,13 @@ export const AuthContextProvider = ({ children }) => {
                     setUser(response);
                     break;
                 case 400:
-                    setLoginError("Missing one of them : email//password");
+                    setLoginError("Missing one of them : email/password");
                     break;
                 case 401:
-                    setLoginError("wrong password");
+                    setLoginError("Wrong password");
                     break;
                 case 404:
-                    setLoginError("user doesn't exist");
+                    setLoginError("User doesn't exist");
                     break;
                 case 500:
                     setLoginError(response);
@@ -153,7 +153,10 @@ export const AuthContextProvider = ({ children }) => {
                     })
                     .then((response) => {
                         console.log("Server Response:", response.data);
-                        localStorage.setItem("User", JSON.stringify(response.data));
+                        localStorage.setItem(
+                            "User",
+                            JSON.stringify(response.data)
+                        );
                         setUser(response.data);
                         if (response.data.isNewUser) {
                             showCustomPopup(

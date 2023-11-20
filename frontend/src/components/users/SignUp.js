@@ -1,4 +1,4 @@
-import styled from "styled-components";
+// import styled from "styled-components";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -41,91 +41,95 @@ function SignUp() {
 
     return (
         <>
-            <SignUpDiv>
-                <h1>Sign up</h1>
-                <form onSubmit={registerUser}>
-                    <Stack>
-                        <label>
-                            <strong>Username</strong>
-                        </label>
-                        <input
-                            type="text"
-                            name="userName"
-                            placeholder="Enter userName"
-                            onChange={(e) =>
-                                updateRegisterInfo({
-                                    ...registerInfo,
-                                    userName: e.target.value,
-                                })
-                            }
-                        />
-                    </Stack>
-                    <Stack>
-                        <label>
-                            <strong>Email</strong>
-                        </label>
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="type in email"
-                            onChange={(e) =>
-                                updateRegisterInfo({
-                                    ...registerInfo,
-                                    email: e.target.value,
-                                })
-                            }
-                        />
-                    </Stack>
-                    <Stack>
-                        <label>
-                            <strong>Password</strong>
-                        </label>
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="type in password"
-                            onChange={(e) =>
-                                updateRegisterInfo({
-                                    ...registerInfo,
-                                    password: e.target.value,
-                                })
-                            }
-                        />
-                    </Stack>
-                    <button>
-                        {isRegisterLoading
-                            ? "Creating your account"
-                            : "Register"}
-                    </button>
-                    <Alert>
-                        <p>{registerError}</p>
-                    </Alert>
-                </form>
-                <ol>
-                    Password rules:
-                    <ul>Max length: 10</ul>
-                    <ul>Min length: 6</ul>
-                    <ul>Needs to contain UpperCase and LowerCase</ul>
-                    <ul>
-                        You can have these
-                        symbols:`~!@#$%^&*()_+=,&lt;&gt;-&#123;&#125;[]:;.'"?|
-                    </ul>
-                </ol>
-            </SignUpDiv>
+            <div className="container">
+                <div className="row d-flex justify-content-center mt-5">
+                    <div className="col-12 col-md-8 col-lg-6 col-xl-5">
+                        <div className="card py-3 px-2">
+                            <h1 className="text-center mb-3 mt-2">Register</h1>
+                            <form className="myform" onSubmit={registerUser}>
+                                <div className="form-group">
+                                    <input
+                                        className="form-control"
+                                        type="text"
+                                        name="userName"
+                                        placeholder="Username"
+                                        onChange={(e) =>
+                                            updateRegisterInfo({
+                                                ...registerInfo,
+                                                userName: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <input
+                                        className="form-control"
+                                        type="email"
+                                        name="email"
+                                        placeholder="Email"
+                                        onChange={(e) =>
+                                            updateRegisterInfo({
+                                                ...registerInfo,
+                                                email: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <input
+                                        className="form-control"
+                                        type="password"
+                                        name="password"
+                                        placeholder="Password ( 6 to 10 characters)"
+                                        onChange={(e) =>
+                                            updateRegisterInfo({
+                                                ...registerInfo,
+                                                password: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </div>
+                                <div className="form-group mt-3 d-grid gap-2">
+                                    <button className="btn btn-block btn-primary btn-lg text-dark">
+                                        {isRegisterLoading
+                                            ? "Creating your account"
+                                            : "Register"}
+                                    </button>
+                                </div>
+                                <div>
+                                    <p className="errorText">{registerError}</p>
+                                </div>
+                            </form>
+                            {/* <ol>
+                                Password rules: */}
+                            {/* <ul>Length: Between 6 and 10 characters.</ul> */}
+                            <ul>
+                                Must include both uppercase and lowercase
+                                letters, special symbols and numbers.
+                            </ul>
+                            <ul>
+                                Allowed
+                                symbols:`~!@#$%^&*()_+=,&lt;&gt;-&#123;&#125;[]:;.'"?|
+                            </ul>
+                            {/* </ol> */}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </>
     );
 }
 
-const SignUpDiv = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`;
-const Stack = styled.div`
-    display: flex;
-`;
-const Alert = styled.div`
-    display: flex;
-    color: black;
-`;
+// const SignUpDiv = styled.div`
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+// `;
+// const Stack = styled.div`
+//     display: flex;
+// `;
+// const Alert = styled.div`
+//     display: flex;
+//     color: black;
+// `;
 export default SignUp;
