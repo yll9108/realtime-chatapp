@@ -1,8 +1,12 @@
 const responseMap = {
     missingInfo: { status: "Missing Info", code: 400 },
     unauthorized: { status: "Unauthorized", code: 401 },
-    unacceptableRequirement: {
-        status: "Unacceptable requirement",
+    passwordEmailDuplicated: {
+        status: "PasswordEmailDuplicated",
+        code: 403,
+    },
+    emailUserNameDuplicated: {
+        status: "EmailUserNameDuplicated",
         code: 403,
     },
     nonExistingUser: { status: "Non Existing User", code: 404 },

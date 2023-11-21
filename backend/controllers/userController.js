@@ -19,7 +19,9 @@ const registerUser = async (req, res) => {
         if (!userName || !email || !password) {
             return res.send(responseMap.missingInfo);
         } else if (password == email) {
-            return res.send(responseMap.unacceptableRequirement);
+            return res.send(responseMap.passwordEmailDuplicated);
+        } else if (email == userName) {
+            return res.send(responseMap.emailUserNameDuplicated);
         }
         // check if user uses the same email to register
 
@@ -231,11 +233,11 @@ const googleLogin = async (req, res) => {
             user = await newUser.save();
             console.log("New user created with firebaseUid");
         }
-        return res.status(user ? 200 : 201).json({ 
-            _id: user._id, 
-            name: user.userName, 
-            email: user.email, 
-            code: 200 
+        return res.status(user ? 200 : 201).json({
+            _id: user._id,
+            name: user.userName,
+            email: user.email,
+            code: 200,
         });
     } catch (error) {
         console.error("Error in googleLogin:", error);
