@@ -1,18 +1,19 @@
 {
   "dependencies": {
     "concurrently": "^8.2.2",
-    "create-react-app": "^5.0.1"
+    "create-react-app": "^5.0.1",
+    "init": "^0.1.2"
   },
   "name": "chatapp-soojin-yen-bosco-final",
   "description": "Realtime Chat Application using MERN Stack",
   "version": "1.0.0",
   "main": ".jsindex",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "frontend": "cd frontend && npm start",
     "backend": "cd backend && npm start",
-    "dev": "concurrently \"npm run frontend\" \"npm run backend\""
+    "socket": "cd socket && nodemon",
+    "dev": "concurrently \"npm run frontend\" \"npm run backend\" \"npm run socket\""
   },
   "repository": {
     "type": "git",

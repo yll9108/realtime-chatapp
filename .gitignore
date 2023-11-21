@@ -1,3 +1,5 @@
 .env
 node_modules
+frontend/src/utils/fireBaseConfig.js
 .DS_Store
+
