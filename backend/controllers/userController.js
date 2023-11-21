@@ -39,6 +39,7 @@ const registerUser = async (req, res) => {
     const salt = random();
     const user = await createUser({
       userName,
+      about,
       email,
       authentication: {
         salt,
@@ -48,7 +49,7 @@ const registerUser = async (req, res) => {
 
     return res
       .status(200)
-      .json({ _id: user._id, name: user.userName, email, code: 200 });
+      .json({ _id: user._id, userName: user.userName, about, email, code: 200 });
   } catch (error) {
     console.log(error);
     return res.send(responseMap.serverError);
@@ -89,7 +90,8 @@ const login = async (req, res) => {
     await user.save();
     return res.status(200).json({
       _id: user._id,
-      name: user.userName,
+      userName: user.userName,
+      about,
       email,
       showAbout: user.showAbout,
       showProfile: user.showProfile,
@@ -221,6 +223,7 @@ const googleLogin = async (req, res) => {
       const newUser = new userModel({
         email: email,
         userName: displayName,
+        about:about,
         firebaseUid: uid,
         isGoogleAccount: true, // Indicate that this user is authenticated through Google
       });
@@ -230,8 +233,9 @@ const googleLogin = async (req, res) => {
     }
     return res.status(user ? 200 : 201).json({
       _id: user._id,
-      name: user.userName,
+      userName: user.userName,
       email: user.email,
+      about:user.about,
       code: 200,
     });
   } catch (error) {
@@ -292,14 +296,14 @@ const updateUserProfile = async (req, res) => {
     }
 };
 module.exports = {
-  registerUser,
-  login,
-  handleResetEmail,
-  handleResetToken,
-  handleResetPW,
-  findUser,
-  getUsers,
-  googleLogin,
+    registerUser,
+    login,
+    handleResetEmail,
+    handleResetToken,
+    handleResetPW,
+    findUser,
+    getUsers,
+    googleLogin,
     updateUserProfile
 };
 
