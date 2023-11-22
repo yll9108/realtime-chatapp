@@ -147,7 +147,7 @@ const handleResetEmail = async (req, res) => {
             // console.log("token2", token);
         } catch (error) {
             console.log("error");
-            return res.sendStatus(500);
+            return res.send(responseMap.serverError);
         }
 
         // update token
@@ -165,7 +165,7 @@ const handleResetEmail = async (req, res) => {
         // console.log(`MSG: token has been saved`);
     } catch (error) {
         console.log(error);
-        return res.sendStatus(400);
+        return res.send(responseMap.serverError);
     }
 };
 
@@ -210,7 +210,7 @@ const handleResetPW = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        return res.status(500).json({ msg: "failed" });
+        return res.send(responseMap.serverError);
     }
 };
 const googleLogin = async (req, res) => {
