@@ -106,7 +106,7 @@ const login = async (req, res) => {
     }
 };
 
-// reset password
+// reset password (ForgettingPW.js)
 const handleResetEmail = async (req, res) => {
     try {
         // use email as rest tool
@@ -116,6 +116,9 @@ const handleResetEmail = async (req, res) => {
         // when user typed in WRONG email
         if (!user) {
             console.log("Email hasn't been signed up.");
+            // return res.send({
+            //     Status: "Wrong email",
+            // });
             return res.send(responseMap.nonExistingUser);
         }
 
@@ -141,7 +144,7 @@ const handleResetEmail = async (req, res) => {
             <a href="http://localhost:${port}/reset/${token}"><p>Link</p></a>
             <p>Link will be expired in 1 hour, thank you!</p>`,
             });
-            console.log("token2", token);
+            // console.log("token2", token);
         } catch (error) {
             console.log("error");
             return res.sendStatus(500);
@@ -155,9 +158,10 @@ const handleResetEmail = async (req, res) => {
         // console.log("token3", user.resetPassword.resetToken);
         // console.log("user.resetExpiration", user.resetPassword.resetExpiration);
         await user.save();
-        return res.send({
-            Status: "Succeed",
-        });
+        return res.sendStatus(200);
+        // return res.send({
+        //     Status: "Succeed",
+        // });
         // console.log(`MSG: token has been saved`);
     } catch (error) {
         console.log(error);
