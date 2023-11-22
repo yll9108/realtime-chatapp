@@ -111,7 +111,7 @@ const handleResetEmail = async (req, res) => {
     try {
         // use email as rest tool
         const { email } = req.body;
-        const user = await getUserByEmail({ email });
+        const user = await getUserByField("email", email);
 
         // when user typed in WRONG email
         if (!user) {
