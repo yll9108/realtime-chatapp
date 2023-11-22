@@ -91,7 +91,7 @@ const login = async (req, res) => {
     return res.status(200).json({
       _id: user._id,
       userName: user.userName,
-      about,
+      about:user.about,
       email,
       showAbout: user.showAbout,
       showProfile: user.showProfile,
@@ -271,30 +271,45 @@ const getUsers = async (req, res) => {
   }
 };
 const updateUserProfile = async (req, res) => {
-    const { _id, userName, about, email } = req.body;
-    
-    if (!_id) {
-        return res.status(400).json({ message: 'User ID is required.' });
-    }
+  const { _id, userName, about, email } = req.body;
+  
+  if (!_id) {
+      return res.status(400).json({ message: 'User ID is required.' });
+  }
 
-    try {
-        const updatedUser = await userModel.findByIdAndUpdate(
-            _id,
-            { userName, about, email },
-            { new: true }
-        );
-        
-        
-        if (!updatedUser) {
-            return res.status(404).json({ message: 'User not found.' });
-        }
+  try {
+      // Retrieve the current user data
+      const currentUser = await userModel.findById(_id);
 
-        res.json(updatedUser);
-    } catch (error) {
-        console.error('Error updating user:', error);
-        res.status(500).json({ message: 'Error updating user.' });
-    }
+      if (!currentUser) {
+          return res.status(404).json({ message: 'User not found.' });
+      }
+
+      // Prepare update object
+      let updateObject = { userName, about };
+      let emailChangeAttempted = false;
+
+      // Check for email change attempt
+      if (currentUser.isGoogleAccount && email && email !== currentUser.email) {
+          emailChangeAttempted = true;
+      } else if (!currentUser.isGoogleAccount) {
+          updateObject.email = email;
+      }
+
+      // Update the user data
+      const updatedUser = await userModel.findByIdAndUpdate(
+          _id,
+          updateObject,
+          { new: true }
+      );
+
+      res.json({ user: updatedUser, emailChangeAttempted });
+  } catch (error) {
+      console.error('Error updating user:', error);
+      res.status(500).json({ message: 'Error updating user.' });
+  }
 };
+
 module.exports = {
     registerUser,
     login,

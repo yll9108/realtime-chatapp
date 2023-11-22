@@ -184,9 +184,14 @@ export const AuthContextProvider = ({ children }) => {
         auth.signOut();
     }, []);
     const updateUser = useCallback((updatedUserData) => {
-        localStorage.setItem("User", JSON.stringify(updatedUserData));
-        setUser(updatedUserData);
+        localStorage.setItem("User", JSON.stringify(updatedUserData.user));
+        setUser(updatedUserData.user);
+    
+        if (updatedUserData.emailChangeAttempted) {
+            alert("Email update is not allowed for Google account users.");
+        }
     }, []);
+    
     
     return (
         <AuthContext.Provider
