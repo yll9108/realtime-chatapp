@@ -69,7 +69,11 @@ export const AuthContextProvider = ({ children }) => {
                     );
                     break;
                 case 403:
-                    setRegisterError("Password can't be the same as email");
+                    if (response.status === "PasswordEmailDuplicated") {
+                        setRegisterError("Password can't be the same as email");
+                    } else if (response.status === "EmailUserNameDuplicated") {
+                        setRegisterError("Username can't be the same as email");
+                    }
                     break;
                 case 409:
                     if (response.status === "Existing User Email") {
