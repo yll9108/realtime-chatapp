@@ -22,7 +22,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
   //initial socket
   useEffect(() => {
-    const newSocket = io("http://localhost:5000");
+    const newSocket = io("http://localhost:4000");
     setSocket(newSocket);
 
     return () => {
@@ -92,8 +92,6 @@ export const ChatContextProvider = ({ children, user }) => {
         return !isChatCreated;
       });
       setPotentialChats(pChats);
-    
-
     };
 
     getUsers();
