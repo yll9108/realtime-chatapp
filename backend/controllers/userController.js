@@ -219,20 +219,22 @@ const googleLogin = async (req, res) => {
     try {
         let user = await userModel.findOne({ email: email });
 
-        if (user) {
-            if (!user.firebaseUid) {
-                user.firebaseUid = uid;
-                await user.save();
-                console.log("firebaseUid saved successfully");
-            }
-        } else {
-            // Create a new user and set isGoogleAccount to true
-            const newUser = new userModel({
-                email: email,
-                userName: displayName,
-                firebaseUid: uid,
-                isGoogleAccount: true, // Indicate that this user is authenticated through Google
-            });
+    if (user) {
+      if (!user.firebaseUid) {
+        user.firebaseUid = uid;
+        await user.save();
+        console.log("firebaseUid saved successfully");
+      }
+    } else {
+      // Create a new user and set isGoogleAccount to true
+      const newUser = new userModel({
+        email: email,
+        userName: displayName,
+        about:about,
+        firebaseUid: uid,
+        isGoogleAccount: true, // Indicate that this user is authenticated through Google
+      });
+
 
             user = await newUser.save();
             console.log("New user created with firebaseUid");
@@ -249,6 +251,20 @@ const googleLogin = async (req, res) => {
             .status(500)
             .send({ message: "Error in googleLogin", error: error });
     }
+    return res.status(user ? 200 : 201).json({
+      _id: user._id,
+      userName: user.userName,
+      email: user.email,
+      about:user.about,
+      code: 200,
+    });
+  } catch (error) {
+    console.error("Error in googleLogin:", error);
+    return res
+      .status(500)
+      .send({ message: "Error in googleLogin", error: error });
+  }
+
 };
 
 //find one  user
@@ -275,6 +291,45 @@ const getUsers = async (req, res) => {
         res.status(500).json(error);
     }
 };
+const updateUserProfile = async (req, res) => {
+  const { _id, userName, about, email } = req.body;
+  
+  if (!_id) {
+      return res.status(400).json({ message: 'User ID is required.' });
+  }
+
+  try {
+      // Retrieve the current user data
+      const currentUser = await userModel.findById(_id);
+
+      if (!currentUser) {
+          return res.status(404).json({ message: 'User not found.' });
+      }
+
+      // Prepare update object
+      let updateObject = { userName, about };
+      let emailChangeAttempted = false;
+
+      // Check for email change attempt
+      if (currentUser.isGoogleAccount && email && email !== currentUser.email) {
+          emailChangeAttempted = true;
+      } else if (!currentUser.isGoogleAccount) {
+          updateObject.email = email;
+      }
+
+      // Update the user data
+      const updatedUser = await userModel.findByIdAndUpdate(
+          _id,
+          updateObject,
+          { new: true }
+      );
+
+      res.json({ user: updatedUser, emailChangeAttempted });
+  } catch (error) {
+      console.error('Error updating user:', error);
+      res.status(500).json({ message: 'Error updating user.' });
+  }
+};
 
 module.exports = {
     registerUser,
@@ -285,4 +340,7 @@ module.exports = {
     findUser,
     getUsers,
     googleLogin,
+    updateUserProfile
+
 };
+
