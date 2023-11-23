@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function ForgettingPW() {
+    const [resetMailError, setResetMailError] = useState(null);
     const [email, setEmail] = useState();
     const navigate = useNavigate();
 
@@ -14,9 +15,11 @@ function ForgettingPW() {
                 email,
             })
             .then((res) => {
-                if (res.data.Status === "Wrong email") {
+                console.log(res);
+                if (res.data.code === 404) {
                     console.log(`MSG from frontend: email hasn't signed up`);
-                } else if (res.data.Status === "Succeed") {
+                    setResetMailError("Can not find user.");
+                } else if (res.status === 200) {
                     console.log(`MSG from frontend: Succeed`);
                     navigate("/");
                 }
@@ -39,6 +42,7 @@ function ForgettingPW() {
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     <button>Sumbit</button>
+                    <p>{resetMailError}</p>
                 </form>
             </ForgettingPWDiv>
         </>
