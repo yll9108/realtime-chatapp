@@ -184,6 +184,7 @@ const handleResetToken = async (req, res) => {
 
 const handleResetPW = async (req, res) => {
     try {
+        console.log(req);
         const { newPassword } = req.body;
         const resetToken = req.params.resetToken;
         const user = await getUserByResetToken(resetToken, Date.now());
@@ -193,16 +194,20 @@ const handleResetPW = async (req, res) => {
                 Status: "Expired Link",
             });
         }
+        if (!checkPasswordComplexity(newPassword, 6, 10, 4)) {
+            return res.send(responseMap.unprocessableEntity);
+        }
+
         const salt = random();
         const newHashedPassword = authentication(salt, newPassword);
-        console.log("newHashedPassword1", newHashedPassword);
+        // console.log("newHashedPassword1", newHashedPassword);
         user.authentication.salt = salt;
         user.authentication.password = newHashedPassword;
-        console.log("newHashedPassword2", newHashedPassword);
-        console.log(
-            "user.authentication.password",
-            user.authentication.password
-        );
+        // console.log("newHashedPassword2", newHashedPassword);
+        // console.log(
+        //     "user.authentication.password",
+        //     user.authentication.password
+        // );
         user.resetPassword.resetToken = null;
         await user.save();
         return res.send({
@@ -213,6 +218,40 @@ const handleResetPW = async (req, res) => {
         return res.send(responseMap.serverError);
     }
 };
+
+const changePassword = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { password } = req.body;
+        const user = await userModel.findById(userId);
+        // const user = await changePassword(userId, password);
+        console.log("userId", userId);
+        // console.log("user", user);
+        if (!password) {
+            console.log("password non exist");
+        }
+        if (!user) {
+            console.log("user not exist");
+            return res.send(responseMap.existingUserEmail);
+        }
+
+        if (!checkPasswordComplexity(password, 6, 10, 4)) {
+            return res.send(responseMap.unprocessableEntity);
+        }
+
+        const { salt, newHashedPassword } = generateHashedPassword(password);
+
+        user.authentication.salt = salt;
+        user.authentication.password = newHashedPassword;
+
+        await user.save();
+        return res.status(200).json({ user });
+    } catch (error) {
+        console.log(error);
+        return res.send(responseMap.serverError);
+    }
+};
+
 const googleLogin = async (req, res) => {
     const { uid, email, displayName } = req.body;
 
@@ -276,6 +315,12 @@ const getUsers = async (req, res) => {
     }
 };
 
+const generateHashedPassword = (password) => {
+    const salt = random();
+    const newHashedPassword = authentication(salt, password);
+    return { salt, newHashedPassword };
+};
+
 module.exports = {
     registerUser,
     login,
@@ -285,4 +330,5 @@ module.exports = {
     findUser,
     getUsers,
     googleLogin,
+    changePassword,
 };

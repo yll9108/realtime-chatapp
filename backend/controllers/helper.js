@@ -4,6 +4,8 @@ const secret = process.env.SECRET;
 
 const createUser = (values) =>
     new userModel(values).save().then((user) => user.toObject());
+// const updatePassword = (field, password) =>
+//     userModel.findOneAndUpdate({ [field]: userId }, { password: password });
 const getUserByField = (field, value) => userModel.findOne({ [field]: value });
 const getUserBySessionToken = (sessionToken) => {
     userModel.findOne({ "authentication.sessionToken": sessionToken });

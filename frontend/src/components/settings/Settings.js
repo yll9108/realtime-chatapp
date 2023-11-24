@@ -5,6 +5,7 @@ import axios from "axios";
 import Sidebar from "../shared/Sidebar";
 import PotentialChats from "../chats/PotentialChats";
 import Profile from "../settings/Profile";
+import PopUp from "../shared/PopUp.js";
 
 function Settings() {
     const { user } = useContext(AuthContext);
@@ -13,6 +14,7 @@ function Settings() {
     const [showStatus, setShowStatus] = useState();
     const [showAbout, setShowAbout] = useState();
     const [activeSection, setActiveSection] = useState("settings");
+    const [passwordPopUp, setPasswordPopUp] = useState(false);
     // const toggleSwitches = [
     //     { label: "Profile", state: showProfile, setState: setShowProfile },
     //     { label: "Status", state: showStatus, setState: setShowStatus },
@@ -56,6 +58,11 @@ function Settings() {
                     userId={user ? user._id : null}
                     status={showAbout !== undefined ? showAbout : false}
                 />
+                <p>changePassword</p>
+                <button onClick={() => setPasswordPopUp(true)}>
+                    edit password
+                </button>
+                <PopUp trigger={passwordPopUp} setTrigger={setPasswordPopUp} />
             </div>
         </div>
     );
