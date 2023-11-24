@@ -52,7 +52,10 @@ export default function PopUp({ userId, trigger, setTrigger }) {
                     <br></br>
                     <button
                         className="btn btn-primary"
-                        onClick={() => setTrigger(false)}
+                        onClick={() => {
+                            setTrigger(false);
+                            setChangePasswordError();
+                        }}
                     >
                         cancel
                     </button>
