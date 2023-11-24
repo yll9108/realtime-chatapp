@@ -184,8 +184,8 @@ const handleResetToken = async (req, res) => {
 
 const handleResetPW = async (req, res) => {
     try {
-        console.log(req);
         const { newPassword } = req.body;
+        console.log("newPassword", newPassword);
         const resetToken = req.params.resetToken;
         const user = await getUserByResetToken(resetToken, Date.now());
         if (!user) {
@@ -195,6 +195,7 @@ const handleResetPW = async (req, res) => {
             });
         }
         if (!checkPasswordComplexity(newPassword, 6, 10, 4)) {
+            console.log("password doesn't isn't acceptable");
             return res.send(responseMap.unprocessableEntity);
         }
 
