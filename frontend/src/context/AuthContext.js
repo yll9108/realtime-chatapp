@@ -33,8 +33,10 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
         const user = localStorage.getItem("User");
         setUser(JSON.parse(user));
-    }, []);
-
+    }, []);   
+    
+    
+    
     const updateRegisterInfo = useCallback((info) => {
         setRegisterInfo(info);
     }, []);
@@ -185,7 +187,22 @@ export const AuthContextProvider = ({ children }) => {
         setUser(null);
         auth.signOut();
     }, []);
-
+    const updateUser = useCallback((updatedUserData) => {
+        localStorage.setItem("User", JSON.stringify(updatedUserData.user));
+      
+        setUser(updatedUserData.user);
+      
+        if (updatedUserData.emailChangeAttempted) {
+          alert("Email update is not allowed for Google account users.");
+        }
+      
+        if (updatedUserData.user.profilePictureUrl) {
+          localStorage.setItem('profilePictureUrl', updatedUserData.user.profilePictureUrl);
+        }
+      }, []);
+      
+    
+    
     return (
         <AuthContext.Provider
             value={{
@@ -202,6 +219,7 @@ export const AuthContextProvider = ({ children }) => {
                 isLoginLoading,
                 signInWithGoogle,
                 logoutUser,
+                updateUser
             }}
         >
             {showPopup && <Popup>{popupMessage}</Popup>}

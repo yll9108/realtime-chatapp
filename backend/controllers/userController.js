@@ -12,6 +12,9 @@ const { responseMap } = require("./responseMap");
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 const port = 3000;
+
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 // function register
 const registerUser = async (req, res) => {
     try {
@@ -42,7 +45,9 @@ const registerUser = async (req, res) => {
         const salt = random();
         const user = await createUser({
             userName,
+            about,
             email,
+            profilePicture: user.profilePicture,
             authentication: {
                 salt,
                 password: authentication(salt, password),
@@ -51,7 +56,13 @@ const registerUser = async (req, res) => {
 
         return res
             .status(200)
-            .json({ _id: user._id, name: user.userName, email, code: 200 });
+            .json({
+                _id: user._id,
+                userName: user.userName,
+                about,
+                email,
+                code: 200,
+            });
     } catch (error) {
         console.log(error);
         return res.send(responseMap.serverError);
@@ -92,8 +103,10 @@ const login = async (req, res) => {
         await user.save();
         return res.status(200).json({
             _id: user._id,
-            name: user.userName,
+            userName: user.userName,
+            about: user.about,
             email,
+            profilePicture: user.profilePicture,
             showAbout: user.showAbout,
             showProfile: user.showProfile,
             showStatus: user.showStatus,
@@ -256,7 +269,7 @@ const changePassword = async (req, res) => {
 };
 
 const googleLogin = async (req, res) => {
-    const { uid, email, displayName } = req.body;
+    const { uid, email, displayName, profilePicture } = req.body;
 
     try {
         let user = await userModel.findOne({ email: email });
@@ -272,6 +285,8 @@ const googleLogin = async (req, res) => {
             const newUser = new userModel({
                 email: email,
                 userName: displayName,
+                about: about,
+                profilePicture: profilePicture,
                 firebaseUid: uid,
                 isGoogleAccount: true, // Indicate that this user is authenticated through Google
             });
@@ -281,8 +296,10 @@ const googleLogin = async (req, res) => {
         }
         return res.status(user ? 200 : 201).json({
             _id: user._id,
-            name: user.userName,
+            userName: user.userName,
             email: user.email,
+            about: user.about,
+            profilePicture: user.profilePicture,
             code: 200,
         });
     } catch (error) {
@@ -318,6 +335,49 @@ const getUsers = async (req, res) => {
     }
 };
 
+const updateUserProfile = async (req, res) => {
+    const profileData = JSON.parse(req.body.profileData);
+    const { _id, userName, about, email, profilePicture } = profileData;
+    const profilePicturePath = req.file
+        ? req.file.path.replace(/\\/g, "/")
+        : null; // Normalize file path
+
+    if (!_id) {
+        return res.status(400).json({ message: "User ID is required." });
+    }
+
+    try {
+        const currentUser = await userModel.findById(_id);
+        if (!currentUser) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        let updateObject = { userName, about, email };
+        if (profilePicturePath) {
+            updateObject.profilePicture = profilePicturePath;
+        }
+
+        // Update the user data
+        const updatedUser = await userModel.findByIdAndUpdate(
+            _id,
+            updateObject,
+            { new: true }
+        );
+
+        // Construct the full URL for the profile picture
+        if (updatedUser.profilePicture) {
+            updatedUser.profilePictureUrl = `${req.protocol}://${req.get(
+                "host"
+            )}/uploads/${updatedUser.profilePicture}`;
+        }
+
+        res.json({ user: updatedUser });
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ message: "Error updating user." });
+    }
+};
+
 module.exports = {
     registerUser,
     login,
@@ -328,4 +388,5 @@ module.exports = {
     getUsers,
     googleLogin,
     changePassword,
+    updateUserProfile,
 };

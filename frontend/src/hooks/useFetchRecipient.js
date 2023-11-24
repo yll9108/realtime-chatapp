@@ -7,25 +7,25 @@ export const useFetchRecipientUser = (chat, user) => {
 
   const recipientId = chat?.roomMembers?.find((id) => id !== user?._id);
 
-  // eslint-disable-next-line
   useEffect(() => {
     const getUser = async () => {
-
-      if (!recipientId) return null;
-
-      const response = await getRequest(`${baseUrl}/users/find/${recipientId}`);
-
-      if (response.error) {
-        response.error = error;
-        return setError(error);
-
+      if (!recipientId) {
+        console.log('No recipient ID found');
+        return null;
       }
 
-      setRecipientUser(response);
+      try {
+        const response = await getRequest(`${baseUrl}/users/find/${recipientId}`);
+        setRecipientUser(response);
+        console.log('Fetched user data:', response);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        setError(error);
+      }
     };
 
     getUser();
-
   }, [recipientId]);
-  return { recipientUser };
+
+  return { recipientUser, error };
 };
