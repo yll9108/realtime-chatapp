@@ -185,7 +185,6 @@ const handleResetToken = async (req, res) => {
 const handleResetPW = async (req, res) => {
     try {
         const { newPassword } = req.body;
-        console.log("newPassword", newPassword);
         const resetToken = req.params.resetToken;
         const user = await getUserByResetToken(resetToken, Date.now());
         if (!user) {
@@ -226,7 +225,7 @@ const changePassword = async (req, res) => {
         const { password } = req.body;
         const user = await userModel.findById(userId);
         // const user = await changePassword(userId, password);
-        console.log("userId", userId);
+        console.log("password", password);
         // console.log("user", user);
         if (!password) {
             console.log("password non exist");

@@ -5,7 +5,7 @@ import axios from "axios";
 import Sidebar from "../shared/Sidebar";
 import PotentialChats from "../chats/PotentialChats";
 import Profile from "../settings/Profile";
-import PopUp from "../shared/PopUp.js";
+import PopUp from "./PopUp.js";
 
 function Settings() {
     const { user } = useContext(AuthContext);
@@ -62,7 +62,11 @@ function Settings() {
                 <button onClick={() => setPasswordPopUp(true)}>
                     edit password
                 </button>
-                <PopUp trigger={passwordPopUp} setTrigger={setPasswordPopUp} />
+                <PopUp
+                    userId={userId}
+                    trigger={passwordPopUp}
+                    setTrigger={setPasswordPopUp}
+                />
             </div>
         </div>
     );

@@ -18,8 +18,8 @@ const getSetting = async (req, res) => {
             const user = await getUserByField("_id", userId).select(
                 "+showProfile+showStatus+showAbout"
             );
-            console.log("user settings", user);
-            console.log("!!!!!!!user.userId", user ? user._id : "undefined");
+            // console.log("user settings", user);
+            // console.log("!!!!!!!user.userId", user ? user._id : "undefined");
             return res.status(200).json({
                 _id: user._id,
                 showAbout: user.showAbout,
