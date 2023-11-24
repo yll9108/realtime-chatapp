@@ -11,6 +11,9 @@ const { responseMap } = require("./responseMap");
 // const { v4: uuid } = require("uuid");
 const nodemailer = require("nodemailer");
 const port = 3000;
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 // function register
 const registerUser = async (req, res) => {
     try {
@@ -43,6 +46,7 @@ const registerUser = async (req, res) => {
       userName,
       about,
       email,
+      profilePicture:user.profilePicture,
       authentication: {
         salt,
         password: authentication(salt, password),
@@ -95,6 +99,7 @@ const login = async (req, res) => {
       userName: user.userName,
       about:user.about,
       email,
+      profilePicture:user.profilePicture,
       showAbout: user.showAbout,
       showProfile: user.showProfile,
       showStatus: user.showStatus,
@@ -216,7 +221,7 @@ const handleResetPW = async (req, res) => {
     }
 };
 const googleLogin = async (req, res) => {
-    const { uid, email, displayName } = req.body;
+    const { uid, email, displayName, profilePicture } = req.body;
 
     try {
         let user = await userModel.findOne({ email: email });
@@ -233,6 +238,7 @@ const googleLogin = async (req, res) => {
         email: email,
         userName: displayName,
         about:about,
+        profilePicture:profilePicture,
         firebaseUid: uid,
         isGoogleAccount: true, // Indicate that this user is authenticated through Google
       });
@@ -245,6 +251,7 @@ const googleLogin = async (req, res) => {
       userName: user.userName,
       email: user.email,
       about:user.about,
+      profilePicture:user.profilePicture,
       code: 200,
     });
   } catch (error) {
@@ -281,39 +288,34 @@ const getUsers = async (req, res) => {
 };
 
 const updateUserProfile = async (req, res) => {
-  const { _id, userName, about, email } = req.body;
-  
+  const profileData = JSON.parse(req.body.profileData);
+  const { _id, userName, about, email,profilePicture } = profileData;
+  const profilePicturePath = req.file ? req.file.path.replace(/\\/g, '/') : null; // Normalize file path
+
   if (!_id) {
       return res.status(400).json({ message: 'User ID is required.' });
   }
 
   try {
-      // Retrieve the current user data
       const currentUser = await userModel.findById(_id);
-
       if (!currentUser) {
           return res.status(404).json({ message: 'User not found.' });
       }
 
-      // Prepare update object
-      let updateObject = { userName, about };
-      let emailChangeAttempted = false;
-
-      // Check for email change attempt
-      if (currentUser.isGoogleAccount && email && email !== currentUser.email) {
-          emailChangeAttempted = true;
-      } else if (!currentUser.isGoogleAccount) {
-          updateObject.email = email;
+      let updateObject = { userName, about, email };
+      if (profilePicturePath) {
+          updateObject.profilePicture = profilePicturePath;
       }
 
       // Update the user data
-      const updatedUser = await userModel.findByIdAndUpdate(
-          _id,
-          updateObject,
-          { new: true }
-      );
+      const updatedUser = await userModel.findByIdAndUpdate(_id, updateObject, { new: true });
 
-      res.json({ user: updatedUser, emailChangeAttempted });
+      // Construct the full URL for the profile picture
+      if (updatedUser.profilePicture) {
+          updatedUser.profilePictureUrl = `${req.protocol}://${req.get('host')}/uploads/${updatedUser.profilePicture}`;
+      }
+
+      res.json({ user: updatedUser });
   } catch (error) {
       console.error('Error updating user:', error);
       res.status(500).json({ message: 'Error updating user.' });

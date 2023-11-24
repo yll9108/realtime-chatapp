@@ -189,12 +189,18 @@ export const AuthContextProvider = ({ children }) => {
     }, []);
     const updateUser = useCallback((updatedUserData) => {
         localStorage.setItem("User", JSON.stringify(updatedUserData.user));
+      
         setUser(updatedUserData.user);
-    
+      
         if (updatedUserData.emailChangeAttempted) {
-            alert("Email update is not allowed for Google account users.");
+          alert("Email update is not allowed for Google account users.");
         }
-    }, []);
+      
+        if (updatedUserData.user.profilePictureUrl) {
+          localStorage.setItem('profilePictureUrl', updatedUserData.user.profilePictureUrl);
+        }
+      }, []);
+      
     
     
     return (
