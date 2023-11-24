@@ -12,21 +12,18 @@ const UserListContainer = styled.div`
   display: flex;
 `;
 
-// const User = styled.div`
-//   display: flex;
-//   align-items: center;
-//   padding: 10px;
-//   border-bottom: 1px solid #e0e0e0;
-//   cursor: pointer;
-// `;
-
 const UserAvatar = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: purple;
+  background-color: purple; 
   margin-right: 15px;
+  background-image: url(${props => props.src}); 
+  background-size: cover; 
+  background-position: center;
+  background-repeat: no-repeat;
 `;
+
 
 const UserInfo = styled.div`
   display: flex;
@@ -59,10 +56,7 @@ const Stack = styled.div`
   justify-content: space-between;
   gap: 3em;
 `;
-// const UserOnlie = styled.span`
-//   background-color: green;
-//   border-radius: 50%;
-// `;
+
 const UserList = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipientUser(chat, user);
   const { onlineUsers } = useContext(ChatContext);
@@ -70,12 +64,20 @@ const UserList = ({ chat, user }) => {
   const isOnline = onlineUsers?.some(
     (user) => user?.userId === recipientUser?._id
   );
+  const profilePictureUrl = recipientUser && recipientUser.profilePicture
+  ? `http://localhost:8080/${recipientUser.profilePicture}` 
+  : ''; 
+  console.log('Profile Picture URL:', profilePictureUrl);
   return (
     <UserListContainer>
       <Stack>
         <div>
-          <UserAvatar />
-          <UserInfo>
+        {profilePictureUrl ? (
+    <UserAvatar src={profilePictureUrl} />
+  ) : (
+    <UserAvatar /> // Default avatar when no picture URL is available
+  )}
+                  <UserInfo>
           <UserName>
   {recipientUser && recipientUser.userName ? recipientUser.userName : "unknown"}
 </UserName>
@@ -90,18 +92,7 @@ const UserList = ({ chat, user }) => {
         </div>
       </Stack>
     </UserListContainer>
-    // <UserListContainer>
-    //     {Object.keys(chats).map(name => (
-    //         <User key={name} onClick={() => setSelectedChat(name)}>
-    //             <UserAvatar />
-    //             <UserInfo>
-    //                 <UserName>{name}</UserName>
-    //                 <UserLastMessage>{chats[name].lastMessage}</UserLastMessage>
-    //                 <UserDate>{chats[name].date}</UserDate>
-    //             </UserInfo>
-    //         </User>
-    //     ))}
-    // </UserListContainer>
+
   );
 };
 

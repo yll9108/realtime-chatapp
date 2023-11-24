@@ -30,6 +30,8 @@ app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
 
+app.use('/uploads', express.static('uploads'));
+
 // Connect to DB
 dbConnect();
 

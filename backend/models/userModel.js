@@ -62,6 +62,10 @@ const usersSchema = new mongoose.Schema({
             type: Boolean, 
             default: false 
           },
+          profilePicture: { 
+            type: String,
+            default: '' // Default value if no profile picture is provided
+        },
 });
 
 const userModel = mongoose.model("users", usersSchema);
