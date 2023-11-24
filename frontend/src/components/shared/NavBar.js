@@ -22,7 +22,7 @@ const NavBar = () => {
           </h1>
           {user ? (
             <>
-              <span className="login-UserName">Logged in as {user?.name}</span>
+              <span className="login-UserName">Logged in as {user?.userName}</span>
               <button onClick={handleLogout}>Logout</button>
             </>
           ) : (
