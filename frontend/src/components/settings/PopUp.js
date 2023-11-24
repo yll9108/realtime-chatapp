@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function PopUp({ userId, trigger, setTrigger }) {
     const [newPassword, setNewPassword] = useState();
     const [changePasswordError, setChangePasswordError] = useState();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     console.log("newPassword", newPassword);
 
     const handleChangePassword = (e) => {
@@ -23,6 +23,10 @@ export default function PopUp({ userId, trigger, setTrigger }) {
                     setChangePasswordError(
                         "The provided password does not meet the minimum requirements. It must be at least 6 characters long and contain a combination of upper case letters, lower case letters, numbers, and special characters."
                     );
+                } else if (res.data.code === 401) {
+                    setChangePasswordError(
+                        "It's a google account, you can't change it."
+                    );
                 } else if (res.status === 200) {
                     alert("Password changed successfully!");
                     setTrigger(false);
@@ -38,6 +42,7 @@ export default function PopUp({ userId, trigger, setTrigger }) {
                 <h5 className="card-title">This part will show user email</h5>
                 <form onSubmit={handleChangePassword}>
                     <input
+                        type="password"
                         placeholder="newPassword"
                         onChange={(e) => setNewPassword(e.target.value)}
                     />

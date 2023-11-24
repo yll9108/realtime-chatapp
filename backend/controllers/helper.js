@@ -25,6 +25,12 @@ const authentication = (salt, password) => {
         .digest("hex");
 };
 
+const generateHashedPassword = (password) => {
+    const salt = random();
+    const newHashedPassword = authentication(salt, password);
+    return { salt, newHashedPassword };
+};
+
 const checkPasswordComplexity = (str, minlength, maxlength, strength) => {
     if (!str || str.length < minlength || str.length > maxlength) {
         return false;
@@ -54,4 +60,5 @@ module.exports = {
     getUserBySessionToken,
     getUserByResetToken,
     checkPasswordComplexity,
+    generateHashedPassword,
 };

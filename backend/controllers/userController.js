@@ -6,6 +6,7 @@ const {
     authentication,
     getUserByResetToken,
     checkPasswordComplexity,
+    generateHashedPassword,
 } = require("./helper");
 const { responseMap } = require("./responseMap");
 // const { v4: uuid } = require("uuid");
@@ -198,16 +199,14 @@ const handleResetPW = async (req, res) => {
             return res.send(responseMap.unprocessableEntity);
         }
 
-        const salt = random();
-        const newHashedPassword = authentication(salt, newPassword);
-        // console.log("newHashedPassword1", newHashedPassword);
+        const { salt, newHashedPassword } = generateHashedPassword(password);
         user.authentication.salt = salt;
         user.authentication.password = newHashedPassword;
-        // console.log("newHashedPassword2", newHashedPassword);
-        // console.log(
-        //     "user.authentication.password",
-        //     user.authentication.password
-        // );
+        // const salt = random();
+        // const newHashedPassword = authentication(salt, newPassword);
+        // user.authentication.salt = salt;
+        // user.authentication.password = newHashedPassword;
+
         user.resetPassword.resetToken = null;
         await user.save();
         return res.send({
@@ -225,8 +224,12 @@ const changePassword = async (req, res) => {
         const { password } = req.body;
         const user = await userModel.findById(userId);
         // const user = await changePassword(userId, password);
-        console.log("password", password);
-        // console.log("user", user);
+        // console.log("password", password);
+        console.log("user", user);
+        if (user.isGoogleAccount === true) {
+            // console.log("it's google account");
+            return res.send(responseMap.unauthorized);
+        }
         if (!password) {
             console.log("password non exist");
         }
@@ -313,12 +316,6 @@ const getUsers = async (req, res) => {
         console.log(error);
         res.status(500).json(error);
     }
-};
-
-const generateHashedPassword = (password) => {
-    const salt = random();
-    const newHashedPassword = authentication(salt, password);
-    return { salt, newHashedPassword };
 };
 
 module.exports = {
