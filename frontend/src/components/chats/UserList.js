@@ -1,9 +1,12 @@
 // UserList.js
-
+import Stack from "react-bootstrap";
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import { ChatContext } from "../../context/ChatContext";
+import { unreadNotificationsFunc } from "../../utils/unreadNotifications";
+import { useFetchLatestMessage } from "../../hooks/useFetchLatestMessage";
+import moment from "moment";
 
 const UserListContainer = styled.div`
   background-color: #f0f0f0;
@@ -11,14 +14,6 @@ const UserListContainer = styled.div`
   overflow-y: auto;
   display: flex;
 `;
-
-// const User = styled.div`
-//   display: flex;
-//   align-items: center;
-//   padding: 10px;
-//   border-bottom: 1px solid #e0e0e0;
-//   cursor: pointer;
-// `;
 
 const UserAvatar = styled.div`
   width: 40px;
@@ -54,54 +49,74 @@ const UserNotification = styled.p`
   color: #aaa;
   font-size: 12px;
 `;
-const Stack = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 3em;
-`;
-// const UserOnlie = styled.span`
-//   background-color: green;
-//   border-radius: 50%;
-// `;
+
 const UserList = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipientUser(chat, user);
-  const { onlineUsers } = useContext(ChatContext);
-
+  const { onlineUsers, notifications, markThisUserNotificationsAsRead } =
+    useContext(ChatContext);
+  const { lastestMessage } = useFetchLatestMessage(chat);
+  const unreadNotifications = unreadNotificationsFunc(notifications);
+  const thisUserNotifications = unreadNotifications?.filter(
+    (n) => n.senderId === recipientUser?._id
+  );
   const isOnline = onlineUsers?.some(
     (user) => user?.userId === recipientUser?._id
   );
+  const truncateText = (text) => {
+    let shortText = text.substring(0, 20);
+
+    if (text.length > 20) {
+      shortText = shortText + "...";
+    }
+    return shortText;
+  };
   return (
     <UserListContainer>
-      <Stack>
+      <Stack
+        direction="horizontal"
+        gap={3}
+        className="user-card align-items-center p-2 justify-content-between"
+        role="button"
+        onClick={() => {
+          if (thisUserNotifications?.length !== 0) {
+            markThisUserNotificationsAsRead(
+              thisUserNotifications,
+              notifications
+            );
+          }
+        }}
+      >
         <div>
           <UserAvatar />
           <UserInfo>
-          <UserName>
-  {recipientUser && recipientUser.userName ? recipientUser.userName : "unknown"}
-</UserName>
+            <UserName>
+              {recipientUser && recipientUser.userName
+                ? recipientUser.userName
+                : "unknown"}
+            </UserName>
 
-            <UserLastMessage>text message</UserLastMessage>
+            <UserLastMessage>
+              {lastestMessage?.text && (
+                <span>{truncateText(lastestMessage?.text)}</span>
+              )}
+            </UserLastMessage>
           </UserInfo>
         </div>
         <div>
-          <UserDate>05/11/2023</UserDate>
-          <UserNotification>2</UserNotification>
+          <UserDate>{moment(lastestMessage?.sentAt).calendar()}</UserDate>
+          <UserNotification
+            className={
+              thisUserNotifications?.length > 0 ? "this-user-notifications" : ""
+            }
+          >
+            {thisUserNotifications?.length > 0
+              ? thisUserNotifications?.length
+              : ""}
+          </UserNotification>
           <span className={isOnline ? "user-online" : ""}></span>
         </div>
       </Stack>
     </UserListContainer>
-    // <UserListContainer>
-    //     {Object.keys(chats).map(name => (
-    //         <User key={name} onClick={() => setSelectedChat(name)}>
-    //             <UserAvatar />
-    //             <UserInfo>
-    //                 <UserName>{name}</UserName>
-    //                 <UserLastMessage>{chats[name].lastMessage}</UserLastMessage>
-    //                 <UserDate>{chats[name].date}</UserDate>
-    //             </UserInfo>
-    //         </User>
-    //     ))}
-    // </UserListContainer>
   );
 };
 

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import Notification from "../chats/Notification";
 
 const NavBar = () => {
   const { user, logoutUser } = useContext(AuthContext);
@@ -22,6 +23,7 @@ const NavBar = () => {
           </h1>
           {user ? (
             <>
+              <Notification />
               <span className="login-UserName">Logged in as {user?.name}</span>
               <button onClick={handleLogout}>Logout</button>
             </>
