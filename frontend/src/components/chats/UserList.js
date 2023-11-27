@@ -21,6 +21,10 @@ const UserAvatar = styled.div`
   border-radius: 50%;
   background-color: purple;
   margin-right: 15px;
+  background-image: url(${(props) => props.src});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 const UserInfo = styled.div`
@@ -62,6 +66,12 @@ const UserList = ({ chat, user }) => {
   const isOnline = onlineUsers?.some(
     (user) => user?.userId === recipientUser?._id
   );
+  const profilePictureUrl =
+    recipientUser && recipientUser.profilePicture
+      ? `http://localhost:8080/${recipientUser.profilePicture}`
+      : "";
+  console.log("Profile Picture URL:", profilePictureUrl);
+
   const truncateText = (text) => {
     let shortText = text.substring(0, 20);
 
@@ -87,7 +97,11 @@ const UserList = ({ chat, user }) => {
         }}
       >
         <div>
-          <UserAvatar />
+          {profilePictureUrl ? (
+            <UserAvatar src={profilePictureUrl} />
+          ) : (
+            <UserAvatar /> // Default avatar when no picture URL is available
+          )}
           <UserInfo>
             <UserName>
               {recipientUser && recipientUser.userName
