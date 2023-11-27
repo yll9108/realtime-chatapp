@@ -1,5 +1,5 @@
 import { useContext, useState, useRef, useEffect } from "react";
-import styled from "styled-components";
+import { Stack } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
 import { ChatContext } from "../../context/ChatContext";
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
@@ -18,15 +18,24 @@ const ChatArea = () => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  if (!recipientUser) return <p>No conversation selected</p>;
-  if (isMessageLoading) return <p>Loading Chat</p>;
+  if (!user)
+    return <p style={{ textAlign: "center", width: "100%" }}>Loading User</p>;
+
+  if (!recipientUser)
+    return (
+      <p style={{ textAlign: "center", width: "100%" }}>
+        No conversation selected
+      </p>
+    );
+  if (isMessageLoading)
+    return <p style={{ textAlign: "center", width: "100%" }}>Loading Chat</p>;
 
   return (
-    <ChatAreaContainer>
+    <Stack gap={4} className="chat-box">
       <div className="chat-header">
         <strong>{recipientUser?.userName}</strong>
       </div>
-      <Stack className="messages">
+      <Stack gap={3} className="messages">
         {messages &&
           messages.map((message, index) => (
             <Stack
@@ -45,8 +54,12 @@ const ChatArea = () => {
             </Stack>
           ))}
       </Stack>
-      <Stack className="chat-input">
-        <InputEmoji value={textMessage} onChange={setTextMessage} />
+      <Stack className="chat-input flex-grow-0" direction="horizontal" gap={3}>
+        <InputEmoji
+          value={textMessage}
+          onChange={setTextMessage}
+          borderColor="rgba(72,112,223,0.2)"
+        />
         <button
           className="send-btn"
           onClick={() =>
@@ -65,20 +78,8 @@ const ChatArea = () => {
           </svg>
         </button>
       </Stack>
-    </ChatAreaContainer>
+    </Stack>
   );
 };
-const ChatAreaContainer = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-`;
-const Stack = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: 4em;
-`;
 
 export default ChatArea;

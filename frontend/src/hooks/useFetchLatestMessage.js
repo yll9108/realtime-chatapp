@@ -17,7 +17,7 @@ export const useFetchLatestMessage = (chat) => {
       setLatestMessage(lastMessage);
     };
     getMessages();
-  }, [newMessages, notifications]);
+  }, [nesMessage, notifications]);
 
   return { latestMessage };
 };
