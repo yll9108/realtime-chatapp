@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { ChatContext } from "../../context/ChatContext";
 import styled from "styled-components";
 import { AuthContext } from "../../context/AuthContext";
+import { Button, Stack } from "react-bootstrap";
 
 const AllUsers = styled.div`
   display: flex;
@@ -23,9 +24,14 @@ const PotentialChats = () => {
               <div
                 className="single-user"
                 key={index}
-                onClick={() => createChat(user?._id, u._id)}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
-                {u.userName}
+                <span>{u.userName}</span>
+                <Button onClick={() => createChat(user?._id, u._id)}>+</Button>
                 <span
                   className={
                     onlineUsers?.some((user) => user?.userId === u?._id)

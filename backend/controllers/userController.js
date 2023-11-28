@@ -54,15 +54,13 @@ const registerUser = async (req, res) => {
             },
         });
 
-        return res
-            .status(200)
-            .json({
-                _id: user._id,
-                userName: user.userName,
-                about,
-                email,
-                code: 200,
-            });
+        return res.status(200).json({
+            _id: user._id,
+            userName: user.userName,
+            about,
+            email,
+            code: 200,
+        });
     } catch (error) {
         console.log(error);
         return res.send(responseMap.serverError);
@@ -347,7 +345,9 @@ const updateUserProfile = async (req, res) => {
     }
 
     try {
+        // Retrieve the current user data
         const currentUser = await userModel.findById(_id);
+
         if (!currentUser) {
             return res.status(404).json({ message: "User not found." });
         }
@@ -357,11 +357,26 @@ const updateUserProfile = async (req, res) => {
             updateObject.profilePicture = profilePicturePath;
         }
 
+        let emailChangeAttempted = false;
+
+        // Check for email change attempt
+        if (
+            currentUser.isGoogleAccount &&
+            email &&
+            email !== currentUser.email
+        ) {
+            emailChangeAttempted = true;
+        } else if (!currentUser.isGoogleAccount) {
+            updateObject.email = email;
+        }
+
         // Update the user data
         const updatedUser = await userModel.findByIdAndUpdate(
             _id,
             updateObject,
-            { new: true }
+            {
+                new: true,
+            }
         );
 
         // Construct the full URL for the profile picture
@@ -371,7 +386,7 @@ const updateUserProfile = async (req, res) => {
             )}/uploads/${updatedUser.profilePicture}`;
         }
 
-        res.json({ user: updatedUser });
+        res.json({ user: updatedUser, emailChangeAttempted });
     } catch (error) {
         console.error("Error updating user:", error);
         res.status(500).json({ message: "Error updating user." });
