@@ -19,6 +19,19 @@ const ChatArea = () => {
     const [textMessage, setTextMessage] = useState("");
     const scroll = useRef();
 
+    const renderMessageContent = (message) => {
+        if (message.messageType === "image") {
+            return (
+                <img
+                    src={`data:image/jpeg;base64,${message.content}`}
+                    alt="Received Image"
+                />
+            );
+        } else {
+            return <span>{message.content}</span>;
+        }
+    };
+
     useEffect(() => {
         scroll.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
@@ -56,7 +69,8 @@ const ChatArea = () => {
                             }`}
                             ref={scroll}
                         >
-                            <span>{message.content}</span>
+                            {renderMessageContent(message)}
+                            {/* <span>{message.content}</span> */}
                             <span className="message-footer">
                                 {moment(message.sentAt).calendar()}
                             </span>

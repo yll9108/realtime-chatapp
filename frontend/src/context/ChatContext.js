@@ -83,6 +83,21 @@ export const ChatContextProvider = ({ children, user }) => {
         };
     }, [socket, currentChat]);
 
+    // handle image message
+    useEffect(() => {
+        if (socket === null) return;
+
+        socket.on("getImage", (res) => {
+            if (currentChat?._id !== res.chatId) return;
+
+            setMessages((prev) => [...prev, res]);
+        });
+
+        return () => {
+            socket.off("getImage");
+        };
+    }, [socket, currentChat]);
+
     //getUsers
     useEffect(() => {
         const getUsers = async () => {
@@ -169,7 +184,8 @@ export const ChatContextProvider = ({ children, user }) => {
             setTextMessage,
             messageType
         ) => {
-            if (!textMessage) return console.log("No messages");
+            if (!textMessage && messageType !== "image")
+                return console.log("No messages");
 
             const response = await postRequest(
                 `${baseUrl}/messages`,
@@ -177,7 +193,8 @@ export const ChatContextProvider = ({ children, user }) => {
                     chatId: currentChatId,
                     senderId: sender._id,
                     content: textMessage,
-                    type: messageType,
+                    messageType: messageType,
+                    imageData: messageType === "image" ? textMessage : null,
                 })
             );
             if (response.error) {
@@ -269,7 +286,7 @@ export const ChatContextProvider = ({ children, user }) => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                const content = reader.result; // This will be the base64-encoded image
+                const content = reader.result.split(",")[1]; // This will be the base64-encoded image
                 sendTextMessage(
                     content,
                     user,
