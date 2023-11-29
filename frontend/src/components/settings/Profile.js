@@ -4,7 +4,7 @@ import { AuthContext } from '../../context/AuthContext';
 import styled from 'styled-components';
 
 function Profile({ userProfile }) {
-    const { updateUser } = useContext(AuthContext);
+    const { updateUser,deleteAccount } = useContext(AuthContext);
     const [editMode, setEditMode] = useState(false);
     const [profile, setProfile] = useState(userProfile);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -80,6 +80,8 @@ function Profile({ userProfile }) {
                     <div><label>About:</label> {profile.about}</div>
                     <div><label>Email:</label> {profile.email}</div>
                     <button onClick={() => setEditMode(true)}>Edit</button>
+                    <button onClick={deleteAccount}>Delete Account</button>
+
                 </>
             )}
         </div>

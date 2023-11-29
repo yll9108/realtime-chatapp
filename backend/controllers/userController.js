@@ -44,9 +44,7 @@ const registerUser = async (req, res) => {
     const salt = random();
     const user = await createUser({
       userName,
-      about,
       email,
-      profilePicture: user.profilePicture,
       authentication: {
         salt,
         password: authentication(salt, password),
@@ -58,7 +56,6 @@ const registerUser = async (req, res) => {
       .json({
         _id: user._id,
         userName: user.userName,
-        about,
         email,
         code: 200,
       });
@@ -341,6 +338,21 @@ const updateUserProfile = async (req, res) => {
     res.status(500).json({ message: "Error updating user." });
   }
 };
+const deleteUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+      // Delete user from the database
+      await userModel.findByIdAndDelete(userId);
+
+      // Here, you can also add logic to handle any additional data cleanup if necessary
+
+      res.status(200).json({ message: 'Account successfully deleted' });
+  } catch (error) {
+      console.error('Error deleting user:', error);
+      res.status(500).json({ message: 'Error deleting account' });
+  }
+};
 
 module.exports = {
   registerUser,
@@ -352,4 +364,5 @@ module.exports = {
   getUsers,
   googleLogin,
   updateUserProfile,
+  deleteUser
 };
