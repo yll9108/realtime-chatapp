@@ -4,6 +4,8 @@ const secret = process.env.SECRET;
 
 const createUser = (values) =>
     new userModel(values).save().then((user) => user.toObject());
+// const updatePassword = (field, password) =>
+//     userModel.findOneAndUpdate({ [field]: userId }, { password: password });
 const getUserByField = (field, value) => userModel.findOne({ [field]: value });
 const getUserBySessionToken = (sessionToken) => {
     userModel.findOne({ "authentication.sessionToken": sessionToken });
@@ -21,6 +23,12 @@ const authentication = (salt, password) => {
         .createHmac("sha256", [salt, password].join("/"))
         .update(secret)
         .digest("hex");
+};
+
+const generateHashedPassword = (password) => {
+    const salt = random();
+    const newHashedPassword = authentication(salt, password);
+    return { salt, newHashedPassword };
 };
 
 const checkPasswordComplexity = (str, minlength, maxlength, strength) => {
@@ -52,4 +60,5 @@ module.exports = {
     getUserBySessionToken,
     getUserByResetToken,
     checkPasswordComplexity,
+    generateHashedPassword,
 };

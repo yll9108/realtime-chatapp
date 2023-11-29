@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function ResetPW() {
     const [newPassword, setNewPassword] = useState();
+    const [resetPasswordError, setResetPasswordError] = useState();
     const navigate = useNavigate();
     const { resetToken } = useParams();
 
@@ -13,9 +14,15 @@ function ResetPW() {
             .post(`http://localhost:8080/api/users/reset/${resetToken}`, {
                 newPassword,
             })
-            .then((result) => {
-                console.log(result);
-                navigate("/");
+            .then((res) => {
+                console.log(res);
+                if (res.data.code === 422) {
+                    setResetPasswordError(
+                        "The provided password does not meet the minimum requirements. It must be at least 6 characters long and contain a combination of upper case letters, lower case letters, numbers, and special characters."
+                    );
+                } else if (res.status === 200) {
+                    navigate("/");
+                }
             })
             .catch((err) => console.log(err));
     };
@@ -35,6 +42,7 @@ function ResetPW() {
                         onChange={(e) => setNewPassword(e.target.value)}
                     />
                     <button>Sumbit</button>
+                    <p>{resetPasswordError}</p>
                 </form>
             </div>
         </>
