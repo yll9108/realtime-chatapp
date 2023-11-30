@@ -84,19 +84,19 @@ export const ChatContextProvider = ({ children, user }) => {
     }, [socket, currentChat]);
 
     // handle image message
-    useEffect(() => {
-        if (socket === null) return;
+    // useEffect(() => {
+    //     if (socket === null) return;
 
-        socket.on("getImage", (res) => {
-            if (currentChat?._id !== res.chatId) return;
+    //     socket.on("getImage", (res) => {
+    //         if (currentChat?._id !== res.chatId) return;
 
-            setMessages((prev) => [...prev, res]);
-        });
+    //         setMessages((prev) => [...prev, res]);
+    //     });
 
-        return () => {
-            socket.off("getImage");
-        };
-    }, [socket, currentChat]);
+    //     return () => {
+    //         socket.off("getImage");
+    //     };
+    // }, [socket, currentChat]);
 
     //getUsers
     useEffect(() => {
@@ -281,23 +281,23 @@ export const ChatContextProvider = ({ children, user }) => {
         []
     );
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const content = reader.result.split(",")[1]; // This will be the base64-encoded image
-                sendTextMessage(
-                    content,
-                    user,
-                    currentChat._id,
-                    setMessages,
-                    "image"
-                );
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+    // const handleImageChange = (e) => {
+    //     const file = e.target.files[0];
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onloadend = () => {
+    //             const content = reader.result.split(",")[1]; // This will be the base64-encoded image
+    //             sendTextMessage(
+    //                 content,
+    //                 user,
+    //                 currentChat._id,
+    //                 setMessages,
+    //                 "image"
+    //             );
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // };
 
     return (
         <ChatContext.Provider
@@ -319,7 +319,7 @@ export const ChatContextProvider = ({ children, user }) => {
                 markAllNotificationsAsRead,
                 markNotificationAsRead,
                 markThisUserNotificationsAsRead,
-                handleImageChange,
+                // handleImageChange,
             }}
         >
             {children}
