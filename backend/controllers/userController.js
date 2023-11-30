@@ -282,7 +282,6 @@ const googleLogin = async (req, res) => {
             const newUser = new userModel({
                 email: email,
                 userName: displayName,
-                about: about,
                 profilePicture: profilePicture,
                 firebaseUid: uid,
                 isGoogleAccount: true, // Indicate that this user is authenticated through Google
@@ -334,7 +333,7 @@ const getUsers = async (req, res) => {
 
 const updateUserProfile = async (req, res) => {
     const profileData = JSON.parse(req.body.profileData);
-    const { _id, userName, about, email, profilePicture } = profileData;
+    const { _id, userName, about, email } = profileData;
     const profilePicturePath = req.file
         ? req.file.path.replace(/\\/g, "/")
         : null; // Normalize file path
@@ -351,38 +350,30 @@ const updateUserProfile = async (req, res) => {
             return res.status(404).json({ message: "User not found." });
         }
 
-        let updateObject = { userName, about, email };
-        if (profilePicturePath) {
-            updateObject.profilePicture = profilePicturePath;
-        }
-
+        let updateObject = { userName, about };
         let emailChangeAttempted = false;
 
-        // Check for email change attempt
-        if (
-            currentUser.isGoogleAccount &&
-            email &&
-            email !== currentUser.email
-        ) {
-            emailChangeAttempted = true;
-        } else if (!currentUser.isGoogleAccount) {
+        // Check for email change attempt and update only if the user is not a Google account user
+        if (!currentUser.isGoogleAccount) {
             updateObject.email = email;
+        } else if (email !== currentUser.email) {
+            emailChangeAttempted = true;
+        }
+
+        if (profilePicturePath) {
+            updateObject.profilePicture = profilePicturePath;
         }
 
         // Update the user data
         const updatedUser = await userModel.findByIdAndUpdate(
             _id,
             updateObject,
-            {
-                new: true,
-            }
+            { new: true }
         );
 
         // Construct the full URL for the profile picture
         if (updatedUser.profilePicture) {
-            updatedUser.profilePictureUrl = `${req.protocol}://${req.get(
-                "host"
-            )}/uploads/${updatedUser.profilePicture}`;
+            updatedUser.profilePictureUrl = `${req.protocol}://${req.get("host")}/uploads/${updatedUser.profilePicture}`;
         }
 
         res.json({ user: updatedUser, emailChangeAttempted });
@@ -391,6 +382,7 @@ const updateUserProfile = async (req, res) => {
         res.status(500).json({ message: "Error updating user." });
     }
 };
+
 const deleteUser = async (req, res) => {
   const { userId } = req.params;
 
