@@ -10,16 +10,19 @@ export const useFetchRecipientUser = (chat, user) => {
   useEffect(() => {
     const getUser = async () => {
       if (!recipientId) {
-        console.log('No recipient ID found');
+        console.log("No recipient ID found");
+        setRecipientUser();
         return null;
       }
 
       try {
-        const response = await getRequest(`${baseUrl}/users/find/${recipientId}`);
+        const response = await getRequest(
+          `${baseUrl}/users/find/${recipientId}`
+        );
         setRecipientUser(response);
-        console.log('Fetched user data:', response);
+        console.log("Fetched user data:", response);
       } catch (error) {
-        console.error('Error fetching user:', error);
+        console.error("Error fetching user:", error);
         setError(error);
       }
     };

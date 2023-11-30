@@ -22,11 +22,7 @@ const ChatArea = () => {
     return <p style={{ textAlign: "center", width: "100%" }}>Loading User</p>;
 
   if (!recipientUser)
-    return (
-      <p style={{ textAlign: "center", width: "100%" }}>
-        No conversation selected
-      </p>
-    );
+    return <p style={{ textAlign: "center", width: "100%" }}>Undefined User</p>;
   if (isMessageLoading)
     return <p style={{ textAlign: "center", width: "100%" }}>Loading Chat</p>;
 
