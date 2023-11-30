@@ -66,6 +66,13 @@ export const ChatContextProvider = ({ children, user }) => {
 
             setMessages((prev) => [...prev, res]);
         });
+
+        socket.on("getImage", (res) => {
+            if (currentChat?._id !== res.chatId) return;
+
+            setMessages((prev) => [...prev, res]);
+        });
+
         socket.on("getNotification", (res) => {
             const isChatOpen = currentChat?.roomMembers.some(
                 (id) => id === res.senderId
@@ -79,6 +86,7 @@ export const ChatContextProvider = ({ children, user }) => {
         });
         return () => {
             socket.off("getMessage");
+            socket.off("getImage");
             socket.off("getNotification");
         };
     }, [socket, currentChat]);
@@ -281,23 +289,23 @@ export const ChatContextProvider = ({ children, user }) => {
         []
     );
 
-    // const handleImageChange = (e) => {
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onloadend = () => {
-    //             const content = reader.result.split(",")[1]; // This will be the base64-encoded image
-    //             sendTextMessage(
-    //                 content,
-    //                 user,
-    //                 currentChat._id,
-    //                 setMessages,
-    //                 "image"
-    //             );
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    // };
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const content = reader.result.split(",")[1]; // This will be the base64-encoded image
+                sendTextMessage(
+                    content,
+                    user,
+                    currentChat._id,
+                    setMessages,
+                    "image"
+                );
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     return (
         <ChatContext.Provider
@@ -319,7 +327,7 @@ export const ChatContextProvider = ({ children, user }) => {
                 markAllNotificationsAsRead,
                 markNotificationAsRead,
                 markThisUserNotificationsAsRead,
-                // handleImageChange,
+                handleImageChange,
             }}
         >
             {children}

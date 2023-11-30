@@ -19,18 +19,18 @@ const ChatArea = () => {
     const [textMessage, setTextMessage] = useState("");
     const scroll = useRef();
 
-    // const renderMessageContent = (message) => {
-    //     if (message.messageType === "image") {
-    //         return (
-    //             <img
-    //                 src={`data:image/jpeg;base64,${message.content}`}
-    //                 alt="Received Image"
-    //             />
-    //         );
-    //     } else {
-    //         return <span>{message.content}</span>;
-    //     }
-    // };
+    const renderMessageContent = (message) => {
+        if (message.messageType === "image") {
+            return (
+                <img
+                    src={`data:image/jpeg;base64,${message.content}`}
+                    alt="Received Image"
+                />
+            );
+        } else {
+            return <span>{message.content}</span>;
+        }
+    };
 
     useEffect(() => {
         scroll.current?.scrollIntoView({ behavior: "smooth" });
@@ -69,8 +69,8 @@ const ChatArea = () => {
                             }`}
                             ref={scroll}
                         >
-                            {/* {renderMessageContent(message)} */}
-                            <span>{message.content}</span>
+                            {renderMessageContent(message)}
+                            {/* <span>{message.content}</span> */}
                             <span className="message-footer">
                                 {moment(message.sentAt).calendar()}
                             </span>
@@ -87,11 +87,11 @@ const ChatArea = () => {
                     onChange={setTextMessage}
                     borderColor="rgba(72,112,223,0.2)"
                 />
-                {/* <input
+                <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => handleImageChange(e)}
-                /> */}
+                />
                 <button
                     className="send-btn"
                     onClick={() =>
@@ -99,8 +99,8 @@ const ChatArea = () => {
                             textMessage,
                             user,
                             currentChat._id,
-                            setTextMessage
-                            // "text"
+                            setTextMessage,
+                            "text"
                         )
                     }
                 >
