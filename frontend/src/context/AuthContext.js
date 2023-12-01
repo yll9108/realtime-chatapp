@@ -195,6 +195,17 @@ export const AuthContextProvider = ({ children }) => {
       );
     }
   }, []);
+  const deleteAccount = async () => {
+    if (window.confirm("Are you sure you want to delete your account? This cannot be undone.")) {
+        try {
+            await axios.delete(`http://localhost:8080/api/users/delete/${user._id}`);
+            logoutUser(); // Log out the user
+            navigate('/login'); // Redirect to the login page
+        } catch (error) {
+            console.error('Error deleting account:', error);
+        }
+    }
+};
 
   return (
     <AuthContext.Provider
@@ -213,6 +224,7 @@ export const AuthContextProvider = ({ children }) => {
         signInWithGoogle,
         logoutUser,
         updateUser,
+        deleteAccount,
       }}
     >
       {showPopup && <Popup>{popupMessage}</Popup>}

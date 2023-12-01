@@ -8,7 +8,8 @@ const {
   findUser,
   getUsers,
   googleLogin,
-  updateUserProfile
+  updateUserProfile,
+  deleteUser
 } = require("../controllers/userController.js");
 const multer = require('multer');
 const path = require('path');
@@ -33,6 +34,7 @@ router.get("/find/:userId", findUser); // /api/users/find
 router.get("/", getUsers); // /api/users/
 router.post("/google-login", googleLogin);
 router.put('/updateProfile', upload.single('profilePicture'), updateUserProfile);
+router.delete('/delete/:userId', deleteUser);
 
 
 module.exports = router;

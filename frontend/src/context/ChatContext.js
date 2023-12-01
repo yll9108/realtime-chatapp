@@ -49,13 +49,13 @@ export const ChatContextProvider = ({ children, user }) => {
     //send message
     useEffect(() => {
         if (socket === null) return;
-
         const recipientId = currentChat?.roomMembers?.find(
             (id) => id !== user?._id
         );
 
         socket.emit("sendMessage", { ...newMessage, recipientId });
     }, [newMessage]);
+
 
     // receive message and notification
     useEffect(() => {
@@ -195,6 +195,7 @@ export const ChatContextProvider = ({ children, user }) => {
             if (!textMessage && messageType !== "image")
                 return console.log("No messages");
 
+
             const response = await postRequest(
                 `${baseUrl}/messages`,
                 JSON.stringify({
@@ -208,12 +209,14 @@ export const ChatContextProvider = ({ children, user }) => {
             if (response.error) {
                 return setSendTextMessageError(response);
             }
+
             console.warn("response", response);
             setNewMessage(response);
             setMessages((prev) => [...prev, response]);
             if (messageType === "text") {
                 setTextMessage("");
             }
+
         },
         []
     );
@@ -291,6 +294,7 @@ export const ChatContextProvider = ({ children, user }) => {
         []
     );
 
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -309,7 +313,6 @@ export const ChatContextProvider = ({ children, user }) => {
             reader.readAsDataURL(file);
         }
     };
-
     return (
         <ChatContext.Provider
             value={{
@@ -331,6 +334,7 @@ export const ChatContextProvider = ({ children, user }) => {
                 markNotificationAsRead,
                 markThisUserNotificationsAsRead,
                 handleImageChange,
+
             }}
         >
             {children}
