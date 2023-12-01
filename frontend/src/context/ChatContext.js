@@ -208,10 +208,12 @@ export const ChatContextProvider = ({ children, user }) => {
             if (response.error) {
                 return setSendTextMessageError(response);
             }
-
+            console.warn("response", response);
             setNewMessage(response);
             setMessages((prev) => [...prev, response]);
-            setTextMessage("");
+            if (messageType === "text") {
+                setTextMessage("");
+            }
         },
         []
     );
@@ -299,7 +301,8 @@ export const ChatContextProvider = ({ children, user }) => {
                     content,
                     user,
                     currentChat._id,
-                    setMessages,
+                    () => {},
+                    // setMessages,
                     "image"
                 );
             };

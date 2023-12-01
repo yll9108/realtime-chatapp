@@ -33,6 +33,7 @@ const ChatArea = () => {
     };
 
     useEffect(() => {
+        console.warn("messages", messages);
         scroll.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
