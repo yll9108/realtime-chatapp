@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+// const bodyParser = require("body-parser");
+
 const { dbConnect } = require("./database.js");
 const userRoute = require("./routes/userRoute.js");
 const chatRoute = require("./routes/chatRoute.js");
@@ -9,8 +11,14 @@ const settingsRoute = require("./routes/settingsRoute.js");
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.use(express.json());
+// app.use(express.json());
 app.use(cors());
+
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// app.use(bodyParser.json({ limit: "10mb" }));
+// app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 // User routes
 app.use("/api/users", userRoute);
@@ -30,7 +38,7 @@ app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
 
-app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static("uploads"));
 
 // Connect to DB
 dbConnect();
