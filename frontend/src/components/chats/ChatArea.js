@@ -19,12 +19,24 @@ const ChatArea = () => {
   }, [messages]);
 
   if (!user)
-    return <p style={{ textAlign: "center", width: "100%" }}>Loading User</p>;
+    return (
+      <strong style={{ textAlign: "center", width: "100%" }}>
+        Loading User
+      </strong>
+    );
 
   if (!recipientUser)
-    return <p style={{ textAlign: "center", width: "100%" }}>Undefined User</p>;
+    return (
+      <strong style={{ textAlign: "center", width: "100%" }}>
+        Undefined User
+      </strong>
+    );
   if (isMessageLoading)
-    return <p style={{ textAlign: "center", width: "100%" }}>Loading Chat</p>;
+    return (
+      <strong style={{ textAlign: "center", width: "100%" }}>
+        Loading Chat
+      </strong>
+    );
 
   return (
     <Stack gap={4} className="chat-box">
@@ -45,7 +57,7 @@ const ChatArea = () => {
             >
               <span>{message.content}</span>
               <span className="message-footer">
-                {moment(message.sentAt).calendar()}
+                {moment(message.createdAt).calendar()}
               </span>
             </Stack>
           ))}

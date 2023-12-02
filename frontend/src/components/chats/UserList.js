@@ -68,7 +68,9 @@ const UserList = ({ chat, user }) => {
         </div>
       </div>
       <div className="d-flex flex-column align-items-end">
-        <div className="date">{moment(latestMessage?.sentAt).calendar()}</div>
+        <div className="date">
+          {moment(latestMessage?.updatedAt).calendar()}
+        </div>
         <div
           className={
             thisUserNotifications?.length > 0 ? "this-user-notifications" : ""
