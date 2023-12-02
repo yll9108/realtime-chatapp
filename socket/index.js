@@ -28,11 +28,16 @@ io.on("connection", (socket) => {
 
         if (user) {
             io.to(user.socketId).emit("getMessage", message);
+            if (message.type === "image") {
+                io.to(user.socketId).emit("getImage", message);
+            }
             io.to(user.socketId).emit("getNotification", {
                 senderId: message.senderId,
                 isRead: false,
                 date: new Date(),
             });
+        } else {
+            console.log("can't find user");
         }
     });
     socket.on("disconnect", () => {
