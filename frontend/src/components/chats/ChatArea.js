@@ -8,35 +8,46 @@ import InputEmoji from "react-input-emoji";
 
 const ChatArea = () => {
   const { user } = useContext(AuthContext);
-  const { currentChat, messages, isMessageLoading, sendTextMessage } =
-    useContext(ChatContext);
+  const {
+    currentChat,
+    messages,
+    isMessageLoading,
+    sendTextMessage,
+    handleImageChange,
+  } = useContext(ChatContext);
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   const [textMessage, setTextMessage] = useState("");
   const scroll = useRef();
 
+  const renderMessageContent = (message) => {
+    if (message.messageType === "image") {
+      return (
+        <img
+          src={`data:image/jpeg;base64,${message.content}`}
+          alt="Received Image"
+        />
+      );
+    } else {
+      return <span>{message.content}</span>;
+    }
+  };
+
   useEffect(() => {
+    console.warn("messages", messages);
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   if (!user)
-    return (
-      <strong style={{ textAlign: "center", width: "100%" }}>
-        Loading User
-      </strong>
-    );
+    return <p style={{ textAlign: "center", width: "100%" }}>Loading User</p>;
 
   if (!recipientUser)
     return (
-      <strong style={{ textAlign: "center", width: "100%" }}>
-        Undefined User
-      </strong>
+      <p style={{ textAlign: "center", width: "100%" }}>
+        No conversation selected
+      </p>
     );
   if (isMessageLoading)
-    return (
-      <strong style={{ textAlign: "center", width: "100%" }}>
-        Loading Chat
-      </strong>
-    );
+    return <p style={{ textAlign: "center", width: "100%" }}>Loading Chat</p>;
 
   return (
     <Stack gap={4} className="chat-box">
@@ -55,7 +66,8 @@ const ChatArea = () => {
               }`}
               ref={scroll}
             >
-              <span>{message.content}</span>
+              {renderMessageContent(message)}
+              {/* <span>{message.content}</span> */}
               <span className="message-footer">
                 {moment(message.createdAt).calendar()}
               </span>
@@ -68,10 +80,21 @@ const ChatArea = () => {
           onChange={setTextMessage}
           borderColor="rgba(72,112,223,0.2)"
         />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleImageChange(e)}
+        />
         <button
           className="send-btn"
           onClick={() =>
-            sendTextMessage(textMessage, user, currentChat._id, setTextMessage)
+            sendTextMessage(
+              textMessage,
+              user,
+              currentChat._id,
+              setTextMessage,
+              "text"
+            )
           }
         >
           <svg

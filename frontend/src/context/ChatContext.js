@@ -66,6 +66,13 @@ export const ChatContextProvider = ({ children, user }) => {
 
       setMessages((prev) => [...prev, res]);
     });
+
+    socket.on("getImage", (res) => {
+      if (currentChat?._id !== res.chatId) return;
+
+      setMessages((prev) => [...prev, res]);
+    });
+
     socket.on("getNotification", (res) => {
       const isChatOpen = currentChat?.roomMembers.some(
         (id) => id === res.senderId
@@ -79,9 +86,25 @@ export const ChatContextProvider = ({ children, user }) => {
     });
     return () => {
       socket.off("getMessage");
+      socket.off("getImage");
       socket.off("getNotification");
     };
   }, [socket, currentChat]);
+
+  // handle image message
+  // useEffect(() => {
+  //     if (socket === null) return;
+
+  //     socket.on("getImage", (res) => {
+  //         if (currentChat?._id !== res.chatId) return;
+
+  //         setMessages((prev) => [...prev, res]);
+  //     });
+
+  //     return () => {
+  //         socket.off("getImage");
+  //     };
+  // }, [socket, currentChat]);
 
   //getUsers
   useEffect(() => {
@@ -156,8 +179,9 @@ export const ChatContextProvider = ({ children, user }) => {
   }, [currentChat]);
 
   const sendTextMessage = useCallback(
-    async (textMessage, sender, currentChatId, setTextMessage) => {
-      if (!textMessage) return console.log("No messages");
+    async (textMessage, sender, currentChatId, setTextMessage, messageType) => {
+      if (!textMessage && messageType !== "image")
+        return console.log("No messages");
 
       const response = await postRequest(
         `${baseUrl}/messages`,
@@ -165,15 +189,20 @@ export const ChatContextProvider = ({ children, user }) => {
           chatId: currentChatId,
           senderId: sender._id,
           content: textMessage,
+          messageType: messageType,
+          imageData: messageType === "image" ? textMessage : null,
         })
       );
       if (response.error) {
         return setSendTextMessageError(response);
       }
 
+      console.warn("response", response);
       setNewMessage(response);
       setMessages((prev) => [...prev, response]);
-      setTextMessage("");
+      if (messageType === "text") {
+        setTextMessage("");
+      }
     },
     []
   );
@@ -250,6 +279,25 @@ export const ChatContextProvider = ({ children, user }) => {
     },
     []
   );
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const content = reader.result.split(",")[1]; // This will be the base64-encoded image
+        sendTextMessage(
+          content,
+          user,
+          currentChat._id,
+          () => {},
+          // setMessages,
+          "image"
+        );
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   return (
     <ChatContext.Provider
       value={{
@@ -270,6 +318,7 @@ export const ChatContextProvider = ({ children, user }) => {
         markAllNotificationsAsRead,
         markNotificationAsRead,
         markThisUserNotificationsAsRead,
+        handleImageChange,
       }}
     >
       {children}
