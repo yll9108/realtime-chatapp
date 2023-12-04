@@ -11,7 +11,7 @@ const UserList = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipientUser(chat, user);
   const { onlineUsers, notifications, markThisUserNotificationsAsRead } =
     useContext(ChatContext);
-  const { lastestMessage } = useFetchLatestMessage(chat);
+  const { latestMessage } = useFetchLatestMessage(chat);
   const unreadNotifications = unreadNotificationsFunc(notifications);
   const thisUserNotifications = unreadNotifications?.filter(
     (n) => n.senderId === recipientUser?._id
@@ -23,7 +23,7 @@ const UserList = ({ chat, user }) => {
     recipientUser && recipientUser.profilePicture
       ? `http://localhost:8080/${recipientUser.profilePicture}`
       : "";
-  console.log("Profile Picture URL:", profilePictureUrl);
+  // console.log("Profile Picture URL:", profilePictureUrl);
 
   const truncateText = (text) => {
     let shortText = text.substring(0, 20);
@@ -33,6 +33,7 @@ const UserList = ({ chat, user }) => {
     }
     return shortText;
   };
+  // console.log("userlist lastestMessage", latestMessage);
   return (
     <Stack
       direction="horizontal"
@@ -60,14 +61,16 @@ const UserList = ({ chat, user }) => {
               : "unknown"}
           </div>
           <div className="text">
-            {lastestMessage?.text && (
-              <span>{truncateText(lastestMessage?.text)}</span>
+            {latestMessage?.content && (
+              <span>{truncateText(latestMessage?.content)}</span>
             )}
           </div>
         </div>
       </div>
       <div className="d-flex flex-column align-items-end">
-        <div className="date">{moment(lastestMessage?.sentAt).calendar()}</div>
+        <div className="date">
+          {moment(latestMessage?.updatedAt).calendar()}
+        </div>
         <div
           className={
             thisUserNotifications?.length > 0 ? "this-user-notifications" : ""
