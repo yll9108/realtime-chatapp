@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { baseUrl, getRequest } from "../utils/services";
 
-export const useFetchRecipientUser = (chat, user) => {
+export const useFetchRecipientUser = (chat, user, query) => {
   const [recipientUser, setRecipientUser] = useState(null);
   const [error, setError] = useState(null);
 
@@ -19,7 +19,12 @@ export const useFetchRecipientUser = (chat, user) => {
         const response = await getRequest(
           `${baseUrl}/users/find/${recipientId}`
         );
-        setRecipientUser(response);
+
+        const filteredUser = query
+          ? response?.userName?.toLowerCase().includes(query.toLowerCase())
+          : response;
+
+        setRecipientUser(filteredUser ? response : null);
         console.log("Fetched user data:", response);
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -28,7 +33,7 @@ export const useFetchRecipientUser = (chat, user) => {
     };
 
     getUser();
-  }, [recipientId]);
+  }, [recipientId, query]);
 
   return { recipientUser, error };
 };
