@@ -12,6 +12,8 @@ function Settings() {
     const [showStatus, setShowStatus] = useState();
     const [showAbout, setShowAbout] = useState();
     const [showAccountSettings, setShowAccountSettings] = useState(false);
+    // const [showEditAndDeleteButton, setShowEditAndDeleteButton] =
+    //     useState(true);
 
     useEffect(() => {
         axios
@@ -27,10 +29,17 @@ function Settings() {
     }, [userId]);
 
     return (
-        <div>
+        <Stack
+            direction="vertically"
+            gap={2}
+            className="single-user align-items-start"
+        >
             <h2>Settings</h2>
             {showAccountSettings ? (
-                <AccountSettings setShowAccountSettings={setShowAccountSettings} />
+                <AccountSettings
+                    setShowAccountSettings={setShowAccountSettings}
+                    // setShowEditAndDeleteButton={setShowEditAndDeleteButton}
+                />
             ) : (
                 <>
                     <ToggleSwitch
@@ -51,12 +60,18 @@ function Settings() {
                         status={showAbout}
                         setStatus={setShowAbout}
                     />
-                    <Button variant="primary" onClick={() => setShowAccountSettings(true)}>
+                    <Button
+                        variant="primary"
+                        onClick={
+                            () => setShowAccountSettings(true)
+                            // setShowEditAndDeleteButton(false);
+                        }
+                    >
                         Account Settings
                     </Button>
                 </>
             )}
-        </div>
+        </Stack>
     );
 }
 

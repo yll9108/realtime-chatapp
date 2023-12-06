@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Stack, Button, Alert } from "react-bootstrap";
 
 export default function PopUp({ userId, trigger, setTrigger }) {
     const [newPassword, setNewPassword] = useState();
@@ -36,33 +37,37 @@ export default function PopUp({ userId, trigger, setTrigger }) {
     };
 
     return trigger ? (
-        <div className="card">
+        // <Stack className="card text-white bg-danger mb-3">
+        <Stack direction="vertically" gap={2} className="align-items-start">
             <div className="card-header">Change Password</div>
             <div className="card-body">
-                <h5 className="card-title">This part will show user email</h5>
                 <form onSubmit={handleChangePassword}>
                     <input
                         type="password"
-                        placeholder="newPassword"
+                        placeholder="new password"
                         onChange={(e) => setNewPassword(e.target.value)}
+                        style={{ marginBottom: "10px" }}
                     />
-                    <button className="btn btn-primary" type="submit">
-                        Submit
-                    </button>
-                    <br></br>
-                    <button
-                        className="btn btn-primary"
-                        onClick={() => {
-                            setTrigger(false);
-                            setChangePasswordError();
-                        }}
-                    >
-                        cancel
-                    </button>
-                    <p>{changePasswordError}</p>
+                    <Stack direction="vertically" gap={2}>
+                        <Button className="btn btn-primary" type="submit">
+                            Submit
+                        </Button>
+                        <Button
+                            className="btn btn-primary"
+                            onClick={() => {
+                                setTrigger(false);
+                                setChangePasswordError();
+                            }}
+                        >
+                            cancel
+                        </Button>
+                    </Stack>
+                    <Stack>
+                        <Alert variant="danger">{changePasswordError}</Alert>
+                    </Stack>
                 </form>
             </div>
-        </div>
+        </Stack>
     ) : (
         ""
     );
