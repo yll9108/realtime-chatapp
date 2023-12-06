@@ -20,12 +20,16 @@ const ChatArea = () => {
     const scroll = useRef();
 
     const renderMessageContent = (message) => {
+        console.warn("message!!!", message);
         if (message.messageType === "image") {
             return (
-                <img
-                    src={`data:image/jpeg;base64,${message.content}`}
-                    alt="Received Image"
-                />
+                <>
+                    <img
+                        src={`data:image/jpeg;base64,${message.content}`}
+                        alt="Received Image"
+                    />
+                    <span>{message.fileName}</span>
+                </>
             );
         } else {
             return <span>{message.content}</span>;
