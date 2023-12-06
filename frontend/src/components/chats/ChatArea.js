@@ -32,6 +32,19 @@ const ChatArea = () => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      // Add your logic to send the message here
+      sendTextMessage(
+        textMessage,
+        user,
+        currentChat._id,
+        setTextMessage,
+        "text"
+      );
+    }
+  };
   useEffect(() => {
     console.warn("messages", messages);
     scroll.current?.scrollIntoView({ behavior: "smooth" });
@@ -75,11 +88,13 @@ const ChatArea = () => {
           ))}
       </Stack>
       <Stack className="chat-input flex-grow-0" direction="horizontal" gap={3}>
-        <InputEmoji
-          value={textMessage}
-          onChange={setTextMessage}
-          borderColor="rgba(72,112,223,0.2)"
-        />
+        <div onKeyDown={handleKeyDown}>
+          <InputEmoji
+            value={textMessage}
+            onChange={setTextMessage}
+            borderColor="rgba(72,112,223,0.2)"
+          />
+        </div>
         <input
           type="file"
           accept="image/*"
