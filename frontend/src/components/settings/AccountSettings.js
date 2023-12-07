@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import PopUp from "./PopUp"; // Ensure the path to PopUp is correct
-import { Button, Stack } from "react-bootstrap";
+import { Container, Button, Stack } from "react-bootstrap";
 
 function AccountSettings({ setShowAccountSettings }) {
     const { user, deleteAccount } = useContext(AuthContext);
@@ -22,8 +22,8 @@ function AccountSettings({ setShowAccountSettings }) {
     };
 
     return (
-        <div>
-            <Stack gap={2} className="col-md-20 mx-auto">
+        <Container>
+            <Stack gap={2} className="col-md-20 mx-auto align-items-center">
                 <button
                     style={backButtonStyle}
                     onClick={() => setShowAccountSettings(false)}
@@ -60,7 +60,7 @@ function AccountSettings({ setShowAccountSettings }) {
                     />
                 )}
             </Stack>
-        </div>
+        </Container>
     );
 }
 

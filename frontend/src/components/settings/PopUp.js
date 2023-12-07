@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Stack, Button, Alert } from "react-bootstrap";
+import {
+    Container,
+    Alert,
+    Button,
+    Form,
+    Row,
+    Col,
+    Stack,
+} from "react-bootstrap";
 
 export default function PopUp({ userId, trigger, setTrigger }) {
     const [newPassword, setNewPassword] = useState();
@@ -38,36 +46,51 @@ export default function PopUp({ userId, trigger, setTrigger }) {
 
     return trigger ? (
         // <Stack className="card text-white bg-danger mb-3">
-        <Stack direction="vertically" gap={2} className="align-items-start">
-            <div className="card-header">Change Password</div>
-            <div className="card-body">
-                <form onSubmit={handleChangePassword}>
+        <Container>
+            <Stack className="mb-3">
+                <label for="exampleFormControlInput1" className="form-label">
+                    Change Password
+                </label>
+                {/* <div className="card-body"> */}
+                <form className="mb-3" onSubmit={handleChangePassword}>
                     <input
                         type="password"
                         placeholder="new password"
                         onChange={(e) => setNewPassword(e.target.value)}
-                        style={{ marginBottom: "10px" }}
+                        className="form-control mb-2"
                     />
                     <Stack direction="vertically" gap={2}>
                         <Button className="btn btn-primary" type="submit">
                             Submit
                         </Button>
                         <Button
-                            className="btn btn-primary"
+                            className="btn btn-primary mb-2"
                             onClick={() => {
                                 setTrigger(false);
                                 setChangePasswordError();
                             }}
                         >
-                            cancel
+                            Cancel
                         </Button>
                     </Stack>
-                    <Stack>
-                        <Alert variant="danger">{changePasswordError}</Alert>
+                    <Stack
+                        direction="vertically"
+                        gap={2}
+                        className="align-items-start"
+                    >
+                        {changePasswordError && (
+                            <Alert
+                                variant="danger"
+                                className="d-flex align-items-center mt-2"
+                            >
+                                <p>{changePasswordError}</p>
+                            </Alert>
+                        )}
                     </Stack>
                 </form>
-            </div>
-        </Stack>
+                {/* </div> */}
+            </Stack>
+        </Container>
     ) : (
         ""
     );
