@@ -11,8 +11,7 @@ import PotentialChats from "../chats/PotentialChats";
 
 function Chat() {
   const { user } = useContext(AuthContext);
-  const { userChats, isUserChatsLoading, updateCurrentChat } =
-    useContext(ChatContext);
+  const { userChats, isUserChatsLoading } = useContext(ChatContext);
   const [activeSection, setActiveSection] = useState("chat");
   const [query, setQuery] = useState("");
 
@@ -28,6 +27,7 @@ function Chat() {
             <Stack direction="horizontal" gap={4} className="align-items-start">
               <Stack className="messages-box flex-grow-0 pe-3" gap={3}>
                 <div className="flex-row">
+                  <h1>chats</h1>
                   <input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
@@ -38,7 +38,14 @@ function Chat() {
                 </div>
                 {isUserChatsLoading && <p>Loading Chats..</p>}
                 {userChats?.map((chat, index) => {
-                  return <UserList chat={chat} user={user} query={query} />;
+                  return (
+                    <UserList
+                      className="user-chat-list"
+                      chat={chat}
+                      user={user}
+                      query={query}
+                    />
+                  );
                 })}
               </Stack>
               <ChatArea />

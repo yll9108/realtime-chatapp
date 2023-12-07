@@ -34,6 +34,7 @@ const UserList = ({ index, chat, user, query }) => {
     }
     return shortText;
   };
+
   // console.log("recipientUser", recipientUser);
   return recipientUser ? (
     <div key={index} onClick={() => updateCurrentChat(chat)}>
@@ -58,10 +59,10 @@ const UserList = ({ index, chat, user, query }) => {
             ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="40"
-                height="40"
+                width="40px"
+                height="40px"
                 fill="currentColor"
-                class="bi bi-person-circle"
+                className="user-svg bi bi-person-circle"
                 viewBox="0 0 16 16"
               >
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />

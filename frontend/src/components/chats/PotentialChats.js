@@ -1,4 +1,4 @@
-import { useContext, useState, useRef, useEffect } from "react";
+import { useContext, useState } from "react";
 import { ChatContext } from "../../context/ChatContext";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -11,11 +11,7 @@ const PotentialChats = () => {
   const filteredChats = potentialChats.filter((u) =>
     u.userName.toLowerCase().includes(query.toLowerCase())
   );
-  const scroll = useRef();
 
-  useEffect(() => {
-    scroll.current?.scrollIntoView({ behavior: "smooth" });
-  }, [potentialChats]);
   return (
     <>
       <div className="all-users d-flex">
