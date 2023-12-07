@@ -129,7 +129,10 @@ export const ChatContextProvider = ({ children, user }) => {
 
       //   return !isChatCreated;
       // });
-      setPotentialChats(response);
+      const pChats = response.filter((u) => {
+        return user?._id !== u._id;
+      });
+      setPotentialChats(pChats);
       setAllUsers(response);
     };
 

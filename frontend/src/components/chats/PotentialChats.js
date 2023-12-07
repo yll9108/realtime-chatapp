@@ -6,12 +6,15 @@ import styled from "styled-components";
 
 const PotentialChats = () => {
   const { user } = useContext(AuthContext);
-  const { potentialChats, createChat, onlineUsers } = useContext(ChatContext);
+  const { potentialChats, createChat, onlineUsers, userChats } =
+    useContext(ChatContext);
   const [query, setQuery] = useState("");
   const filteredChats = potentialChats.filter((u) =>
     u.userName.toLowerCase().includes(query.toLowerCase())
   );
-
+  const isFriendInChatList = (friendId) => {
+    return userChats.some((chat) => chat.roomMembers.includes(friendId));
+  };
   return (
     <>
       <div className="all-users d-flex">
@@ -68,12 +71,14 @@ const PotentialChats = () => {
                 <div className="friend-about">
                   <span>{u.about}</span>
                 </div>
-                <button
-                  className="friend-addChat"
-                  onClick={() => createChat(user?._id, u._id)}
-                >
-                  +
-                </button>
+                {!isFriendInChatList(u._id) && (
+                  <button
+                    className="friend-addChat"
+                    onClick={() => createChat(user?._id, u._id)}
+                  >
+                    +
+                  </button>
+                )}
               </div>
             </div>
           );

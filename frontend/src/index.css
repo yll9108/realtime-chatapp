@@ -378,3 +378,6 @@ input {
 .friend-addChat {
   border-radius: 50%;
 }
+.hidden {
+  display: none;
+}
