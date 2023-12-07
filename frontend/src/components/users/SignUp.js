@@ -23,17 +23,22 @@ function SignUp() {
 
   const handlePasswordChange = (event) => {
     const { value } = event.target;
-    updateRegisterInfo({ ...registerInfo, password: value });
-
-    // Check password requirements
-    setPasswordRequirements({
+    console.log("Password:", value); // Log the current password
+  
+    // Check password requirements and log them
+    const passwordReqs = {
       length: value.length >= 6,
       uppercase: /[A-Z]/.test(value),
       lowercase: /[a-z]/.test(value),
       digit: /\d/.test(value),
-      specialChar: /[~!@#$%^&*()_+=,<>?-{}[\]:;.'"?|]/.test(value),
-    });
+      specialChar: /[~!@#$%^&*()_+=,{}[\]:";'?|]/.test(value),
+    };
+    console.log("Requirements:", passwordReqs);
+  
+    updateRegisterInfo({ ...registerInfo, password: value });
+    setPasswordRequirements(passwordReqs);
   };
+  
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePasswordVisibility = () => setPasswordShown(!passwordShown);
 
