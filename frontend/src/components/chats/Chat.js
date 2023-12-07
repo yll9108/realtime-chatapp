@@ -27,7 +27,7 @@ function Chat() {
             <Stack direction="horizontal" gap={4} className="align-items-start">
               <Stack className="messages-box flex-grow-0 pe-3" gap={3}>
                 <div className="flex-row">
-                  <h1>chats</h1>
+                  <h1>Chats</h1>
                   <input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
