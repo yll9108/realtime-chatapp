@@ -1,0 +1,18 @@
+{
+    "en": {
+        "settings": "Settings",
+        "profile": "Profile",
+        "status": "Status",
+        "about": "About",
+        "language": "Language",
+        "accountSettings": "Account Settings"
+    },
+    "es": {
+        "settings": "Configuraciones",
+        "profile": "Perfil",
+        "status": "Estado",
+        "about": "Acerca de",
+        "language": "Idioma",
+        "accountSettings": "Configuración de la cuenta"
+    }
+}
