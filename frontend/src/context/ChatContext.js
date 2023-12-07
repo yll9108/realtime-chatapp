@@ -114,22 +114,22 @@ export const ChatContextProvider = ({ children, user }) => {
         return console.log("ChatContextProvider getUsers error ", response);
       }
 
-      const pChats = response.filter((u) => {
-        let isChatCreated = false;
+      // const pChats = response.filter((u) => {
+      //   let isChatCreated = false;
 
-        if (user?._id === u._id) return false;
+      //   if (user?._id === u._id) return false;
 
-        if (userChats) {
-          isChatCreated = userChats?.some((chat) => {
-            return (
-              chat.roomMembers[0] === u._id || chat.roomMembers[1] === u._id
-            );
-          });
-        }
+      //   if (userChats) {
+      //     isChatCreated = userChats?.some((chat) => {
+      //       return (
+      //         chat.roomMembers[0] === u._id || chat.roomMembers[1] === u._id
+      //       );
+      //     });
+      //   }
 
-        return !isChatCreated;
-      });
-      setPotentialChats(pChats);
+      //   return !isChatCreated;
+      // });
+      setPotentialChats(response);
       setAllUsers(response);
     };
 
