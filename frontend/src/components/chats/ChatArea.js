@@ -36,6 +36,19 @@ const ChatArea = () => {
         }
     };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      // Add your logic to send the message here
+      sendTextMessage(
+        textMessage,
+        user,
+        currentChat._id,
+        setTextMessage,
+        "text"
+      );
+    }
+  };
     useEffect(() => {
         console.warn("messages", messages);
         scroll.current?.scrollIntoView({ behavior: "smooth" });
@@ -87,11 +100,12 @@ const ChatArea = () => {
                 direction="horizontal"
                 gap={3}
             >
-                <InputEmoji
-                    value={textMessage}
-                    onChange={setTextMessage}
-                    borderColor="rgba(72,112,223,0.2)"
-                />
+                <div onKeyDown={handleKeyDown}>
+          <InputEmoji
+                      value={textMessage}
+                      onChange={setTextMessage}
+                      borderColor="rgba(72,112,223,0.2)"
+                  />
                 <label
                     className="bi bi-plus send-btn"
                     style={{ cursor: "pointer" }}
@@ -106,7 +120,8 @@ const ChatArea = () => {
                     >
                         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
                     </svg>
-                    <input
+                    </div>
+        <input
                         style={{ display: "none" }}
                         type="file"
                         accept="image/*"

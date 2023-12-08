@@ -117,21 +117,6 @@ code {
   border-bottom: none;
 }
 
-/* All users */
-.all-users {
-  display: flex;
-  margin-bottom: 1rem;
-}
-
-.single-user {
-  border: 1px solid;
-  color: white;
-  cursor: pointer;
-  padding: 1rem;
-  border-radius: 10px;
-  margin: 0.5rem;
-}
-
 /* User Card */
 .user-card {
   color: white;
@@ -161,21 +146,33 @@ code {
   border-radius: 50%;
   background: rgb(0, 219, 66);
   position: absolute;
-  top: -3px;
-  right: -3px;
+  top: 35px;
+  right: 330px;
   z-index: 2;
 }
 
 /* Chat Box */
 .chat-box {
   max-height: calc(100vh - 10rem);
+  width: 60rem;
   overflow-y: auto;
   background: rgb(25, 25, 25);
   border-radius: 10px;
+  overflow-x: none;
 }
 
 .messages-box {
   height: 85vh;
+  width: 40rem;
+  overflow-y: auto;
+  overflow-x: none;
+}
+
+.all-users {
+  height: 85vh;
+  width: calc(100vw - 70rem);
+  overflow-y: auto;
+  overflow-x: none;
 }
 
 /* Chat Header */
@@ -318,4 +315,69 @@ code {
   border-radius: 50%;
   align-items: center;
   justify-content: center;
+}
+
+.user-svg {
+  margin-right: 15px;
+}
+
+/* friends list */
+
+input {
+  outline: none;
+}
+.all-users {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+  width: 50%;
+}
+.all-users-search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.2rem;
+  margin: 0.5rem 2rem;
+}
+.single-user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid;
+  padding: 0.5rem;
+  margin: 0.5rem 2rem;
+  position: relative;
+}
+
+.single-user-componenet:first-child {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.single-user-componenet:last-child {
+  display: flex;
+  align-items: flex-end;
+}
+.friend-online {
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: rgb(0, 219, 66);
+  position: absolute;
+  top: 35px;
+  left: 40px;
+  z-index: 2;
+}
+
+.friend-about {
+  margin-right: 1rem;
+}
+.friend-addChat {
+  border-radius: 50%;
+}
+.hidden {
+  display: none;
 }
