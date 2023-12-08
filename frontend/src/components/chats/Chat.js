@@ -47,11 +47,6 @@ function Chat() {
                                 </div>
                                 {isUserChatsLoading && <p>Loading Chats..</p>}
                                 {userChats?.map((chat, index) => {
-                                    // console.log("user", user);
-                                    // console.log(
-                                    //     "user.showStatus",
-                                    //     user.showStatus
-                                    // );
                                     return (
                                         <UserList
                                             className="user-chat-list"
