@@ -9,7 +9,7 @@ import moment from "moment";
 
 const UserList = ({ index, chat, user, query }) => {
     const { recipientUser } = useFetchRecipientUser(chat, user, query);
-    console.warn("recipientUser", recipientUser);
+    // console.warn("recipientUser", recipientUser);
     const { onlineUsers, notifications, markThisUserNotificationsAsRead } =
         useContext(ChatContext);
     const { updateCurrentChat } = useContext(ChatContext);

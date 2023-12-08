@@ -70,7 +70,10 @@ const PotentialChats = () => {
 
                             <div className="single-user-componenet">
                                 <div className="friend-about">
-                                    <span>{u.about}</span>
+                                    {/* <span>{u.about}</span> */}
+                                    {u.showAbout === true ? (
+                                        <span>{u.about}</span>
+                                    ) : null}
                                 </div>
                                 {!isFriendInChatList(u._id) && (
                                     <button
