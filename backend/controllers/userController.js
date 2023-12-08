@@ -41,29 +41,27 @@ const registerUser = async (req, res) => {
             return res.send(responseMap.unprocessableEntity);
         }
 
-    // if not .. user is able to type in password and it'll be hashed
-    const salt = random();
-    const user = await createUser({
-      userName,
-      email,
-      authentication: {
-        salt,
-        password: authentication(salt, password),
-      },
-    });
+        // if not .. user is able to type in password and it'll be hashed
+        const salt = random();
+        const user = await createUser({
+            userName,
+            email,
+            authentication: {
+                salt,
+                password: authentication(salt, password),
+            },
+        });
 
-    return res
-      .status(200)
-      .json({
-        _id: user._id,
-        userName: user.userName,
-        email,
-        code: 200,
-      });
-  } catch (error) {
-    console.log(error);
-    return res.send(responseMap.serverError);
-  }
+        return res.status(200).json({
+            _id: user._id,
+            userName: user.userName,
+            email,
+            code: 200,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.send(responseMap.serverError);
+    }
 };
 
 // function login
@@ -209,7 +207,7 @@ const handleResetPW = async (req, res) => {
             return res.send(responseMap.unprocessableEntity);
         }
 
-        const { salt, newHashedPassword } = generateHashedPassword(password);
+        const { salt, newHashedPassword } = generateHashedPassword(newPassword);
         user.authentication.salt = salt;
         user.authentication.password = newHashedPassword;
         // const salt = random();
@@ -392,19 +390,19 @@ const updateUserProfile = async (req, res) => {
     }
 };
 const deleteUser = async (req, res) => {
-  const { userId } = req.params;
+    const { userId } = req.params;
 
-  try {
-      // Delete user from the database
-      await userModel.findByIdAndDelete(userId);
+    try {
+        // Delete user from the database
+        await userModel.findByIdAndDelete(userId);
 
-      // Here, you can also add logic to handle any additional data cleanup if necessary
+        // Here, you can also add logic to handle any additional data cleanup if necessary
 
-      res.status(200).json({ message: 'Account successfully deleted' });
-  } catch (error) {
-      console.error('Error deleting user:', error);
-      res.status(500).json({ message: 'Error deleting account' });
-  }
+        res.status(200).json({ message: "Account successfully deleted" });
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(500).json({ message: "Error deleting account" });
+    }
 };
 
 module.exports = {
@@ -418,5 +416,5 @@ module.exports = {
     googleLogin,
     changePassword,
     updateUserProfile,
-  deleteUser
+    deleteUser,
 };

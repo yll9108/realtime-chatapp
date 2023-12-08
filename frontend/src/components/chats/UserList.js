@@ -76,8 +76,11 @@ const UserList = ({ index, chat, user, query }) => {
           <div className="text-content">
             <div className="name">{recipientUser.userName}</div>
             <div className="text">
-              {latestMessage?.content && (
+              {!latestMessage?.fileName && latestMessage?.content && (
                 <span>{truncateText(latestMessage?.content)}</span>
+              )}
+              {latestMessage?.fileName && (
+                <span>{latestMessage?.fileName}</span>
               )}
             </div>
           </div>
