@@ -35,7 +35,7 @@ const PotentialChats = () => {
                         <div className="single-user" key={index}>
                             <div className="me-2 single-user-componenet">
                                 <div className="friend-avatar">
-                                    {profilePictureUrl ? (
+                                    {u.showProfile === true ? (
                                         <UserAvatar src={profilePictureUrl} />
                                     ) : (
                                         <svg

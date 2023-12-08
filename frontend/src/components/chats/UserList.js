@@ -55,7 +55,7 @@ const UserList = ({ index, chat, user, query }) => {
             >
                 <div className="d-flex">
                     <div className="me-2">
-                        {profilePictureUrl ? (
+                        {recipientUser.showProfile === true ? (
                             <UserAvatar src={profilePictureUrl} />
                         ) : (
                             <svg
