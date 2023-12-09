@@ -101,12 +101,13 @@ code {
   margin-left: 0%;
   margin-right: 0%;
 }
-/* 
-.NavBar a {
-  color: lightseagreen;
-  text-decoration: none;
-} */
-
+.Nav-title {
+  display: flex;
+  justify-content: space-between;
+}
+.Nav-title > img {
+  width: 60px;
+}
 .chatApp {
   margin-left: 1vw;
 }
