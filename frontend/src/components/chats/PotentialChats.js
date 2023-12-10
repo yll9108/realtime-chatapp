@@ -61,10 +61,12 @@ const PotentialChats = () => {
 
                             <span
                                 className={
-                                    u.showStatus === true ? "friend-online" : ""
-                                    // onlineUsers?.some((user) => user?.userId === u?._id)
-                                    //   ? "friend-online"
-                                    //   : ""
+                                    // u.showStatus === true ? "friend-online" : ""
+                                    onlineUsers?.some(
+                                        (user) => user?.userId === u?._id
+                                    ) && u.showStatus === true
+                                        ? "friend-online"
+                                        : ""
                                 }
                             ></span>
 
