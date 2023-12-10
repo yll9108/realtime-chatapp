@@ -107,7 +107,7 @@ const UserList = ({ index, chat, user, query }) => {
                     {/* <span className={isOnline ? "user-online" : ""}></span> */}
                     <span
                         className={
-                            recipientUser.showStatus === true
+                            isOnline && recipientUser.showStatus === true
                                 ? "user-online"
                                 : ""
                         }
