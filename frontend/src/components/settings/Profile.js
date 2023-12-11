@@ -105,15 +105,6 @@ function Profile({ userProfile }) {
                                         onChange={handleInputChange}
                                     />
                                 </Form.Group>
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Email:</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        name="email"
-                                        value={profile.email}
-                                        onChange={handleInputChange}
-                                    />
-                                </Form.Group>
                                 <Stack>
                                     <Button type="submit">Save Changes</Button>
                                     <Button
