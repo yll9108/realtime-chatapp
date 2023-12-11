@@ -2,13 +2,15 @@ const messageModel = require("../models/messageModel.js");
 
 //createMessage
 const createMessage = async (req, res) => {
-    const { chatId, senderId, content, messageType, imageData } = req.body;
+    const { chatId, senderId, content, messageType, imageData, fileName } =
+        req.body;
     console.log("messageType:", messageType);
     const message = new messageModel({
         chatId,
         senderId,
         content,
         messageType,
+        fileName,
     });
 
     if (messageType === "image" && imageData) {

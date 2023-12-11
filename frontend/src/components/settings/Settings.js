@@ -3,7 +3,7 @@ import ToggleSwitch from "./ToggleSwitch.js";
 import { AuthContext } from "../../context/AuthContext.js";
 import axios from "axios";
 import AccountSettings from "./AccountSettings.js";
-import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
+import { Container, Button, Form, Row, Col, Stack } from "react-bootstrap";
 
 function Settings() {
     const { user } = useContext(AuthContext);
@@ -12,6 +12,8 @@ function Settings() {
     const [showStatus, setShowStatus] = useState();
     const [showAbout, setShowAbout] = useState();
     const [showAccountSettings, setShowAccountSettings] = useState(false);
+    // const [showEditAndDeleteButton, setShowEditAndDeleteButton] =
+    //     useState(true);
 
     useEffect(() => {
         axios
@@ -27,36 +29,52 @@ function Settings() {
     }, [userId]);
 
     return (
-        <div>
-            <h2>Settings</h2>
-            {showAccountSettings ? (
-                <AccountSettings setShowAccountSettings={setShowAccountSettings} />
-            ) : (
-                <>
-                    <ToggleSwitch
-                        label="Profile"
-                        userId={userId}
-                        status={showProfile}
-                        setStatus={setShowProfile}
+        <Container>
+            <Stack
+                direction="vertically"
+                gap={2}
+                className="single-user align-items-center"
+                style={{ textAlign: "center" }}
+            >
+                <h2>Settings</h2>
+                {showAccountSettings ? (
+                    <AccountSettings
+                        setShowAccountSettings={setShowAccountSettings}
+                        // setShowEditAndDeleteButton={setShowEditAndDeleteButton}
                     />
-                    <ToggleSwitch
-                        label="Status"
-                        userId={userId}
-                        status={showStatus}
-                        setStatus={setShowStatus}
-                    />
-                    <ToggleSwitch
-                        label="About"
-                        userId={userId}
-                        status={showAbout}
-                        setStatus={setShowAbout}
-                    />
-                    <Button variant="primary" onClick={() => setShowAccountSettings(true)}>
-                        Account Settings
-                    </Button>
-                </>
-            )}
-        </div>
+                ) : (
+                    <>
+                        <ToggleSwitch
+                            label="Profile"
+                            userId={userId}
+                            status={showProfile}
+                            setStatus={setShowProfile}
+                        />
+                        <ToggleSwitch
+                            label="Status"
+                            userId={userId}
+                            status={showStatus}
+                            setStatus={setShowStatus}
+                        />
+                        <ToggleSwitch
+                            label="About"
+                            userId={userId}
+                            status={showAbout}
+                            setStatus={setShowAbout}
+                        />
+                        <Button
+                            variant="primary"
+                            onClick={
+                                () => setShowAccountSettings(true)
+                                // setShowEditAndDeleteButton(false);
+                            }
+                        >
+                            Account Settings
+                        </Button>
+                    </>
+                )}
+            </Stack>
+        </Container>
     );
 }
 

@@ -1,4 +1,4 @@
-import { Container, Nav, Navbar, Stack } from "react-bootstrap";
+import { Container, Nav, Navbar, Stack, Image } from "react-bootstrap";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
@@ -6,18 +6,25 @@ import Notification from "../chats/Notification";
 
 const NavBar = () => {
     const { user, logoutUser } = useContext(AuthContext);
-
     return (
         <Navbar className="mb-4 NavBar" style={{ height: "3.75rem" }}>
             <Container>
-                <h1 className="col-3">
-                    <Link
-                        to="/"
-                        className="chatApp link-light text-decoration-none"
-                    >
-                        ChatApp
-                    </Link>
-                </h1>
+                <div className="Nav-title">
+                    <img
+                        className="col-1"
+                        src="chatAppRevised.png"
+                        alt="logo"
+                    />
+                    <h1 className="">
+                        <Link
+                            to="/"
+                            className="chatApp link-light text-decoration-none"
+                        >
+                            ChatApp
+                        </Link>
+                    </h1>
+                </div>
+
                 {user && (
                     <span className="login-UserName text-warning">
                         Logged in as {user?.userName}

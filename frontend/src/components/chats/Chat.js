@@ -10,43 +10,59 @@ import { AuthContext } from "../../context/AuthContext";
 import PotentialChats from "../chats/PotentialChats";
 
 function Chat() {
-  const { user } = useContext(AuthContext);
-  const { userChats, isUserChatsLoading, updateCurrentChat } =
-    useContext(ChatContext);
-  const [activeSection, setActiveSection] = useState("chat");
-  const [query, setQuery] = useState("");
+    const { user } = useContext(AuthContext);
+    const { userChats, isUserChatsLoading } = useContext(ChatContext);
+    const [activeSection, setActiveSection] = useState("chat");
+    const [query, setQuery] = useState("");
 
-  return (
-    <Container className="d-flex">
-      <Sidebar setActiveSection={setActiveSection} />
-      {activeSection === "friends" && <PotentialChats />}
-      {activeSection === "settings" && <Settings />}
-      {activeSection === "profile" && <Profile userProfile={user} />}
-      {activeSection === "chat" && userChats?.length > 0 && (
-        <Container>
-          {userChats?.length < 1 ? null : (
-            <Stack direction="horizontal" gap={4} className="align-items-start">
-              <Stack className="messages-box flex-grow-0 pe-3" gap={3}>
-                <div className="flex-row">
-                  <input
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    type="search"
-                    placeholder="Search Chat"
-                    className="search-chat"
-                  />
-                </div>
-                {isUserChatsLoading && <p>Loading Chats..</p>}
-                {userChats?.map((chat, index) => {
-                  return <UserList chat={chat} user={user} query={query} />;
-                })}
-              </Stack>
-              <ChatArea />
-            </Stack>
-          )}
+    return (
+        <Container className="d-flex">
+            <Sidebar setActiveSection={setActiveSection} />
+            {activeSection === "friends" && <PotentialChats />}
+            {activeSection === "settings" && <Settings />}
+            {activeSection === "profile" && <Profile userProfile={user} />}
+            {activeSection === "chat" && userChats?.length > 0 && (
+                <Container>
+                    {userChats?.length < 1 ? null : (
+                        <Stack
+                            direction="horizontal"
+                            gap={4}
+                            className="align-items-start"
+                        >
+                            <Stack
+                                className="messages-box flex-grow-0 pe-3"
+                                gap={3}
+                            >
+                                <div className="flex-row">
+                                    <h1>Chats</h1>
+                                    <input
+                                        value={query}
+                                        onChange={(e) =>
+                                            setQuery(e.target.value)
+                                        }
+                                        type="search"
+                                        placeholder="Search Chat"
+                                        className="search-chat"
+                                    />
+                                </div>
+                                {isUserChatsLoading && <p>Loading Chats..</p>}
+                                {userChats?.map((chat, index) => {
+                                    return (
+                                        <UserList
+                                            className="user-chat-list"
+                                            chat={chat}
+                                            user={user}
+                                            query={query}
+                                        />
+                                    );
+                                })}
+                            </Stack>
+                            <ChatArea />
+                        </Stack>
+                    )}
+                </Container>
+            )}
         </Container>
-      )}
-    </Container>
-  );
+    );
 }
 export default Chat;

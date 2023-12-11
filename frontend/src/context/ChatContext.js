@@ -114,20 +114,23 @@ export const ChatContextProvider = ({ children, user }) => {
         return console.log("ChatContextProvider getUsers error ", response);
       }
 
+      // const pChats = response.filter((u) => {
+      //   let isChatCreated = false;
+
+      //   if (user?._id === u._id) return false;
+
+      //   if (userChats) {
+      //     isChatCreated = userChats?.some((chat) => {
+      //       return (
+      //         chat.roomMembers[0] === u._id || chat.roomMembers[1] === u._id
+      //       );
+      //     });
+      //   }
+
+      //   return !isChatCreated;
+      // });
       const pChats = response.filter((u) => {
-        let isChatCreated = false;
-
-        if (user?._id === u._id) return false;
-
-        if (userChats) {
-          isChatCreated = userChats?.some((chat) => {
-            return (
-              chat.roomMembers[0] === u._id || chat.roomMembers[1] === u._id
-            );
-          });
-        }
-
-        return !isChatCreated;
+        return user?._id !== u._id;
       });
       setPotentialChats(pChats);
       setAllUsers(response);
@@ -179,7 +182,14 @@ export const ChatContextProvider = ({ children, user }) => {
   }, [currentChat]);
 
   const sendTextMessage = useCallback(
-    async (textMessage, sender, currentChatId, setTextMessage, messageType) => {
+    async (
+      textMessage,
+      sender,
+      currentChatId,
+      setTextMessage,
+      messageType,
+      fileName
+    ) => {
       if (!textMessage && messageType !== "image")
         return console.log("No messages");
 
@@ -191,6 +201,7 @@ export const ChatContextProvider = ({ children, user }) => {
           content: textMessage,
           messageType: messageType,
           imageData: messageType === "image" ? textMessage : null,
+          fileName: fileName,
         })
       );
       if (response.error) {
@@ -282,6 +293,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    const fileName = file.name;
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -292,7 +304,8 @@ export const ChatContextProvider = ({ children, user }) => {
           currentChat._id,
           () => {},
           // setMessages,
-          "image"
+          "image",
+          fileName
         );
       };
       reader.readAsDataURL(file);
