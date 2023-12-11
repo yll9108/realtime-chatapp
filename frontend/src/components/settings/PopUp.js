@@ -1,22 +1,34 @@
 import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import { EyeSlash, Eye } from 'react-bootstrap-icons';
 import axios from "axios";
-import {
-    Container,
-    Alert,
-    Button,
-    Form,
-    Row,
-    Col,
-    Stack,
-} from "react-bootstrap";
+import { Container, Button, Stack, Form, InputGroup, FormControl, Alert } from "react-bootstrap";
 
 export default function PopUp({ userId, trigger, setTrigger }) {
-    const [newPassword, setNewPassword] = useState();
-    const [changePasswordError, setChangePasswordError] = useState();
-    // const navigate = useNavigate();
-    console.log("newPassword", newPassword);
+    const [newPassword, setNewPassword] = useState("");
+    const [changePasswordError, setChangePasswordError] = useState("");
+    const [passwordRequirements, setPasswordRequirements] = useState({
+        length: false,
+        uppercase: false,
+        lowercase: false,
+        digit: false,
+        specialChar: false,
+    });
+    const [passwordShown, setPasswordShown] = useState(false);
 
+    const togglePasswordVisibility = () => setPasswordShown(!passwordShown);
+
+    const handlePasswordChange = (event) => {
+        const { value } = event.target;
+        setNewPassword(value); // Update the state with the new password
+
+        setPasswordRequirements({
+            length: value.length >= 6,
+            uppercase: /[A-Z]/.test(value),
+            lowercase: /[a-z]/.test(value),
+            digit: /\d/.test(value),
+            specialChar: /[~!@#$%^&*()_+=,{}[\]:";'?|]/.test(value),
+        });
+    };
     const handleChangePassword = (e) => {
         e.preventDefault();
         axios
@@ -45,20 +57,43 @@ export default function PopUp({ userId, trigger, setTrigger }) {
     };
 
     return trigger ? (
-        // <Stack className="card text-white bg-danger mb-3">
         <Container>
             <Stack className="mb-3">
-                <label for="exampleFormControlInput1" className="form-label">
+                <label htmlFor="exampleFormControlInput1" className="form-label">
                     Change Password
                 </label>
-                {/* <div className="card-body"> */}
                 <form className="mb-3" onSubmit={handleChangePassword}>
-                    <input
-                        type="password"
-                        placeholder="new password"
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        className="form-control mb-2"
-                    />
+                    <InputGroup>
+                        <FormControl
+                            type={passwordShown ? 'text' : 'password'}
+                            placeholder="Password"
+                            onChange={handlePasswordChange}
+                        />
+                        <InputGroup.Text onClick={togglePasswordVisibility}>
+                            {passwordShown ? <EyeSlash /> : <Eye />}
+                        </InputGroup.Text>
+                    </InputGroup>
+                           <div id="password-requirements">
+                <p>Password Requirements:</p>
+                <ul>
+                  <li className={passwordRequirements.length ? 'valid' : 'invalid'}>
+                    At least 6 characters
+                  </li>
+                  <li className={passwordRequirements.uppercase ? 'valid' : 'invalid'}>
+                    At least one uppercase letter (A-Z)
+                  </li>
+                  <li className={passwordRequirements.lowercase ? 'valid' : 'invalid'}>
+                    At least one lowercase letter (a-z)
+                  </li>
+                  <li className={passwordRequirements.digit ? 'valid' : 'invalid'}>
+                    At least one digit (0-9)
+                  </li>
+                  <li className={passwordRequirements.specialChar ? 'valid' : 'invalid'}>
+                    At least one special character (~!@#$%^&amp;*()_+=,{}[]:";'?|/)
+                 </li>
+
+                </ul>
+              </div>
                     <Stack direction="vertically" gap={2}>
                         <Button className="btn btn-primary" type="submit">
                             Submit
@@ -90,6 +125,16 @@ export default function PopUp({ userId, trigger, setTrigger }) {
                 </form>
                 {/* </div> */}
             </Stack>
+            <style type="text/css">
+        {`
+          .valid {
+            color: green;
+          }
+          .invalid {
+            color: red;
+          }
+        `}
+      </style>
         </Container>
     ) : (
         ""
