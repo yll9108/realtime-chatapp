@@ -20,7 +20,17 @@ function AccountSettings({ setShowAccountSettings }) {
         display: "flex",
         alignItems: "center",
     };
-
+    const isGoogleUser = user.isGoogleAccount; 
+    const handleEditPasswordClick = () => {
+        if (isGoogleUser) {
+            // Show alert for Google account users
+            alert("Not available for Google account users.");
+        } else {
+            // Open the password edit popup for other users
+            setPasswordPopUp(true);
+            setShowEditAndDeleteButton(false);
+        }
+    };
     return (
         <Container>
             <Stack gap={2} className="col-md-20 mx-auto align-items-center">
@@ -30,19 +40,20 @@ function AccountSettings({ setShowAccountSettings }) {
                 >
                     <i className="bi bi-arrow-left"></i> Back to Settings
                 </button>
-
+                {!isGoogleUser && (
                 <Button
-                    variant="primary"
-                    onClick={() => {
-                        setPasswordPopUp(true);
-                        setShowEditAndDeleteButton(false);
-                    }}
-                    style={{
-                        display: showEditAndDeleteButton ? "block" : "none",
-                    }}
-                >
-                    Edit Password
-                </Button>
+                        variant="primary"
+                        onClick={() => {
+                            setPasswordPopUp(true);
+                            setShowEditAndDeleteButton(false);
+                        }}
+                        style={{
+                            display: showEditAndDeleteButton ? "block" : "none",
+                        }}
+                    >
+                        Edit Password
+                    </Button>
+                )}
                 <Button
                     variant="danger"
                     onClick={() => deleteAccount(user._id)}
