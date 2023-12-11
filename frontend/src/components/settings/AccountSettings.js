@@ -1,13 +1,34 @@
 import React, { useContext, useState } from "react";
+import { Container, Button, Stack, Form } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
-import PopUp from "./PopUp"; // Ensure the path to PopUp is correct
-import { Container, Button, Stack } from "react-bootstrap";
 
 function AccountSettings({ setShowAccountSettings }) {
     const { user, deleteAccount } = useContext(AuthContext);
     const [passwordPopUp, setPasswordPopUp] = useState(false);
-    const [showEditAndDeleteButton, setShowEditAndDeleteButton] =
-        useState(true);
+    const [showEditAndDeleteButton, setShowEditAndDeleteButton] = useState(true);
+
+    // State for individual password requirements (similar to SignUp)
+    const [passwordRequirements, setPasswordRequirements] = useState({
+        length: false,
+        uppercase: false,
+        lowercase: false,
+        digit: false,
+        specialChar: false,
+    });
+
+    // Similar to handlePasswordChange in SignUp
+    const handlePasswordChange = (event) => {
+        const { value } = event.target;
+
+        setPasswordRequirements({
+            length: value.length >= 6,
+            uppercase: /[A-Z]/.test(value),
+            lowercase: /[a-z]/.test(value),
+            digit: /\d/.test(value),
+            specialChar: /[~!@#$%^&*()_+=,{}[\]:";'?|]/.test(value),
+        });
+    };
+
 
     const backButtonStyle = {
         background: "none",
@@ -53,13 +74,45 @@ function AccountSettings({ setShowAccountSettings }) {
                     Delete Account
                 </Button>
                 {passwordPopUp && (
-                    <PopUp
-                        userId={user._id}
-                        trigger={passwordPopUp}
-                        setTrigger={setPasswordPopUp}
-                    />
+                    <>
+                        <Form.Control
+                            type="password"
+                            placeholder="New Password"
+                            onChange={handlePasswordChange}
+                        />
+                        <div id="password-requirements">
+                            <p>Password Requirements:</p>
+                            <ul>
+                                <li className={passwordRequirements.length ? 'valid' : 'invalid'}>
+                                    At least 6 characters
+                                </li>
+                                <li className={passwordRequirements.uppercase ? 'valid' : 'invalid'}>
+                                    At least one uppercase letter (A-Z)
+                                </li>
+                                <li className={passwordRequirements.lowercase ? 'valid' : 'invalid'}>
+                                    At least one lowercase letter (a-z)
+                                </li>
+                                <li className={passwordRequirements.digit ? 'valid' : 'invalid'}>
+                                    At least one digit (0-9)
+                                </li>
+                                <li className={passwordRequirements.specialChar ? 'valid' : 'invalid'}>
+                                    At least one special character (~!@#$%^&*()_+=,{}[]:";'?|/)
+                                </li>
+                            </ul>
+                        </div>
+                    </>
                 )}
             </Stack>
+            <style type="text/css">
+        {`
+          .valid {
+            color: green;
+          }
+          .invalid {
+            color: red;
+          }
+        `}
+      </style>
         </Container>
     );
 }
