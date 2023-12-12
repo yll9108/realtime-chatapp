@@ -173,7 +173,7 @@ export default function PopUp({ userId, trigger, setTrigger }) {
             <style type="text/css">
                 {`
           .valid {
-            color: green;
+            color: #00bd9b;
           }
           .invalid {
             color: red;

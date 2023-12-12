@@ -1,7 +1,7 @@
 import { useState } from "react";
-import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Container, Stack } from "react-bootstrap";
 
 function ForgettingPW() {
     const [resetMailMsg, setResetMailMsg] = useState(null);
@@ -16,15 +16,11 @@ function ForgettingPW() {
             })
             .then((res) => {
                 console.log(res);
-                if (res.data.code === 404) {
-                    console.log(`MSG from frontend: email hasn't signed up`);
+                if (res.data.code === 404 || res.status === 200) {
                     setResetMailMsg("Please check your email.");
                     setTimeout(() => {
-                        navigate("/");
+                        // navigate("/");
                     }, 3000);
-                } else if (res.status === 200) {
-                    console.log(`MSG from frontend: Succeed`);
-                    navigate("/");
                 }
             })
             .catch((err) => console.log(err));
@@ -32,30 +28,31 @@ function ForgettingPW() {
 
     return (
         <>
-            <ForgettingPWDiv>
-                <h1>Forgot Password?</h1>
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        <strong>Email</strong>
-                    </label>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="type in email"
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <button>Sumbit</button>
-                    <p>{resetMailMsg}</p>
-                </form>
-            </ForgettingPWDiv>
+            <Container>
+                <Stack
+                    direction="vertically"
+                    gap={2}
+                    className="align-items-center"
+                    style={{ textAlign: "center" }}
+                >
+                    <h1>Forgot Password?</h1>
+                    <form onSubmit={handleSubmit}>
+                        <label>
+                            <strong>Email</strong>
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="type in email"
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <button>Sumbit</button>
+                        <p>{resetMailMsg}</p>
+                    </form>
+                </Stack>
+            </Container>
         </>
     );
 }
-
-const ForgettingPWDiv = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`;
 
 export default ForgettingPW;
