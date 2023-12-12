@@ -81,9 +81,7 @@ export const AuthContextProvider = ({ children }) => {
                     }
                     break;
                 case 422:
-                    setRegisterError(
-                        "The provided password does not meet the minimum requirements. It must be at least 6 characters long and contain a combination of upper case letters, lower case letters, numbers, and special characters."
-                    );
+                    setRegisterError(false);
                     break;
                 case 500:
                     console.log(response);
