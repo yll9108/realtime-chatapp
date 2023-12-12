@@ -32,7 +32,6 @@ function ResetPW() {
         const { value } = event.target;
         setNewPassword(value);
 
-        // 检查密码要求并设置颜色
         const passwordReqs = {
             length: value.length >= 6,
             uppercase: /[A-Z]/.test(value),
@@ -57,9 +56,7 @@ function ResetPW() {
             .then((res) => {
                 console.log(res);
                 if (res.data.code === 422) {
-                    setResetPasswordError(
-                        "提供的密码不符合最低要求。必须至少包含6个字符，并包含大写字母、小写字母、数字和特殊字符的组合。"
-                    );
+                    setResetPasswordError(false);
                 } else if (res.status === 200) {
                     navigate("/");
                 }

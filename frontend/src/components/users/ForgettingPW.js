@@ -19,7 +19,7 @@ function ForgettingPW() {
                 if (res.data.code === 404 || res.status === 200) {
                     setResetMailMsg("Please check your email.");
                     setTimeout(() => {
-                        // navigate("/");
+                        navigate("/");
                     }, 3000);
                 }
             })
