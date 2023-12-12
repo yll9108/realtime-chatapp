@@ -1,7 +1,15 @@
 import React, { useState } from "react";
-import { EyeSlash, Eye } from 'react-bootstrap-icons';
+import { EyeSlash, Eye } from "react-bootstrap-icons";
 import axios from "axios";
-import { Container, Button, Stack, Form, InputGroup, FormControl, Alert } from "react-bootstrap";
+import {
+    Container,
+    Button,
+    Stack,
+    Form,
+    InputGroup,
+    FormControl,
+    Alert,
+} from "react-bootstrap";
 
 export default function PopUp({ userId, trigger, setTrigger }) {
     const [newPassword, setNewPassword] = useState("");
@@ -58,14 +66,21 @@ export default function PopUp({ userId, trigger, setTrigger }) {
 
     return trigger ? (
         <Container>
-            <Stack className="mb-3">
-                <label htmlFor="exampleFormControlInput1" className="form-label">
+            <Stack
+                direction="vertically"
+                className="align-items-center"
+                style={{ textAlign: "center" }}
+            >
+                <label
+                    htmlFor="exampleFormControlInput1"
+                    className="form-label"
+                >
                     Change Password
                 </label>
-                <form className="mb-3" onSubmit={handleChangePassword}>
+                <form onSubmit={handleChangePassword}>
                     <InputGroup>
                         <FormControl
-                            type={passwordShown ? 'text' : 'password'}
+                            type={passwordShown ? "text" : "password"}
                             placeholder="Password"
                             onChange={handlePasswordChange}
                         />
@@ -73,27 +88,57 @@ export default function PopUp({ userId, trigger, setTrigger }) {
                             {passwordShown ? <EyeSlash /> : <Eye />}
                         </InputGroup.Text>
                     </InputGroup>
-                           <div id="password-requirements">
-                <p>Password Requirements:</p>
-                <ul>
-                  <li className={passwordRequirements.length ? 'valid' : 'invalid'}>
-                    At least 6 characters
-                  </li>
-                  <li className={passwordRequirements.uppercase ? 'valid' : 'invalid'}>
-                    At least one uppercase letter (A-Z)
-                  </li>
-                  <li className={passwordRequirements.lowercase ? 'valid' : 'invalid'}>
-                    At least one lowercase letter (a-z)
-                  </li>
-                  <li className={passwordRequirements.digit ? 'valid' : 'invalid'}>
-                    At least one digit (0-9)
-                  </li>
-                  <li className={passwordRequirements.specialChar ? 'valid' : 'invalid'}>
-                    At least one special character (~!@#$%^&amp;*()_+=,{}[]:";'?|/)
-                 </li>
-
-                </ul>
-              </div>
+                    <div id="password-requirements">
+                        <p>Password Requirements:</p>
+                        <ul>
+                            <li
+                                className={
+                                    passwordRequirements.length
+                                        ? "valid"
+                                        : "invalid"
+                                }
+                            >
+                                At least 6 characters
+                            </li>
+                            <li
+                                className={
+                                    passwordRequirements.uppercase
+                                        ? "valid"
+                                        : "invalid"
+                                }
+                            >
+                                At least one uppercase letter (A-Z)
+                            </li>
+                            <li
+                                className={
+                                    passwordRequirements.lowercase
+                                        ? "valid"
+                                        : "invalid"
+                                }
+                            >
+                                At least one lowercase letter (a-z)
+                            </li>
+                            <li
+                                className={
+                                    passwordRequirements.digit
+                                        ? "valid"
+                                        : "invalid"
+                                }
+                            >
+                                At least one digit (0-9)
+                            </li>
+                            <li
+                                className={
+                                    passwordRequirements.specialChar
+                                        ? "valid"
+                                        : "invalid"
+                                }
+                            >
+                                At least one special character
+                                (~!@#$%^&amp;*()_+=,{}[]:";'?|/)
+                            </li>
+                        </ul>
+                    </div>
                     <Stack direction="vertically" gap={2}>
                         <Button className="btn btn-primary" type="submit">
                             Submit
@@ -126,7 +171,7 @@ export default function PopUp({ userId, trigger, setTrigger }) {
                 {/* </div> */}
             </Stack>
             <style type="text/css">
-        {`
+                {`
           .valid {
             color: green;
           }
@@ -134,7 +179,7 @@ export default function PopUp({ userId, trigger, setTrigger }) {
             color: red;
           }
         `}
-      </style>
+            </style>
         </Container>
     ) : (
         ""
