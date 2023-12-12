@@ -49,9 +49,7 @@ export default function PopUp({ userId, trigger, setTrigger }) {
             .then((res) => {
                 console.log(res);
                 if (res.data.code === 422) {
-                    setChangePasswordError(
-                        "The provided password does not meet the minimum requirements. It must be at least 6 characters long and contain a combination of upper case letters, lower case letters, numbers, and special characters."
-                    );
+                    setChangePasswordError(false);
                 } else if (res.data.code === 401) {
                     setChangePasswordError(
                         "It's a google account, you can't change it."
