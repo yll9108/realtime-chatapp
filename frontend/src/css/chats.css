@@ -1,0 +1,131 @@
+/* User Card */
+.user-card {
+  color: white;
+  position: relative;
+  border-bottom: 1px solid rgb(100, 100, 100);
+  width: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-card .text-content {
+  width: 170px;
+}
+
+.user-card .name {
+  font-weight: 700;
+}
+
+.user-card .text,
+.user-card .date {
+  font-size: 14px;
+  color: rgb(180, 180, 180);
+}
+
+.user-online {
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: rgb(0, 219, 66);
+  position: absolute;
+  top: 35px;
+  right: 330px;
+  z-index: 2;
+}
+
+/* Chat Box */
+.chat-box {
+  max-height: calc(100vh - 10rem);
+  width: 60rem;
+  overflow-y: auto;
+  background: rgb(25, 25, 25);
+  border-radius: 10px;
+  overflow-x: none;
+}
+
+.messages-box {
+  height: 85vh;
+  width: 40rem;
+  overflow-y: auto;
+  overflow-x: none;
+}
+
+/* Chat Header */
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  color: white;
+  background: rgb(30, 30, 30);
+}
+
+/* Messages */
+.messages {
+  max-height: calc(100vh - 15rem);
+  overflow-y: auto;
+  padding: 0 2rem;
+}
+
+.message {
+  color: white;
+  background: #282828;
+  padding: 0.75rem;
+  border-radius: 5px;
+  max-width: 50%;
+}
+
+.message.self {
+  color: white;
+  background: rgb(2, 74, 46);
+}
+
+.message-footer {
+  font-size: 12px;
+  align-self: flex-end;
+  font-weight: 400;
+}
+
+/* Chat Input  */
+.chat-input {
+  width: 100%;
+  background: rgb(30, 30, 30);
+  padding: 1rem;
+}
+.send-btn {
+  border: none;
+  background: rgba(72, 112, 223, 1);
+  color: white;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+.chat-content {
+  display: flex;
+  flex-direction: row;
+}
+@media (max-width: 767px) {
+  .chat-content {
+    display: flex;
+    flex-direction: column;
+  }
+  .messages-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 50vw;
+  }
+  .chat-box {
+    width: 100%;
+  }
+  .chat-title {
+    display: flex;
+    align-items: center;
+  }
+  .chat-title > h1 {
+    margin-right: 10px;
+  }
+}

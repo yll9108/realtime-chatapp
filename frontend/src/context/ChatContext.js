@@ -20,12 +20,9 @@ export const ChatContextProvider = ({ children, user }) => {
   const [notifications, setNotifications] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
 
-  // console.log("ChatContext onlineUsers", onlineUsers);
-  //   console.log("ChatContext notifications", notifications);
-
   //initial socket
   useEffect(() => {
-    const newSocket = io("http://localhost:8080");
+    const newSocket = io("http://localhost:4000");
     setSocket(newSocket);
 
     return () => {
@@ -91,21 +88,6 @@ export const ChatContextProvider = ({ children, user }) => {
     };
   }, [socket, currentChat]);
 
-  // handle image message
-  // useEffect(() => {
-  //     if (socket === null) return;
-
-  //     socket.on("getImage", (res) => {
-  //         if (currentChat?._id !== res.chatId) return;
-
-  //         setMessages((prev) => [...prev, res]);
-  //     });
-
-  //     return () => {
-  //         socket.off("getImage");
-  //     };
-  // }, [socket, currentChat]);
-
   //getUsers
   useEffect(() => {
     const getUsers = async () => {
@@ -114,21 +96,6 @@ export const ChatContextProvider = ({ children, user }) => {
         return console.log("ChatContextProvider getUsers error ", response);
       }
 
-      // const pChats = response.filter((u) => {
-      //   let isChatCreated = false;
-
-      //   if (user?._id === u._id) return false;
-
-      //   if (userChats) {
-      //     isChatCreated = userChats?.some((chat) => {
-      //       return (
-      //         chat.roomMembers[0] === u._id || chat.roomMembers[1] === u._id
-      //       );
-      //     });
-      //   }
-
-      //   return !isChatCreated;
-      // });
       const pChats = response.filter((u) => {
         return user?._id !== u._id;
       });
@@ -297,7 +264,7 @@ export const ChatContextProvider = ({ children, user }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const content = reader.result.split(",")[1]; // This will be the base64-encoded image
+        const content = reader.result.split(",")[1];
         sendTextMessage(
           content,
           user,

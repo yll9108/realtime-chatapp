@@ -1,0 +1,23 @@
+/* navBar css */
+.NavBar {
+  background: linear-gradient(1deg, black 30%, rgb(17, 255, 164) 150%);
+  border: none;
+}
+.NavBar {
+  border-bottom: 1px solid lightseagreen;
+  margin-left: 0%;
+  margin-right: 0%;
+}
+.Nav-title {
+  display: flex;
+  justify-content: space-between;
+}
+.Nav-title > img {
+  width: 60px;
+}
+
+@media (max-width: 767px) {
+  .Nav-title {
+    display: none;
+  }
+}
