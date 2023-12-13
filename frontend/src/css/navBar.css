@@ -2,12 +2,9 @@
 .NavBar {
   background: linear-gradient(1deg, black 30%, rgb(17, 255, 164) 150%);
   border: none;
-  /* height: 50%; */
-  clip-path: polygon(0 100%, 100, 0, 100%, 0, 30%, 50%);
 }
 .NavBar {
   border-bottom: 1px solid lightseagreen;
-  /* padding: ; */
   margin-left: 0%;
   margin-right: 0%;
 }
@@ -18,15 +15,9 @@
 .Nav-title > img {
   width: 60px;
 }
-.Nav-title-responsive {
-  display: none;
-}
 
 @media (max-width: 767px) {
   .Nav-title {
     display: none;
-  }
-  .Nav-title-responsive {
-    display: block;
   }
 }

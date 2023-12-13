@@ -40,7 +40,7 @@ const UserList = ({ index, chat, user, query }) => {
       <Stack
         direction="horizontal"
         gap={3}
-        className="user-card align-items-center p-2 justify-content-between"
+        className="user-card p-2"
         role="button"
         onClick={() => {
           if (thisUserNotifications?.length !== 0) {
@@ -54,7 +54,7 @@ const UserList = ({ index, chat, user, query }) => {
         <div className="d-flex">
           <div className="me-2">
             {recipientUser.showProfile === true ? (
-              <UserAvatar src={profilePictureUrl} />
+              <UserAvatar className="user-svg" src={profilePictureUrl} />
             ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +84,7 @@ const UserList = ({ index, chat, user, query }) => {
             </div>
           </div>
         </div>
-        <div className="d-flex flex-column align-items-end">
+        <div className="date-content d-flex flex-column align-items-end">
           <div className="date">
             {moment(latestMessage?.updatedAt).calendar()}
           </div>

@@ -1,22 +1,11 @@
 /* friends list */
 
-/* Media Query for smaller screens */
-@media only screen and (max-width: 768px) {
-  .all-users {
-    width: 100%;
-  }
-
-  .single-user {
-    margin: 0.5rem;
-  }
-}
-
 .all-users {
   display: flex;
   flex-direction: column;
   margin: 1rem;
   height: 85vh;
-  width: calc(100vw - 70rem);
+
   overflow-y: auto;
   overflow-x: none;
 }

@@ -16,7 +16,7 @@ function Chat() {
   const [query, setQuery] = useState("");
 
   return (
-    <Container className="d-flex">
+    <Container fluid className="d-flex chatContainer">
       <Sidebar setActiveSection={setActiveSection} />
       {activeSection === "friends" && <PotentialChats />}
       {activeSection === "settings" && <Settings />}
@@ -24,9 +24,9 @@ function Chat() {
       {activeSection === "chat" && userChats?.length > 0 && (
         <Container>
           {userChats?.length < 1 ? null : (
-            <Stack direction="horizontal" gap={4} className="align-items-start">
+            <Stack gap={4} className="chat-content align-items-start">
               <Stack className="messages-box flex-grow-0 pe-3" gap={3}>
-                <div className="flex-row">
+                <div className="chat-title">
                   <h1>Chats</h1>
                   <input
                     value={query}

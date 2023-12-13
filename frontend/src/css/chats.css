@@ -4,6 +4,9 @@
   position: relative;
   border-bottom: 1px solid rgb(100, 100, 100);
   width: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .user-card .text-content {
@@ -98,4 +101,32 @@
   height: 40px;
   width: 40px;
   border-radius: 50%;
+}
+.chat-content {
+  display: flex;
+  flex-direction: row;
+}
+@media (max-width: 767px) {
+  .chat-content {
+    display: flex;
+    flex-direction: column;
+  }
+  .messages-box {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    width: 100%;
+    height: auto;
+  }
+  .chat-box {
+    width: 100%;
+  }
+  .chat-title {
+    display: flex;
+    align-items: center;
+  }
+  .chat-title > h1 {
+    margin-right: 10px;
+  }
 }
