@@ -1,0 +1,53 @@
+/* login css */
+.myform {
+  padding: 0 25px 0 33px;
+}
+
+.form-control:focus {
+  border: 1px solid #57557a;
+  border-radius: 3px;
+  box-shadow: none;
+  background: #212042;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.bn {
+  text-decoration: underline;
+}
+.bn:hover {
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: linear-gradient(
+    135deg,
+    rgb(106, 232, 252) 39%,
+    rgb(17, 255, 164) 101%
+  );
+  border: none;
+  border-radius: 50px;
+}
+
+.btn-primary:focus {
+  box-shadow: none;
+  border: none;
+}
+
+.Login a {
+  color: lightcyan;
+}
+
+.errorText {
+  color: yellow;
+}
+
+.register {
+  margin-left: 3vw;
+  margin-right: 2vw;
+  border-bottom: none;
+}
+
+.hidden {
+  display: none;
+}
