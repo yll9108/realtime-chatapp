@@ -22,7 +22,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
   //initial socket
   useEffect(() => {
-    const newSocket = io("http://localhost:8080");
+    const newSocket = io("http://localhost:4000");
     setSocket(newSocket);
 
     return () => {

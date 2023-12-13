@@ -1,7 +1,7 @@
 const { Server } = require("socket.io");
 
 const io = new Server({
-  cors: "http://localhost:8080",
+  cors: "http://localhost:3000",
 });
 
 let onlineUsers = [];
@@ -47,4 +47,4 @@ io.on("connection", (socket) => {
   });
 });
 
-io.listen(5000);
+io.listen(4000);
