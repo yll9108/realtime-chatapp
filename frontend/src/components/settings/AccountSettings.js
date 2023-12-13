@@ -42,6 +42,10 @@ function AccountSettings({ setShowAccountSettings }) {
                             setPasswordPopUp(true);
                             setShowEditAndDeleteButton(false);
                         }}
+                        style={{
+                            display: showEditAndDeleteButton ? "block" : "none",
+                            // backgroundColor: "red",
+                        }}
                     >
                         Edit Password
                     </Button>
