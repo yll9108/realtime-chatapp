@@ -26,10 +26,6 @@ export const AuthContextProvider = ({ children }) => {
   const [popupMessage, setPopupMessage] = useState("");
   const navigate = useNavigate();
 
-  // console.log("registerInfo", registerInfo);
-  // console.log("loginInfo", loginInfo);
-  // console.log("user", user);
-
   useEffect(() => {
     const user = localStorage.getItem("User");
     setUser(JSON.parse(user));
@@ -42,7 +38,7 @@ export const AuthContextProvider = ({ children }) => {
   const updateLoginInfo = useCallback((info) => {
     setLoginInfo(info);
   }, []);
-  //SingUp.js handleSubmit
+
   const registerUser = useCallback(
     async (e) => {
       e.preventDefault();
@@ -56,7 +52,7 @@ export const AuthContextProvider = ({ children }) => {
       );
 
       setIsRegisterLoading(false);
-      // console.log(response);
+
       switch (response.code) {
         case 200:
           navigate("/");
@@ -84,20 +80,17 @@ export const AuthContextProvider = ({ children }) => {
           );
           break;
         case 500:
-          console.log(response);
+          // console.log(response);
           return setRegisterError(response);
         default:
           console.log("Unknown response code: " + response.code);
           break;
       }
     },
-    // it's better to save user after logged in
-    // localStorage.setItem("User", JSON.stringify(response));
-    // setUser(response);
+
     [registerInfo, navigate]
   );
 
-  //Login.js handleSubmit
   const loginUser = useCallback(
     async (e) => {
       e.preventDefault();
@@ -147,7 +140,7 @@ export const AuthContextProvider = ({ children }) => {
       .signInWithPopup(googleAuthProvider)
       .then((result) => {
         const { user } = result;
-        console.log("Google Auth User:", user);
+        // console.log("Google Auth User:", user);
         axios
           .post("http://localhost:8080/api/users/google-login", {
             uid: user.uid,
@@ -155,7 +148,7 @@ export const AuthContextProvider = ({ children }) => {
             displayName: user.displayName,
           })
           .then((response) => {
-            console.log("Server Response:", response.data);
+            // console.log("Server Response:", response.data);
             localStorage.setItem("User", JSON.stringify(response.data));
             setUser(response.data);
             if (response.data.isNewUser) {
@@ -196,16 +189,22 @@ export const AuthContextProvider = ({ children }) => {
     }
   }, []);
   const deleteAccount = async () => {
-    if (window.confirm("Are you sure you want to delete your account? This cannot be undone.")) {
-        try {
-            await axios.delete(`http://localhost:8080/api/users/delete/${user._id}`);
-            logoutUser(); // Log out the user
-            navigate('/login'); // Redirect to the login page
-        } catch (error) {
-            console.error('Error deleting account:', error);
-        }
+    if (
+      window.confirm(
+        "Are you sure you want to delete your account? This cannot be undone."
+      )
+    ) {
+      try {
+        await axios.delete(
+          `http://localhost:8080/api/users/delete/${user._id}`
+        );
+        logoutUser();
+        navigate("/login");
+      } catch (error) {
+        console.error("Error deleting account:", error);
+      }
     }
-};
+  };
 
   return (
     <AuthContext.Provider
