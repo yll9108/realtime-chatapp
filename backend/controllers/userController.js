@@ -223,7 +223,7 @@ const changePassword = async (req, res) => {
     if (!password) {
       console.log("changePassword - password non exist");
     }
-    s;
+
     if (!user) {
       console.log("changePassword - user not exist");
       return res.send(responseMap.existingUserEmail);
@@ -259,7 +259,7 @@ const changePassword = async (req, res) => {
       });
       // console.log("token2", token);
     } catch (error) {
-      console.log("error");
+      console.log("error", error);
       return res.send(responseMap.serverError);
     }
 
