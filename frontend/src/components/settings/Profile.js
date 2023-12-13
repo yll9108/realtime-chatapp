@@ -13,12 +13,20 @@ function Profile({ userProfile }) {
   const [profileImageUrl, setProfileImageUrl] = useState(
     userProfile.profilePictureUrl
   );
+  const [remainingChars, setRemainingChars] = useState(
+    20 - (userProfile.about ? userProfile.about.length : 0)
+  );
 
   useEffect(() => {
     setProfile(userProfile);
     setProfileImageUrl(userProfile.profilePictureUrl);
   }, [userProfile]);
 
+  const handleAboutChange = (e) => {
+    const newAboutValue = e.target.value;
+    setProfile({ ...profile, about: newAboutValue });
+    setRemainingChars(20 - newAboutValue.length);
+  };
   const handleInputChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
@@ -66,6 +74,7 @@ function Profile({ userProfile }) {
       <Row className="justify-content-center">
         <Stack className="single-user">
           <Col className="mx-auto">
+            {/* <Col xs={6}> */}
             <h2>Profile</h2>
             {editMode ? (
               <Form
@@ -95,8 +104,12 @@ function Profile({ userProfile }) {
                     as="textarea"
                     name="about"
                     value={profile.about}
-                    onChange={handleInputChange}
+                    onChange={handleAboutChange}
+                    maxLength={20}
                   />
+                  <div style={{ textAlign: "right" }}>
+                    {remainingChars} characters left
+                  </div>
                 </Form.Group>
                 <Stack>
                   <Button type="submit">Save Changes</Button>

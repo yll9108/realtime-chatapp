@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import PopUp from "./PopUp";
 import { Container, Button, Stack } from "react-bootstrap";
@@ -7,6 +7,7 @@ function AccountSettings({ setShowAccountSettings }) {
   const { user, deleteAccount } = useContext(AuthContext);
   const [passwordPopUp, setPasswordPopUp] = useState(false);
   const [showEditAndDeleteButton, setShowEditAndDeleteButton] = useState(true);
+  const [isGoogleUser, setIsGoogleUser] = useState(false);
 
   const backButtonStyle = {
     background: "none",
@@ -19,7 +20,11 @@ function AccountSettings({ setShowAccountSettings }) {
     display: "flex",
     alignItems: "center",
   };
-
+  useEffect(() => {
+    if (user) {
+      setIsGoogleUser(user.isGoogleAccount);
+    }
+  }, [user]);
   return (
     <Container>
       <Stack gap={2} className="col-md-20 mx-auto align-items-center">
@@ -29,19 +34,18 @@ function AccountSettings({ setShowAccountSettings }) {
         >
           <i className="bi bi-arrow-left"></i> Back to Settings
         </button>
+        {!user.isGoogleAccount && (
+          <Button
+            variant="primary"
+            onClick={() => {
+              setPasswordPopUp(true);
+              setShowEditAndDeleteButton(false);
+            }}
+          >
+            Edit Password
+          </Button>
+        )}
 
-        <Button
-          variant="primary"
-          onClick={() => {
-            setPasswordPopUp(true);
-            setShowEditAndDeleteButton(false);
-          }}
-          style={{
-            display: showEditAndDeleteButton ? "block" : "none",
-          }}
-        >
-          Edit Password
-        </Button>
         <Button
           variant="danger"
           onClick={() => deleteAccount(user._id)}

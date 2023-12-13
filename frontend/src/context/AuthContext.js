@@ -146,13 +146,18 @@ export const AuthContextProvider = ({ children }) => {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName,
+            isGoogleAccount: true,
           })
           .then((response) => {
             // console.log("Server Response:", response.data);
-            localStorage.setItem("User", JSON.stringify(response.data));
-            setUser(response.data);
-            if (response.data.isNewUser) {
-              showCustomPopup("Account created! Welcome to ChatApp.");
+            const userData = {
+              ...response.data,
+              isGoogleAccount: true,
+            };
+            localStorage.setItem("User", JSON.stringify(userData));
+            setUser(userData);
+            if (user.data.isNewUser) {
+              showCustomPopup("Welcome to ChatApp.");
             }
             navigate("/home");
           })
@@ -232,7 +237,6 @@ export const AuthContextProvider = ({ children }) => {
   );
 };
 const Popup = styled.div`
-  position: absolute;
   top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
