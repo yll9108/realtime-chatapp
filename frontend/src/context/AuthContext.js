@@ -107,6 +107,7 @@ export const AuthContextProvider = ({ children }) => {
         case 200:
           localStorage.setItem("User", JSON.stringify(response));
           setUser(response);
+          navigate("/");
           break;
         case 400:
           setLoginError("Missing one of them : email/password");
@@ -237,6 +238,7 @@ export const AuthContextProvider = ({ children }) => {
   );
 };
 const Popup = styled.div`
+  position: absolute;
   top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);

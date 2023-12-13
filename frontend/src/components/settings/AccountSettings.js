@@ -41,16 +41,21 @@ function AccountSettings({ setShowAccountSettings }) {
               setPasswordPopUp(true);
               setShowEditAndDeleteButton(false);
             }}
+            style={{
+              display: showEditAndDeleteButton ? "block" : "none",
+              // backgroundColor: "red",
+            }}
           >
             Edit Password
           </Button>
         )}
 
         <Button
-          variant="danger"
+          className="btn btn-danger"
           onClick={() => deleteAccount(user._id)}
           style={{
             display: showEditAndDeleteButton ? "block" : "none",
+            // backgroundColor: "red",
           }}
         >
           Delete Account

@@ -5,6 +5,7 @@ import {
   Container,
   Button,
   Stack,
+  Form,
   InputGroup,
   FormControl,
   Alert,
@@ -45,9 +46,7 @@ export default function PopUp({ userId, trigger, setTrigger }) {
       .then((res) => {
         console.log(res);
         if (res.data.code === 422) {
-          setChangePasswordError(
-            "The provided password does not meet the minimum requirements. It must be at least 6 characters long and contain a combination of upper case letters, lower case letters, numbers, and special characters."
-          );
+          setChangePasswordError(false);
         } else if (res.data.code === 401) {
           setChangePasswordError("It's a google account, you can't change it.");
         } else if (res.status === 200) {
@@ -60,11 +59,15 @@ export default function PopUp({ userId, trigger, setTrigger }) {
 
   return trigger ? (
     <Container>
-      <Stack className="mb-3">
+      <Stack
+        direction="vertically"
+        className="align-items-center"
+        style={{ textAlign: "center" }}
+      >
         <label htmlFor="exampleFormControlInput1" className="form-label">
           Change Password
         </label>
-        <form className="mb-3" onSubmit={handleChangePassword}>
+        <form onSubmit={handleChangePassword}>
           <InputGroup>
             <FormControl
               type={passwordShown ? "text" : "password"}
@@ -128,11 +131,12 @@ export default function PopUp({ userId, trigger, setTrigger }) {
             )}
           </Stack>
         </form>
+        {/* </div> */}
       </Stack>
       <style type="text/css">
         {`
           .valid {
-            color: green;
+            color: #00bd9b;
           }
           .invalid {
             color: red;

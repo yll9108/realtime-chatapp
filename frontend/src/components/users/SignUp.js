@@ -32,6 +32,7 @@ function SignUp() {
 
   const handlePasswordChange = (event) => {
     const { value } = event.target;
+    console.log("Password:", value); // Log the current password
 
     // Check password requirements and log them
     const passwordReqs = {
@@ -41,7 +42,7 @@ function SignUp() {
       digit: /\d/.test(value),
       specialChar: /[~!@#$%^&*()_+=,{}[\]:";'?|]/.test(value),
     };
-    // console.log("Requirements:", passwordReqs);
+    console.log("Requirements:", passwordReqs);
 
     updateRegisterInfo({ ...registerInfo, password: value });
     setPasswordRequirements(passwordReqs);
@@ -145,7 +146,7 @@ function SignUp() {
       <style type="text/css">
         {`
           .valid {
-            color: green;
+            color: #00bd9b;
           }
           .invalid {
             color: red;

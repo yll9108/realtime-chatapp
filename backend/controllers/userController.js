@@ -238,6 +238,31 @@ const changePassword = async (req, res) => {
     user.authentication.salt = salt;
     user.authentication.password = newHashedPassword;
 
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MY_EMAIL,
+        pass: process.env.MY_PASSWORD,
+      },
+    });
+
+    // create a transporter to send reset mail
+    try {
+      await transporter.sendMail({
+        from: process.env.MY_EMAIL,
+        to: user.email,
+        subject: "You have changed passwprd successfully!",
+        html: `<p>Hi user: ${user.userName}</p>
+            <p>This is a reminder that you have changed passwprd successfully!</p>
+            <p>Please reset password if this action isn't from you.</p>
+            `,
+      });
+      // console.log("token2", token);
+    } catch (error) {
+      console.log("error");
+      return res.send(responseMap.serverError);
+    }
+
     await user.save();
     return res.status(200).json({ user });
   } catch (error) {

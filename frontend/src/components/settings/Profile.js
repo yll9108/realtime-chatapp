@@ -71,80 +71,88 @@ function Profile({ userProfile }) {
 
   return (
     <Container>
-      <Row className="justify-content-center">
-        <Stack className="single-user">
-          <Col className="mx-auto">
-            {/* <Col xs={6}> */}
-            <h2>Profile</h2>
-            {editMode ? (
-              <Form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  saveChanges();
-                }}
-              >
-                <div>
-                  <StyledFileInput type="file" onChange={handleImageChange} />
-                  {selectedImage && (
-                    <ImagePreview src={profileImageUrl} alt="Profile Preview" />
-                  )}
-                </div>
-                <Form.Group className="mb-3">
-                  <Form.Label>Name:</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="userName"
-                    value={profile.userName}
-                    onChange={handleInputChange}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>About:</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    name="about"
-                    value={profile.about}
-                    onChange={handleAboutChange}
-                    maxLength={20}
-                  />
-                  <div style={{ textAlign: "right" }}>
-                    {remainingChars} characters left
-                  </div>
-                </Form.Group>
-                <Stack>
-                  <Button type="submit">Save Changes</Button>
-                  <Button
-                    type="button"
-                    onClick={() => setEditMode(false)}
-                    className="mt-3"
-                  >
-                    Cancel
-                  </Button>
-                </Stack>
-              </Form>
-            ) : (
-              <>
-                {profile.profilePicture && (
-                  <ProfileImage
-                    src={`http://localhost:8080/${profile.profilePicture}`}
-                    alt="Profile"
-                  />
+      <Stack
+        direction="vertically"
+        gap={2}
+        className="single-user align-items-center"
+        style={{ textAlign: "center" }}
+      >
+        <Col>
+          {/* <Col xs={6}> */}
+          <h2>Profile</h2>
+          {editMode ? (
+            <Form
+              onSubmit={(e) => {
+                e.preventDefault();
+                saveChanges();
+              }}
+            >
+              <div>
+                <StyledFileInput type="file" onChange={handleImageChange} />
+                {selectedImage && (
+                  <ImagePreview src={profileImageUrl} alt="Profile Preview" />
                 )}
-                <div>
-                  <label>Name:</label> {profile.userName}
+              </div>
+              <Form.Group className="mb-3">
+                <Form.Label>Name:</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="userName"
+                  value={profile.userName}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>About:</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  name="about"
+                  value={profile.about}
+                  onChange={handleAboutChange}
+                  maxLength={20}
+                />
+                <div style={{ textAlign: "right" }}>
+                  {remainingChars} characters left
                 </div>
-                <div>
-                  <label>About:</label> {profile.about}
-                </div>
-                <div>
-                  <label>Email:</label> {profile.email}
-                </div>
-                <Button onClick={() => setEditMode(true)}>Edit</Button>
-              </>
-            )}
-          </Col>
-        </Stack>
-      </Row>
+              </Form.Group>
+              <Stack>
+                <Button type="submit">Save Changes</Button>
+                <Button
+                  type="button"
+                  onClick={() => setEditMode(false)}
+                  className="mt-3"
+                >
+                  Cancel
+                </Button>
+              </Stack>
+            </Form>
+          ) : (
+            <>
+              {profile.profilePicture && (
+                <ProfileImage
+                  src={`http://localhost:8080/${profile.profilePicture}`}
+                  alt="Profile"
+                />
+              )}
+              <div>
+                <label>Name:</label> {profile.userName}
+              </div>
+              <div>
+                <label>About:</label> {profile.about}
+              </div>
+              <div>
+                <label>Email:</label> {profile.email}
+              </div>
+              <Button
+                onClick={() => setEditMode(true)}
+                style={{ width: "175px" }}
+              >
+                Edit
+              </Button>
+            </>
+          )}
+        </Col>
+      </Stack>
     </Container>
   );
 }
