@@ -1,6 +1,4 @@
-# chatapp-soojin-yen-bosco-final
-
-Realtime Chat Application using MERN Stack
+# Realtime Chat Application using MERN Stack
 
 Our real-time chat application provides a simple and user-friendly platform for one-on-one chat.
 
