@@ -4,7 +4,7 @@ Our real-time chat application provides a simple and user-friendly platform for 
 
 -   **Tech stack - MERN stack (MongoDB, Express, React, Node.js)**
 
-    1. Front-End : React, Redux, React Router, WebSocket Library
+    1. Front-End : React, useContext, React Router, WebSocket Library, Bootstrap
     2. Back-End : Node.js, Express, WebSocket Library
     3. Database : MongoDB
 
