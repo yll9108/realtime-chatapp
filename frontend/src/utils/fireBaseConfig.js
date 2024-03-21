@@ -1,11 +1,12 @@
-import firebase from 'firebase/compat/app'; // note the "/compat"
-import 'firebase/compat/auth'; 
+import firebase from "firebase/compat/app"; // note the "/compat"
+import "firebase/compat/auth";
 const firebaseConfig = {
-  apiKey: "AIzaSyDHp6kO8THL-FBY9A7044bFA16BI_eji2U",
-  authDomain: "chat-app-5d5fe.firebaseapp.com",
-  projectId: "chat-app-5d5fe",
-  messagingSenderId: "264529411536",
-  appId: "1:264529411536:web:85ecc54443f718fb5d4dd5"
+    apiKey: process.env.REACT_APP_FIREBASE_CONFIG_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_CONFIG_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_FIREBASE_CONFIG_PROJECT_ID,
+    messagingSenderId:
+        process.env.REACT_APP_FIREBASE_CONFIG_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_CONFIG_APP_ID,
 };
 
 firebase.initializeApp(firebaseConfig);
