@@ -15,13 +15,4 @@ https://github.com/yll9108/realtime-chatapp-soojin-yen-bosco-final/assets/121968
 -   **I'm still working on .....**
 
   1. Move Socket i.o. to backend folder
-
-# If you would like to git it a try by yourself....
-
--   **Prerequisites**
-
-To use this application, you must have React, Node and MongoDB installed on your machine.
-
--   **Installation**
-
-```Fork``` this repository to your github. Clone to your machine. 
+  2. Writing the instructions of how to use this repo. 
